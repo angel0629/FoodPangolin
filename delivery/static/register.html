@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兩列排列的註冊表單</title>
+    <style>
+        /* 全局樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 表單容器樣式 */
+        form {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 700px; /* 增加寬度以支持兩列 */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-group-container {
+            display: flex; /* 使用 flexbox 建立兩列佈局 */
+            flex-wrap: wrap; /* 保持響應式布局 */
+            gap: 40px; /* 每組之間的間距 */
+        }
+
+        .form-group {
+            flex: 1 1 calc(50% - 20px); /* 每組寬度為容器的一半，減去間距 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="password"], select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%; /* 確保填滿父容器 */
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
+            border-color: #007bff;
+        }
+
+        .radio-group {
+            flex: 1 1 100%; /* 單獨佔用一整行 */
+            margin-bottom: 15px;
+        }
+
+        .radio-group p {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .radio-group label {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form id="content" method="POST" action="/login">
+        <h1>註冊表單</h1>
+        <div class="form-group-container">
+            <div class="form-group">
+                <label for="ID">ID</label>
+                <input type="text" name="ID" id="ID" required>
+            </div>
+            <div class="form-group">
+                <label for="PWD">Password</label>
+                <input type="password" name="PWD" id="PWD" required>
+            </div>
+            <div class="form-group">
+                <label for="city">請選擇您的城市</label>
+                <select id="city" name="city">
+                    <option value="台北">台北</option>
+                    <option value="新北">新北</option>
+                    <option value="桃園">桃園</option>
+                    <option value="高雄">高雄</option>
+                    <!-- 更多選項 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="car">選擇您的交通工具</label>
+                <select id="car" name="car">
+                    <option value="機車">機車</option>
+                    <option value="汽車">汽車</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="firstName">姓氏</label>
+                <input type="text" name="firstName" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">名字</label>
+                <input type="text" name="lastName" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">電話</label>
+                <input type="text" name="phone" id="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="PID">身分證字號</label>
+                <input type="text" name="PID" id="PID" required>
+            </div>
+            <div class="form-group">
+                <label for="gmail">Gmail</label>
+                <input type="text" name="gmail" id="gmail" required>
+            </div>
+            <div class="radio-group">
+                <p>您是否已滿18歲</p>
+                <label>
+                    <input type="radio" name="age" value="yes" required>
+                    是
+                </label>
+                <label>
+                    <input type="radio" name="age" value="no">
+                    否
+                </label>
+            </div>
+        </div>
+        <input type="submit" value="註冊">
+    </form>
+</body>
+</html>

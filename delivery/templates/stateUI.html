@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狀態</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between; /*中間分開*/
+            align-items: center;
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 0px 20px;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        header.back-button{
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        header.back-button:hover{
+            text-decoration: underline;
+        }
+
+        header .profile {
+            display: flex;
+            align-items:first baseline;
+        }
+
+        header .profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 130px;
+            height: calc(100% - 60px);
+            background-color: #f2f2f2;
+            border-right: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .sidebar a {  /*連結*/
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration:double;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+
+        .content {
+            margin-right: 300px;
+            margin-left: 150px;
+            
+            padding: 80px 20px 20px;
+        }
+
+        .status-page {
+            margin-bottom: 20px;
+        }
+
+        .status-page h1 {
+            margin-bottom: 10px;
+        }
+
+        .time-slots {
+            width: 200px; /* 固定宽度 */
+            height: 30px;
+            display: flex;
+            flex-direction: column; /* 设置子元素垂直排列 */
+            gap: 10px;
+        }
+        .time-slot {
+            padding: 10px 15px;
+            border: 3px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .online {
+            position: fixed;
+            bottom: 500px;
+            left: 500px;
+            font-size: larger;
+            padding: 30px 30px;
+            border: 3px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+
+        .online.active {
+            padding: 10px 15px;
+            border: 3px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .online:hover {
+            background-color: #ddd;
+        }
+
+        .time-slot.active {
+            background-color: #4caf50;
+            color: white;
+        }
+ 
+
+        .time-slot:hover {
+            background-color: #ddd;
+        }
+
+    
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="back-button">返回</a>
+        <h1>狀態</h1>
+        <div class="profile">
+            <img src="profile-placeholder.png" alt="Profile Picture">
+            <span>name</span>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <a href="#status">狀態</a>
+        <a href="#orders">訂單</a>
+        <a href="#completed-orders">已完成訂單</a>
+    </nav>
+
+    <main class="content">
+        <div class="status-page">
+            <p> <span id="current-status">未上線</span></p>
+        </div>
+
+        <div class="time-slots">
+            <div class="time-slot" onclick="toggleActive(this)">00:00 - 02:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">02:00 - 04:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">04:00 - 06:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">06:00 - 08:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">08:00 - 10:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">10:00 - 12:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">12:00 - 14:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">14:00 - 16:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">16:00 - 18:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">18:00 - 20:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">20:00 - 22:00</div>
+            <div class="time-slot" onclick="toggleActive(this)">22:00 - 24:00</div>
+            <div class="online" onclick="online()" >上線</div>
+            
+            <!-- Add more time slots as needed -->
+        </div>
+    </main>
+
+    <script>
+        // 获取当前时间的小时数
+        const currentHour = new Date().getHours();
+    
+        // 计算当前时间所属的时间段
+        const timeSlots = document.querySelectorAll('.time-slot');
+        let selectedSlot = null;
+    
+        timeSlots.forEach(slot => {
+            const timeRange = slot.textContent.split(' - ');
+            const startHour = parseInt(timeRange[0].split(':')[0], 10);
+            const endHour = parseInt(timeRange[1].split(':')[0], 10);
+    
+            if (currentHour >= startHour && currentHour < endHour) {
+                selectedSlot = slot; // 找到当前时间对应的时间段
+            }
+        });
+    
+        // 如果找到对应的时间段，则设置为选中状态
+        if (selectedSlot) {
+            selectedSlot.classList.add('active');
+        }
+    
+        function toggleActive(element) {
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => slot.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function online() {
+            const status = document.getElementById('current-status');
+            status.textContent = '上線';
+
+            const timeSlots =document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => classList.remove('active'));
+        }
+
+        
+    </script>
+</body>
+</html>
