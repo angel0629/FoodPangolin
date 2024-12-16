@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="keywords" content=" " />
+<meta name="description" content=" " />
+<title>客戶首頁</title>
+<script>
+function userinfo() {
+    window.location.href = "";
+}
+function search() {
+    window.location.href = "";
+}
+function listinfo() {
+    window.location.href = "";
+}
+function R_manu() {
+    window.location.href = "";
+}
+</script>
+<style>
+body{
+    background-color: #faf6f1;
+}
+#div_position {
+    text-align: center;
+}
+.div_tbl {
+    margin-left: 5%;
+    border: 5px solid #faf6f1;
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #eedede;
+    border-radius: 25px;
+    text-indent: 1em;
+    font-weight: bold;
+    font-size: 30px;
+    width: 40%;
+    cursor: pointer;
+}
+.div_user {
+    padding: 9px;
+    background-color: #d0a6a6;
+    width: 2%;
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    right: 22.5%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.div_star {
+    margin-top: -30px;
+    text-align: right;
+    padding-right: 5%;
+}
+.div_avgP {
+    margin-top: -30px;
+    text-align: center;
+}
+input {
+    background-color: #eedede;
+    border: 2px solid;
+    border-radius: 25px;
+    width: 35%;
+    height: 30px;
+    padding: 3px;
+    text-indent: 0.5em;
+}
+select {
+    background-color: #eedede;
+    border: 2px solid;
+    border-radius: 25px;
+    width: 18%;
+    height: 38px;
+    padding: 3px;
+    text-indent: 0.5em;
+    position: relative;
+    left: -120px;
+}
+option {
+    background-color: #fff6f6;
+    border: 2px solid;
+    border-radius: 25px;
+    width: 15%;
+    padding: 3px;
+    text-indent: 0.5em;
+}
+button {
+    font-weight: bold;
+    padding: 10px 26px;
+    border-radius: 25px;
+    background-color: #d0a6a6;
+    border: 0px solid;
+    color: white;
+    cursor: pointer;
+}
+span {
+    font-weight: normal;
+    font-size: small;
+}
+img {
+    width: 25px;
+    height: 25px;
+}
+#search {
+    position: relative;
+    top: -58px;
+    left: 19%;
+}
+#search_list {
+    position: relative;
+    top: -58px;
+    left: 20%;
+}
+</style>
+</head>
+<body>
+<p></p>
+<div id="div_position">
+    <div class="div_user" onclick="userinfo()">邱</div>
+    <p><input type="text" placeholder="搜尋餐廳..."></p>
+    <p><select name="" id="">
+        <option value="">條件篩選</option>
+        <option value="">平均價位低</option>
+        <option value="">平均價位高</option>
+        <option value="">評價低</option>
+        <option value="">評價高</option>
+    </select></p>
+    <button type="submit" id="search" onclick="Search()">查詢</button>
+    <button type="button" id="search_list" onclick="listinfo()">下單查詢</button>
+    <center>
+        <div class="div_tbl" onclick="R_manu()">餐廳 1 
+            <span><div class="div_avgP">平均價位：$200</div></span>
+            <div class="div_star"><img src="star.png"><img src="star.png"><img src="star.png"></div>
+        </div>
+        <div class="div_tbl" onclick="R_manu()">餐廳 2 
+            <span><div class="div_avgP">平均價位：$150</div></span>
+            <div class="div_star"><img src="star.png"><img src="star.png"><img src="star.png"><img src="star.png"></div>
+        </div>
+        <div class="div_tbl" onclick="R_manu()">餐廳 3 
+            <span><div class="div_avgP">平均價位：$250</div></span>
+            <div class="div_star"><img src="star.png"><img src="star.png"></div>
+        </div>
+    </center>
+    
+</div>
+
+
+</body>
+</html>
