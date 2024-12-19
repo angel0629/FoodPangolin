@@ -1,0 +1,67 @@
+.content {
+    margin-right: 300px;
+    margin-left: 150px;
+    
+    padding: 80px 20px 20px;
+}
+
+.status-page {
+    margin-bottom: 20px;
+}
+
+.status-page h1 {
+    margin-bottom: 10px;
+}
+
+.time-slots {
+    width: 200px; /* 固定宽度 */
+    height: 30px;
+    display: flex;
+    flex-direction: column; /* 设置子元素垂直排列 */
+    gap: 10px;
+}
+.time-slot {
+    padding: 10px 15px;
+    border: 3px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.online {
+    position: fixed;
+    bottom: 500px;
+    left: 500px;
+    font-size: larger;
+    padding: 30px 30px;
+    border: 3px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+
+.online.active {
+    padding: 10px 15px;
+    border: 3px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.online:hover {
+    background-color: #ddd;
+}
+
+.time-slot.active {
+    background-color: #4caf50;
+    color: white;
+}
+
+
+.time-slot:hover {
+    background-color: #ddd;
+}

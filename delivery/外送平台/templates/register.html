@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外送員註冊表單</title>
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+<body>
+    <form id="content" method="POST" action="/add_delivery">
+        <h1 lang="zh-TW">外送員註冊表單</h1>
+        <div class="form-group-container">
+            <div class="form-group">
+                <label for="ID">ID</label>
+                <input 
+                    type="text" 
+                    name="ID" 
+                    id="ID" 
+                    value="111" 
+                    required 
+                    pattern="^111.*" 
+                    title="ID 必須以 111 開頭"
+                >
+                <small>預設值 111，請勿修改前綴</small>
+            </div>
+            <div class="form-group">
+                <label for="PWD">Password</label>
+                <input type="password" name="PWD" id="PWD" required minlength="6" title="密碼需至少6個字符">
+            </div>
+            <div class="form-group">
+                <label for="city">請選擇您的城市</label>
+                <select id="city" name="city">
+                    <option value="台北">台北</option>
+                    <option value="新北">新北</option>
+                    <option value="桃園">桃園</option>
+                    <option value="高雄">高雄</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="car">選擇您的交通工具</label>
+                <select id="car" name="car">
+                    <option value="機車">機車</option>
+                    <option value="汽車">汽車</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">電話</label>
+                <input 
+                    type="tel" 
+                    name="phone" 
+                    id="phone" 
+                    required 
+                    pattern="[0-9]{10}" 
+                    title="請輸入10位數字的電話號碼"
+                >
+            </div>
+            <div class="form-group">
+                <label for="gmail">Gmail</label>
+                <input 
+                    type="email" 
+                    name="gmail" 
+                    id="gmail" 
+                    required 
+                    placeholder="example@gmail.com"
+                >
+            </div>
+            <div class="radio-group">
+                <p>您是否已滿18歲</p>
+                <label>
+                    <input type="radio" name="age" value="yes" required>
+                    是
+                </label>
+                <label>
+                    <input type="radio" name="age" value="no">
+                    否
+                </label>
+            </div>
+        </div>
+        <input type="submit" value="註冊" lang="zh-TW">
+    </form>
+
+    <script>
+        document.getElementById("content").addEventListener("submit", function(event) {
+            let errors = [];
+
+            // 取得 ID 欄位的值
+            const idField = document.getElementById("ID");
+            if (!idField.value.startsWith("111")) {
+                errors.push("ID 前綴必須是 '111'，請勿修改。");
+            }
+
+            // 檢查是否未滿18歲
+            const ageRadios = document.getElementsByName("age");
+            let isUnder18 = false;
+            for (let radio of ageRadios) {
+                if (radio.checked && radio.value === "no") {
+                    isUnder18 = true;
+                    break;
+                }
+            }
+            if (isUnder18) {
+                errors.push("您未滿18歲，無法完成註冊。");
+            }
+
+            // 若有錯誤，阻止提交並顯示所有錯誤訊息
+            if (errors.length > 0) {
+                alert(errors.join("\n"));
+                event.preventDefault(); // 阻止表單提交
+            }
+        });
+    </script>
+</body>
+</html>

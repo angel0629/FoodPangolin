@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>狀態</title>
+    <title>定單紀錄</title>
     <style>
         body {
             margin: 0;
@@ -12,9 +12,8 @@
 
         header {
             display: flex;
-            justify-content: space-between; /*中間分開*/
+            justify-content: space-between;
             align-items: center;
-            text-align: center;
             background-color: #f8f8f8;
             padding: 0px 20px;
             border-bottom: 1px solid #ddd;
@@ -23,20 +22,20 @@
             width: 100%;
             z-index: 1000;
         }
-        
-        header.back-button{
+
+        header .back-button {
             cursor: pointer;
             font-size: 16px;
             text-decoration: none;
         }
 
-        header.back-button:hover{
+        header .back-button:hover {
             text-decoration: underline;
         }
 
         header .profile {
             display: flex;
-            align-items:first baseline;
+            align-items: center;
         }
 
         header .profile img {
@@ -45,7 +44,28 @@
             border-radius: 50%;
             margin-right: 10px;
         }
-        
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #155599;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
 
         .sidebar {
             position: fixed;
@@ -58,11 +78,11 @@
             padding-top: 20px;
         }
 
-        .sidebar a {  /*連結*/
+        .sidebar a {
             display: block;
             padding: 10px 20px;
             color: #333;
-            text-decoration:double;
+            text-decoration: none;
             transition: background-color 0.3s;
         }
 
@@ -73,8 +93,7 @@
         .content {
             margin-right: 300px;
             margin-left: 150px;
-            
-            padding: 80px 20px 20px;
+            padding: 130px 60px 20px;
         }
 
         .status-page {
@@ -86,12 +105,13 @@
         }
 
         .time-slots {
-            width: 200px; /* 固定宽度 */
+            width: 200px;
             height: 30px;
             display: flex;
-            flex-direction: column; /* 设置子元素垂直排列 */
+            flex-direction: column;
             gap: 10px;
         }
+
         .time-slot {
             padding: 10px 15px;
             border: 3px solid #ddd;
@@ -114,12 +134,10 @@
             transition: background-color 0.3s;
         }
 
-
         .online.active {
             padding: 10px 15px;
             border: 3px solid #ddd;
             border-radius: 5px;
-            cursor: pointer;
             background-color: #f9f9f9;
             transition: background-color 0.3s;
         }
@@ -132,19 +150,16 @@
             background-color: #4caf50;
             color: white;
         }
- 
 
         .time-slot:hover {
             background-color: #ddd;
         }
-
-    
     </style>
 </head>
 <body>
     <header>
         <a href="#" class="back-button">返回</a>
-        <h1>狀態</h1>
+        <h1>訂單狀態</h1>
         <div class="profile">
             <img src="profile-placeholder.png" alt="Profile Picture">
             <span>name</span>
@@ -158,52 +173,53 @@
     </nav>
 
     <main class="content">
-        <div class="status-page">
-            <p> <span id="current-status">未上線</span></p>
+        <div class="mystatus">
+            <table>
+                <tr>
+                    <th>完成訂單</th>
+                    <th>收取總金額</th>
+                </tr>
+                {% for bid in bids %}
+                <tr>
+                    <td>{{ }}</td>
+                    <td>{{ }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
 
-        <div class="time-slots">
-            <div class="time-slot" onclick="toggleActive(this)">00:00 - 02:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">02:00 - 04:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">04:00 - 06:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">06:00 - 08:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">08:00 - 10:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">10:00 - 12:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">12:00 - 14:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">14:00 - 16:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">16:00 - 18:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">18:00 - 20:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">20:00 - 22:00</div>
-            <div class="time-slot" onclick="toggleActive(this)">22:00 - 24:00</div>
-            <div class="online" onclick="online()" >上線</div>
-            
-            <!-- Add more time slots as needed -->
+        <div class="records">
+            <table>
+                {% for bid in bids %}
+                <tr>
+                    <td>{{ bid.bid_price }}</td>
+                    <td>{{ bid.bid_time }}</td>
+                    <td>{{ bid.bidder_id }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
     </main>
 
     <script>
-        // 获取当前时间的小时数
         const currentHour = new Date().getHours();
-    
-        // 计算当前时间所属的时间段
         const timeSlots = document.querySelectorAll('.time-slot');
         let selectedSlot = null;
-    
+
         timeSlots.forEach(slot => {
             const timeRange = slot.textContent.split(' - ');
             const startHour = parseInt(timeRange[0].split(':')[0], 10);
             const endHour = parseInt(timeRange[1].split(':')[0], 10);
-    
+
             if (currentHour >= startHour && currentHour < endHour) {
-                selectedSlot = slot; // 找到当前时间对应的时间段
+                selectedSlot = slot;
             }
         });
-    
-        // 如果找到对应的时间段，则设置为选中状态
+
         if (selectedSlot) {
             selectedSlot.classList.add('active');
         }
-    
+
         function toggleActive(element) {
             const timeSlots = document.querySelectorAll('.time-slot');
             timeSlots.forEach(slot => slot.classList.remove('active'));
@@ -214,11 +230,19 @@
             const status = document.getElementById('current-status');
             status.textContent = '上線';
 
-            const timeSlots =document.querySelectorAll('.time-slot');
-            timeSlots.forEach(slot => classList.remove('active'));
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => slot.classList.remove('active'));
         }
-
-        
     </script>
+    <script>
+        const myID='{{data}}';  //登入資料，由flask塞進來的(因為是在template下面)；const代表不能被改
+        let div = document.getElementById('main');
+        if (div) {
+            div.innerHTML = template; //把template的內容塞進去div裡面(在"js/base.js"中定義)
+            myVueApp=Vue.createApp(vueDef); //利用她去create一個vue
+            myVueApp.mount(div); //mount上去剛的div就開始動了
+        } //end if
+        
+    </script> 
 </body>
 </html>
