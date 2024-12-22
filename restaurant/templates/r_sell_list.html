@@ -65,6 +65,17 @@
       <th > 已取餐</th>
       <td ></td>
     </tr>
+    {% for i in data %}
+    <tr>
+      <th > {{i.o_id}}</th> 
+      <th >{{i.name}}</th>
+      <th >{{i.pickup_time}}</th>
+      <th >{{i.d_name}}</th>
+      <th > {{i.delivery_time}}</th>
+      <th > {{i.o_status}}</th>
+      <td ></td>
+    </tr>
+  {% endfor %}
 
   </table>  
 </section>

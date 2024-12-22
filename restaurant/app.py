@@ -1,21 +1,30 @@
 from flask import Flask, render_template, request, session, redirect,url_for, flash
 from functools import wraps
-from dbUtils import r_getList, r_add, r_editList, r_update, r_delete #, getallList, details, add, delete, editList, update, buy, new_buy, get_shop
-
+from dbUtils import r_getList, r_add, r_editList, r_update, r_delete , r_getallList#, details, add, delete, editList, update, buy, new_buy, get_shop
+import os
 # creates a Flask application, specify a static folder on /
-app = Flask(__name__, static_folder='static',static_url_path='/')
+#app = Flask(__name__, static_folder='static',static_url_path='/')
+app = Flask(__name__, static_folder='static')
 #set a secret key to hash cookies
 app.config['SECRET_KEY'] = '123TyU%^&'
 
 global my_id
 my_id=1
 	
+# 設置上傳目錄
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# 確保上傳目錄存在
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
 #自己的拍賣品清單
 @app.route("/")
 #使用server side render: template 樣板
 def r_get_sell():
-	
-	return render_template('r_sell_list.html')
+	dat=r_getallList(my_id)
+	return render_template('r_sell_list.html',data=dat, id_in=my_id)
 
 
 @app.route("/r_sell_food")
@@ -32,13 +41,20 @@ def r_add_new():
 
 @app.route('/r_add_product', methods=['POST'])
 def r_add_form():
-	form = request.form
-	name = form['name']
-	price = form['price']
-	more = form['more']
-	picture = form['picture']
-	r_add(name,price,more,picture,my_id)
-	return redirect(url_for('r_get_food'))
+    form = request.form
+    name = form['name']
+    price = form['price']
+    detail = form['more']
+    file = request.files.get('picture')
+
+    if file and file.filename:
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filename)
+        picture_path=file.filename
+    else:
+        picture_path = "default.jpg"
+    r_add(name, price, detail, picture_path, my_id)
+    return redirect(url_for('r_get_food'))
 	#return render_template('add_product.html')
 
 #編輯產品submit
@@ -47,13 +63,21 @@ def r_edit_form():
 	form = request.form
 	name = form['name']
 	price = form['price']
-	more = form['more']
-	picture = form['picture']
-	edit_id=form['edit_id']
-	r_update(name,price,more,picture,edit_id)
+	detail = form['more']
+	edit_id = form['edit_id']
+	current_pix = form['current_pix']
+	file = request.files.get('picture')
+
+	if file and file.filename:
+		filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+		file.save(filename)
+		picture_path=file.filename
+	else:
+		picture_path = current_pix
+
+	r_update(name,price,detail,picture_path,edit_id)
 	#dat=update(name,info,price, s_id)
 	return redirect(url_for('r_get_food'))
-
 #編輯產品頁面
 @app.route("/r_edit_product/<int:id>")
 #使用server side render: template 樣板

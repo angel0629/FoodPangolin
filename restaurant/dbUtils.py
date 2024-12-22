@@ -47,10 +47,10 @@ def r_delete(id):
 	conn.commit()
 
 #更新上架商品
-def r_update(name,price,more,picture,edit_id):
+def r_update(name,price,detail,picture,edit_id):
 	#更新自己的上架清單
 	sql="UPDATE `menu` SET `m_name` = %s, `m_price` = %s, `m_detail` = %s, `m_picture` = %s WHERE `menu`.`m_id` = %s"
-	param=(name,price,more,picture,edit_id)
+	param=(name,price,detail,picture,edit_id)
 	cursor.execute(sql,param)
 
 	conn.commit()
@@ -77,17 +77,18 @@ def r_getList(my_id):
 
 
 
-'''
 
-#顯示所有上架清單
-def r_getallList():
-	sql="""SELECT all_sells.s_id,sell.name,sell.info,MAX(price) AS max_price, sell.seller
-			FROM `all_sells` inner join `sell` ON all_sells.s_id=sell.s_id
-			GROUP BY s_id,sell.name,sell.info
-            ORDER BY s_id DESC;"""
-	cursor.execute(sql)
+
+#顯示所有訂單清單
+def r_getallList(my_id):
+	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
+		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
+		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
+		INNER JOIN restaurant ON orders.r_id=restaurant.r_id
+		WHERE restaurant.r_id=%s;"""
+	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
-
+'''
 #顯示細節
 def details(id):
 	sql="""SELECT all_sells.s_id,sell.name,sell.info,price, all_sells.u_id AS username
