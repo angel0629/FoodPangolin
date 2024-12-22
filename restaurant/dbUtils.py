@@ -21,9 +21,9 @@ except mysql.connector.Error as e: # mariadb.Error as e:
 
 
 #新增產品
-def add(name,price,more,picture,my_id):
+def r_add(name,price,more,picture,my_id):
 	#在自己的上架清單新增上架
-	sql="INSERT INTO `menu` (`m_id`, `name`, `price`, `more`, `picture`, `r_id`) VALUES (NULL, %s, %s, %s, %s, %s);"
+	sql="INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`) VALUES (NULL, %s, %s, %s, %s, %s);"
 	param=(name,price,more,picture,my_id)
 	cursor.execute(sql,param)
 	'''
@@ -41,32 +41,32 @@ def add(name,price,more,picture,my_id):
 
 
 #刪除商品
-def delete(id):
+def r_delete(id):
 	sql="DELETE FROM `menu` WHERE `menu`.`m_id` = %s;"
 	cursor.execute(sql,(id,))
 	conn.commit()
 
 #更新上架商品
-def update(name,price,more,picture,my_id):
+def r_update(name,price,more,picture,edit_id):
 	#更新自己的上架清單
-	sql="UPDATE `menu` SET `name` = %s, `price` = %s, `more` = %s, `picture` = %s WHERE `menu`.`m_id` = %s"
-	param=(name,price,more,picture,my_id)
+	sql="UPDATE `menu` SET `m_name` = %s, `m_price` = %s, `m_detail` = %s, `m_picture` = %s WHERE `menu`.`m_id` = %s"
+	param=(name,price,more,picture,edit_id)
 	cursor.execute(sql,param)
 
 	conn.commit()
 
 #更改產品內容
-def editList(id):
-	sql="""SELECT sell.name, info, min_price, sell.s_id 
-			FROM `sell` INNER JOIN users on sell.seller=users.name
-			WHERE sell.s_id=%s;"""
+def r_editList(id):
+	sql="""SELECT menu.m_name, menu.m_price, menu.m_detail, menu.m_picture 
+			FROM `menu` 
+			WHERE menu.m_id=%s;"""
 
 	cursor.execute(sql,(id,))
 	return cursor.fetchall()
 
 #顯示自己上架清單
-def getList(my_id):
-	sql="""SELECT menu.name, menu.price, menu.picture
+def r_getList(my_id):
+	sql="""SELECT menu.m_id, menu.m_name, menu.m_price, menu.m_picture, menu.m_detail
 			FROM `menu` 
 			WHERE menu.r_id=%s
             """
@@ -74,8 +74,13 @@ def getList(my_id):
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
 
+
+
+
+'''
+
 #顯示所有上架清單
-def getallList():
+def r_getallList():
 	sql="""SELECT all_sells.s_id,sell.name,sell.info,MAX(price) AS max_price, sell.seller
 			FROM `all_sells` inner join `sell` ON all_sells.s_id=sell.s_id
 			GROUP BY s_id,sell.name,sell.info
@@ -116,3 +121,4 @@ def get_shop(id):
             ORDER BY s_id DESC;"""
 	cursor.execute(sql,(id,))
 	return cursor.fetchall()
+'''

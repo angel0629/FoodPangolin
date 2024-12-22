@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect,url_for, flash
 from functools import wraps
-from dbUtils import getList, add, editList, update, delete #, getallList, details, add, delete, editList, update, buy, new_buy, get_shop
+from dbUtils import r_getList, r_add, r_editList, r_update, r_delete #, getallList, details, add, delete, editList, update, buy, new_buy, get_shop
 
 # creates a Flask application, specify a static folder on /
 app = Flask(__name__, static_folder='static',static_url_path='/')
@@ -13,59 +13,65 @@ my_id=1
 #自己的拍賣品清單
 @app.route("/")
 #使用server side render: template 樣板
-def get_sell():
+def r_get_sell():
 	
-	return render_template('sell_list.html')
+	return render_template('r_sell_list.html')
 
 
-@app.route("/sell_food")
+@app.route("/r_sell_food")
 #使用server side render: template 樣板
-def get_food():
-	dat=getList(my_id)
-	return render_template('sell_food.html',data=dat,id_in=my_id)
+def r_get_food():
+	dat=r_getList(my_id)
+	return render_template('r_sell_food.html',data=dat,id_in=my_id)
 
-@app.route("/new")
+@app.route("/r_new")
 #使用server side render: template 樣板
-def add_new():
+def r_add_new():
 
-	return render_template('add_product.html')
+	return render_template('r_add_product.html')
 
-@app.route('/add_product', methods=['POST'])
-def add_form():
+@app.route('/r_add_product', methods=['POST'])
+def r_add_form():
 	form = request.form
 	name = form['name']
 	price = form['price']
 	more = form['more']
 	picture = form['picture']
-	add(name,price,more,picture,my_id)
-	return redirect(url_for('get_food'))
+	r_add(name,price,more,picture,my_id)
+	return redirect(url_for('r_get_food'))
 	#return render_template('add_product.html')
 
 #編輯產品submit
-@app.route('/edit_product', methods=['POST'])
-def edit_form():
+@app.route('/r_edit_product', methods=['POST'])
+def r_edit_form():
 	form = request.form
 	name = form['name']
 	price = form['price']
 	more = form['more']
 	picture = form['picture']
-	update(name,price,more,picture,my_id)
+	edit_id=form['edit_id']
+	r_update(name,price,more,picture,edit_id)
 	#dat=update(name,info,price, s_id)
-	return redirect(url_for('get_food'))
+	return redirect(url_for('r_get_food'))
 
 #編輯產品頁面
-@app.route("/edit_product/<int:id>")
+@app.route("/r_edit_product/<int:id>")
 #使用server side render: template 樣板
-def edit(id):
-	dat=editList(id)
-	return render_template('edit_product.html', data=dat,id_in=my_id)
+def r_edit(id):
+	dat=r_editList(id)
+	return render_template('r_edit_product.html', data=dat,id_in=my_id,edit_id=id)
 
 #刪除產品
-@app.route("/delete_product/<int:id>")
+@app.route("/r_delete_product/<int:id>")
 #使用server side render: template 樣板
-def delete_form(id):
-	dat=delete(id)
-	return redirect(url_for('get_food'))
+def r_delete_form(id):
+	dat=r_delete(id)
+	return redirect(url_for('r_get_food'))
+	#return render_template('delete.html',id)
+@app.route("/r_delete_product")
+#使用server side render: template 樣板
+def r_delete_form_error():
+	return redirect(url_for('r_get_food'))
 	#return render_template('delete.html',id)
 
 '''
