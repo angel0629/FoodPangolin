@@ -23,7 +23,7 @@ def c_register():
 
 #註冊內容儲存至DB
 @app.route("/c_register", methods=['get','post'])
-def insertdo():
+def c_insertdo():
 	acc=request.args.get('acc')
 	psw=request.args.get('psw')
 	fname=request.args.get('fname')
@@ -35,3 +35,46 @@ def insertdo():
 	return render_template('c_register.html')
 
 #客戶homepage
+@app.route("/c_home")
+def c_homepage():
+	return render_template('c_homepage.html')
+
+#條件搜尋
+
+
+#已下定清單
+@app.route("/c_orderlist")
+def c_Olist():
+	return render_template('c_orderlist.html')
+
+#已下定清單詳細內容
+@app.route("/c_orderlistinfo")
+def c_Olistinfo():
+	return render_template('c_orderlistinfo.html')
+
+#收貨確認
+@app.route("/c_recievecheck")
+def c_check():
+	return render_template('c_recievecheck.html')
+
+#給予評價
+@app.route("/c_feedbackUPL")
+def c_feedback():
+	return render_template('c_feedbackUPL.html')
+
+#各餐廳菜單
+@app.route("/c_Rmanu")
+def c_showmanu():
+	return render_template('c_Rmanu.html')
+
+#購物車
+@app.route("/c_car")
+def c_showcar():
+	return render_template('c_carlist.html')
+
+#菜品詳細資訊
+@app.route("/c_manuinfo")
+def c_showmanuinfo():
+	return render_template('c_Rmanuinfo.html')
+
+#加入購物車

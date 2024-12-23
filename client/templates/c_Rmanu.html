@@ -5,14 +5,6 @@
 <meta name="keywords" content=" " />
 <meta name="description" content=" " />
 <title>菜單</title>
-<script>
-function p_info() {
-    window.location.href = "";
-}
-function go_back() {
-    window.location.href = "";
-}
-</script>
 <style>
 body{
     background-color: #faf6f1;
@@ -127,13 +119,24 @@ img {
     left: 20%;
 }
 </style>
+<script>
+    function car() {
+        window.location.href = "/c_car";
+    }
+    function p_info() {
+        window.location.href = "/c_manuinfo";
+    }
+    function go_back() {
+        window.location.href = "/c_home";
+    }
+    </script>
 </head>
 <body>
 <p></p>
 <div id="div_position">
     <div id="back" onclick="go_back()"></div>
     <span class="title">餐廳1</sapn>
-    <button type="button">查看購物車</button>
+    <button type="button" onclick="car()">查看購物車</button>
     <p></p>
     <center>
         <div class="div_tbl" onclick="p_info()">爌肉飯 

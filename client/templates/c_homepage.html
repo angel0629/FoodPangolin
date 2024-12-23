@@ -5,20 +5,6 @@
 <meta name="keywords" content=" " />
 <meta name="description" content=" " />
 <title>客戶首頁</title>
-<script>
-function userinfo() {
-    window.location.href = "";
-}
-function search() {
-    window.location.href = "";
-}
-function listinfo() {
-    window.location.href = "";
-}
-function R_manu() {
-    window.location.href = "";
-}
-</script>
 <style>
 body{
     background-color: #faf6f1;
@@ -117,6 +103,20 @@ img {
     left: 20%;
 }
 </style>
+<script>
+    function userinfo() {
+        window.location.href = "";
+    }
+    function search() {
+        window.location.href = "";
+    }
+    function listinfo() {
+        window.location.href = "/c_orderlist";
+    }
+    function R_manu() {
+        window.location.href = "/c_Rmanu";
+    }
+    </script>
 </head>
 <body>
 <p></p>
@@ -124,11 +124,11 @@ img {
     <div class="div_user" onclick="userinfo()">邱</div>
     <p><input type="text" placeholder="搜尋餐廳..."></p>
     <p><select name="" id="">
-        <option value="">條件篩選</option>
-        <option value="">平均價位低</option>
-        <option value="">平均價位高</option>
-        <option value="">評價低</option>
-        <option value="">評價高</option>
+        <option value="0">條件篩選...</option>
+        <option value="1">平均價位低</option>
+        <option value="2">平均價位高</option>
+        <option value="3">評價低</option>
+        <option value="4">評價高</option>
     </select></p>
     <button type="submit" id="search" onclick="Search()">查詢</button>
     <button type="button" id="search_list" onclick="listinfo()">下單查詢</button>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="keywords" content=" " />
 <meta name="description" content=" " />
-<title>給予評價</title>
+<title>已下單清單</title>
 <style>
 body{
     background-color: #faf6f1;
@@ -13,15 +13,18 @@ body{
     text-align: center;
 }
 .div_tbl {
+    margin-left: 5%;
     border: 5px solid #faf6f1;
+    text-align: left;
     padding-top: 20px;
     padding-bottom: 20px;
     background-color: #eedede;
     border-radius: 25px;
+    text-indent: 1em;
     font-weight: bold;
     font-size: 30px;
     width: 40%;
-    text-align: left;
+    cursor: pointer;
 }
 .div_title {
     text-align: center;
@@ -33,48 +36,28 @@ body{
     background-color: #eedede;
     border-radius: 20px;
 }
-button {
-    font-weight: bold;
-    padding: 10px 26px;
-    border-radius: 25px;
+.div_pic {
+    text-align: left;
+    position: absolute;
+    right: 27.5%;
+    margin-top: -60px;
+    padding-right: 5%;
+    width: 3%;
+    height: 80px;
     background-color: #d0a6a6;
-    border: 0px solid;
-    color: white;
+    border-radius: 20px;
     cursor: pointer;
 }
-.y {
+.div_P {
+    margin-top: -30px;
     position: absolute;
     right: 30%;
-}
-.n {
-    position: absolute;
-    right: 38%;
+    font-weight: normal;
+    font-size: 20px;
 }
 div.title {
     font-weight: bold;
     font-size: 40px;
-}
-.div_user {
-    background-color: #d0a6a6;
-    width: 35px;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 25px;
-    padding: 6px;
-    text-align: center;
-    margin-left: 20px;
-}
-textarea {
-    margin-top:12px ;
-    margin-left: 20px;
-    background-color: #fff6f6;
-    border: 2px solid black;
-    border-radius: 15px;
-    text-indent: 0.2em;
-    width: 90%;
-    height: 125px;
-    padding: 10px;
 }
 #back {
     width: 0;
@@ -91,13 +74,10 @@ textarea {
 </style>
 <script>
     function go_back() {
-        window.location.href = "c_home";
-    }
-    function upl_n() {
         window.location.href = "/c_home";
     }
-    function upl_y() {
-        window.location.href = "/c_home";
+    function orderinfo() {
+        window.location.href = "/c_orderlistinfo";
     }
     </script>
 </head>
@@ -105,20 +85,16 @@ textarea {
 <p></p>
 <div id="div_position">
     <center>
-        <div class="div_title"><div class="title">給予評價</div></div>
+        <div class="div_title"><div class="title">下單查詢</div></div>
         <div id="back" onclick="go_back()"></div>
     </center>
     
     <p></p>
     <center>
-        <div class="div_tbl">
-        <div class="div_user">邱</div>
-        <textarea name="feedback" id="feedback" placeholder="請輸入評價..."></textarea>
+        <div class="div_tbl" onclick="orderinfo()">餐廳1 
+            <span><div class="div_P">訂單總金額：$400</div></span>
         </div>
     </center>
-    <p></p>
-    <button type="button" class="n" onclick="upl_n()">取消</button>
-    <button type="button" class="y" onclick="upl_y()">確認</button>
 </div>
 
 
