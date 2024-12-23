@@ -108,7 +108,7 @@ img {
         window.location.href = "";
     }
     function search() {
-        window.location.href = "";
+        window.location.href = "/search";
     }
     function listinfo() {
         window.location.href = "/c_orderlist";
@@ -122,16 +122,18 @@ img {
 <p></p>
 <div id="div_position">
     <div class="div_user" onclick="userinfo()">邱</div>
-    <p><input type="text" placeholder="搜尋餐廳..."></p>
-    <p><select name="" id="">
-        <option value="0">條件篩選...</option>
-        <option value="1">平均價位低</option>
-        <option value="2">平均價位高</option>
-        <option value="3">評價低</option>
-        <option value="4">評價高</option>
-    </select></p>
-    <button type="submit" id="search" onclick="Search()">查詢</button>
-    <button type="button" id="search_list" onclick="listinfo()">下單查詢</button>
+    <form action="/search" method="get">
+        <p><input type="text" placeholder="搜尋餐廳..."></p>
+        <p><select name="select" id="">
+            <option value="0" selected disabled>條件篩選...</option>
+            <option value="1">平均價位低</option>
+            <option value="2">平均價位高</option>
+            <option value="3">評價低</option>
+            <option value="4">評價高</option>
+        </select></p>
+        <button type="submit" id="search" onclick="Search()">查詢</button>
+        <button type="button" id="search_list" onclick="listinfo()">下單查詢</button>
+    </form>
     <center>
         {% for rec in data %}
         <div class="div_tbl" onclick="R_manu()">{{rec.name}} 

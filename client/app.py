@@ -41,7 +41,11 @@ def c_homepage():
 	return render_template('c_homepage.html', data=data)
 
 #條件搜尋
-
+@app.route("/search", methods=['get','post'])
+def c_search():
+	option=request.args.get('select')
+	data=C_gethome2(option)
+	return render_template('c_homepage.html', data=data)
 
 #已下定清單
 @app.route("/c_orderlist")
