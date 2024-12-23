@@ -24,13 +24,13 @@ def c_register():
 #註冊內容儲存至DB
 @app.route("/c_register", methods=['get','post'])
 def c_insertdo():
-	acc=request.args.get('acc')
-	psw=request.args.get('psw')
-	fname=request.args.get('fname')
-	lname=request.args.get('lname')
-	tel=request.args.get('tel')
-	email=request.args.get('email')
-	add=request.args.get('add')
+	acc=request.form.get('acc')
+	psw=request.form.get('psw')
+	fname=request.form.get('fname')
+	lname=request.form.get('lname')
+	tel=request.form.get('tel')
+	email=request.form.get('email')
+	add=request.form.get('add')
 	C_insertacc(acc, psw, fname, lname, tel, email, add)
 	return render_template('c_register.html')
 
@@ -43,7 +43,7 @@ def c_homepage():
 #條件搜尋
 @app.route("/search", methods=['get','post'])
 def c_search():
-	option=request.args.get('select')
+	option=request.form.get('select')
 	data=C_gethome2(option)
 	return render_template('c_homepage.html', data=data)
 
