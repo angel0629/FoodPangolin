@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>營業額</title>
+    <style>
+        .sales-summary {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sales-summary h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sales-table th, .sales-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .sales-table th {
+            background-color: #f2f2f2;
+        }
+
+        .sales-table td {
+            background-color: #ffffff;
+        }
+
+        .view-details-btn {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .view-details-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #order-details {
+            display: none;  /* 預設隱藏細項視窗 */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #order-time {
+            font-size: 14px;
+            margin-bottom: 10px; /* 與列表保持適當距離 */ 
+        }
+        #total-amount {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right; /* 總金額靠右對齊 */
+        }
+
+        #order-details button {
+            padding: 6px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #order-details button:hover {
+            background-color: #c82333;
+        }
+        /* 品項列表樣式 */
+        #order-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 單一品項樣式 */
+        #order-items-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 餐點名稱和數量樣式 */
+        #order-items-list li span:first-child {
+            font-weight: bold;
+        }
+
+        /* 餐點價格樣式 */
+        #order-items-list li span:last-child {
+            font-weight: normal;
+            color: #555;
+        }
+        
+        /* 總收入與訂單統計的區塊樣式 */
+        #summary-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 各項文字樣式 */
+        #summary-section p {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        #summary-section #total-revenue {
+            font-weight: bold;
+            font-size: 18px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="sales-summary">
+        <h2>營業額統計</h2>
+        <table class="sales-table">
+            <thead>
+                <tr>
+                    <th>訂單編號</th>
+                    <th>出餐時間</th>
+                    <th>品項內容</th>
+                    <th>總金額</th>
+                    <th>查看細項</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.time }}</td>
+                    <td>{{ order.items | join(", ") }}</td>
+                    <td>NT$ {{ order.total }}</td>
+                    <td><button class="view-details-btn" onclick="showDetails('{{ order.id }}')">查看細項</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 假設的細項視窗 -->
+    <div id="order-details" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: white; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 400px; max-height: 80%; overflow-y: auto;">
+        <h3>訂單細項</h3>
+        <p id="order-id">訂單編號: </p>
+        <p id="order-time">出餐時間: </p> 
+        <ul id="order-items-list" style="list-style-type: none; padding: 0;">
+            <!-- 品項和價格會由 JavaScript 動態生成 -->
+        </ul>
+        <hr>
+        <p id="total-amount">總金額: NT$ 320</p>
+        <button onclick="closeDetails()">關閉</button>
+    </div>
+
+    <!-- 總收入與訂單統計區塊 -->
+    <div id="summary-section">
+        <p id="total-revenue">今日總收入: NT$ {{ total_revenue }}</p>
+        <p id="revenue-note">備註: 總收入 = 總出餐金額 - 平台抽成</p>
+        <p id="completed-orders">完成訂單數: {{ completed_orders }}</p>
+        <p id="canceled-orders">取消訂單數: {{ canceled_orders }}</p>
+    </div>
+    <script>
+        
+        function closeDetails() {
+            // 關閉視窗
+            document.getElementById('order-details').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

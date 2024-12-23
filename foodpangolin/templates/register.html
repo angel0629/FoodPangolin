@@ -5,19 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagolin 註冊頁面</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
   <style>
     .brand-section {
-      position: absolute; /* 脫離正常佈局，絕對定位 */
-      top: 0; /* 置頂 */
+      position: absolute;
+      top: 0;
       left: 0;
-      width: 100%; /* 寬度填滿全屏 */
+      width: 100%;
       text-align: center;
       margin-bottom: 20px;
       border-bottom: 3px solid #b2c4b6;
       background-color: rgb(188, 225, 225);
-      
     }
 
     .brand-section img {
@@ -25,6 +24,7 @@
       height: auto;
       border-radius: 10px;
     }
+
     .brand-text {
       font-size: 20px;
       color: #333;
@@ -32,7 +32,7 @@
       font-family: 'Noto Sans SC', sans-serif;
       font-weight: 900;
     }
-    /* 基本樣式 */
+
     body {
       align-items: flex-start;
       font-family: 'Noto Sans SC', sans-serif;
@@ -44,16 +44,19 @@
       height: 100vh;
       background-color: #f4f4f4;
       flex-direction: column;
-      overflow: hidden; /* 防止滾動條顯示 */
-      margin-top: 50px;
+      overflow: hidden;
+      margin-top: 80px;
+      
     }
+
     .welcome-text {
       font-size: 30px;
       color: #333;
       text-align: center;
       margin-bottom: 30px;
-      font-weight: 800
+      font-weight: 800;
     }
+
     .container {
       display: flex;
       flex-direction: column;
@@ -61,11 +64,12 @@
       background-color: white;
       height: 300px;
       width: 45%;
-      padding: 40px; /* 增加容器的內邊距 */
-      border-radius: 15px; /* 圓角變大 */
+      padding: 40px;
+      border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       position: relative;
     }
+
     .identity-text {
       font-family: 'Noto Sans SC', sans-serif;
       font-weight: 650;
@@ -73,11 +77,12 @@
       color: #333;
       text-align: center;
       margin-bottom: 30px;
-      opacity: 0; /* 初始狀態透明 */
-      transform: translateY(50px); /* 初始位置在視窗下方 */
-      animation: slideUp 1s ease-out forwards; /* 加入動畫效果 */
-      animation-delay: 0.5s; /* 設定延遲時間 */
+      opacity: 0;
+      transform: translateY(50px);
+      animation: slideUp 1s ease-out forwards;
+      animation-delay: 0.5s;
     }
+
     @keyframes slideUp {
       0% {
         transform: translateY(50px);
@@ -88,12 +93,11 @@
         opacity: 1;
       }
     }
+
     .identity-selection {
       display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-      gap: 30px; /* 增加格子之間的間距 */
-      margin-bottom: 40px; 
+      gap: 30px;
+      margin-bottom: 40px;
       font-family: 'Noto Sans SC', sans-serif;
       font-weight: 500;
     }
@@ -114,48 +118,37 @@
       transform: scale(1.1);
     }
 
-    /* 隱藏下一步按鈕 */
     .next-step {
       display: none;
       margin-top: 20px;
-      bottom: 20px; 
-      transform: translateX(-50%);
-      position: absolute; /* 絕對定位 */
-      bottom: 20px; /* 距離容器底部 20px */
-      right: 20px; /* 距離容器右邊 20px */
-      width: auto; /* 讓按鈕自動適應內容 */
+      bottom: 20px;
+      position: absolute;
+      width: auto;
       border-radius: 15px;
     }
 
     .next-step button {
-      background-color: #ccc; /* 灰色背景色 */
-      color: #333; /* 深色文字 */
-      border: none; /* 去掉邊框 */
-      border-radius: 6px; /* 圓角設計，讓按鈕顯得柔和 */
-      padding: 8px 15px; /* 內邊距，調整按鈕大小 */
-      cursor: pointer; /* 鼠標懸停時顯示為手指圖標，增強互動感 */
-      transition: background-color 0.3s; /* 背景顏色過渡效果，平滑變化 */
-      font-weight: 600; /* 字體加粗 */
-      border-radius: 15px;
-    }
-    .next-step{
       background-color: #ccc;
       color: #333;
-    }
-    .next-step button:hover {
-      background-color: #bbb;
-      
+      border: none;
+      border-radius: 6px;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: 600;
     }
 
+    .next-step button:hover {
+      background-color: #bbb;
+    }
   </style>
 </head>
 <body>
-<div class="brand-section">
-  <img src="/templates/img/brand.png" alt="品牌圖片">
-  <p class="brand-text">全台第一外送平台</p>
-</div>
+  <div class="brand-section">
+    <img src="/static/img/brand.png" alt="品牌圖片">
+    <p class="brand-text">全台第一外送平台</p>
+  </div>
 
-</div>
   <div class="welcome-text">
     用戶您好，歡迎註冊Foodpangolin
   </div>
@@ -165,34 +158,43 @@
       <p>您的身分是?</p>
     </div>
     <div class="identity-selection">
-      <div class="identity" id="customer" onclick="showNextStep()">
-        <img src="/templates/img/customer1.jpeg" alt="消費者" />
+      <div class="identity" id="customer" onclick="selectIdentity('消費客戶')">
+        <img src="/static/img/customer1.jpeg" alt="消費者" />
         <p>消費客戶</p>
       </div>
-      <div class="identity" id="deliverer" onclick="showNextStep()">
-        <img src="/templates/img/deliver1.jpeg" alt="外送人員" />
+      <div class="identity" id="deliverer" onclick="selectIdentity('外送人員')">
+        <img src="/static/img/deliver1.jpeg" alt="外送人員" />
         <p>外送人員</p>
       </div>
-      <div class="identity" id="merchant" onclick="showNextStep()">
-        <img src="/templates/img/restaurant1.jpeg" alt="餐廳業者" />
+      <div class="identity" id="merchant" onclick="selectIdentity('餐廳業者')">
+        <img src="/static/img/restaurant1.jpeg" alt="餐廳業者" />
         <p>餐廳業者</p>
       </div>
     </div>
 
-    <!-- 下一步按鈕 -->
     <div class="next-step" id="nextStepContainer">
-      <button onclick="goPrivacy()">下一步</button>
+      <a id="nextStepLink" href="#">
+        <button>下一步</button>
+      </a>
     </div>
+
+    <!-- 隱藏字段用來存儲選擇的身份 -->
+    <input type="hidden" id="selectedIdentity" name="identity" value="">
+
   </div>
 
   <script>
+    function selectIdentity(identity) {
+    // 設置所選身份到隱藏字段
+    document.getElementById('selectedIdentity').value = identity;
+
+    // 動態設置超連結的 href
+    const nextStepLink = document.getElementById('nextStepLink');
+    nextStepLink.href = '/privacy?identity=' + encodeURIComponent(identity);
+
     // 顯示下一步按鈕
-    function showNextStep() {
-      document.getElementById('nextStepContainer').style.display = 'block';
-    }
-    function goPrivacy() {
-        window.location.href = 'privacy.html'; // 返回上一頁
-    }
+    document.getElementById('nextStepContainer').style.display = 'block';
+  }
   </script>
 </body>
 </html>
