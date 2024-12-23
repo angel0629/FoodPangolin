@@ -27,11 +27,13 @@ def C_insertacc(acc, psw, fname, lname, tel, email, add):
 	conn.commit()
 	return
 
+#取得homepage
 def C_gethome():
-	sql="SELECT r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name;"
+	sql="SELECT restaurant.r_id rid, r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name;"
 	cursor.execute(sql)
 	return cursor.fetchall()
 
+#取得條件篩選排列的homepage
 def C_gethome2(option):
 	if (option=="1"):
 		sql="SELECT r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name ORDER BY avg ASC;"
@@ -49,3 +51,9 @@ def C_gethome2(option):
 		sql="SELECT r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name ORDER BY avg DESC;"
 		cursor.execute(sql)
 		return cursor.fetchall()
+	
+#取得各餐廳menu
+def C_getmenu():
+	sql="SELECT m_name name, m_price price, m_picture pic FROM menu;"
+	cursor.execute(sql)
+	return cursor.fetchall()

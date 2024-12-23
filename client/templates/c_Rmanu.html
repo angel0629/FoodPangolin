@@ -40,7 +40,7 @@ body{
 .div_P {
     margin-top: -30px;
     position: absolute;
-    left: 40%;
+    left: 45%;
     font-weight: normal;
 }
 button {
@@ -135,28 +135,24 @@ img {
 <p></p>
 <div id="div_position">
     <div id="back" onclick="go_back()"></div>
-    <span class="title">餐廳1</sapn>
+    <span class="title">{{Rname}}</sapn>
     <button type="button" onclick="car()">查看購物車</button>
     <p></p>
     <center>
-        <div class="div_tbl" onclick="p_info()">爌肉飯 
-            <span><div class="div_P">$50</div></span>
-            <div class="div_pic"><img src="manu01.png"></div>
+        {% for rec in data %}
+        <div class="div_tbl" onclick="p_info()">{{rec.name}}
+            <span><div class="div_P">${{rec.price}}</div></span>
+            <div class="div_pic"><img src="{{rec.pic}}"></div>
         </div>
-        <div class="div_tbl" onclick="p_info()">拉麵
-            <span><div class="div_P">$90</div></span>
-            <div class="div_pic"><img src="manu02.png"></div>
-        </div>
-        <div class="div_tbl" onclick="p_info()">炒飯 
-            <span><div class="div_P">$65</div></span>
-            <div class="div_pic"><img src="manu03.png"></div>
-        </div>
+        {% endfor %}
     </center>
     <p></p>
     <div class="div_list">評價表</div>
     <div class="j_list">
-        <span><div class="div_user">邱</div></span>
-        <span><div class="j_content">........................................... </div></span>
+        {% for rec2 in fbdata %}
+        <span><div class="div_user">{{rec2.user}}</div></span>
+        <span><div class="j_content">{{rec2.feedback}} </div></span>
+        {% endfor %}
         <span><div class="div_user">陳</div></span>
         <span><div class="j_content">...................</div></span>
         <span><div class="div_user">羅</div></span>

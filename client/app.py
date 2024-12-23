@@ -47,6 +47,12 @@ def c_search():
 	data=C_gethome2(option)
 	return render_template('c_homepage.html', data=data)
 
+#各餐廳菜單
+@app.route("/c_Rmenu")
+def c_showmanu():
+	data=C_getmenu()
+	return render_template('c_Rmanu.html', data=data)
+
 #已下定清單
 @app.route("/c_orderlist")
 def c_Olist():
@@ -67,10 +73,7 @@ def c_check():
 def c_feedback():
 	return render_template('c_feedbackUPL.html')
 
-#各餐廳菜單
-@app.route("/c_Rmanu")
-def c_showmanu():
-	return render_template('c_Rmanu.html')
+
 
 #購物車
 @app.route("/c_car")

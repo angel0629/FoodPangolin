@@ -113,8 +113,8 @@ img {
     function listinfo() {
         window.location.href = "/c_orderlist";
     }
-    function R_manu() {
-        window.location.href = "/c_Rmanu";
+    function R_menu() {
+        window.location.href = "/c_Rmenu";
     }
     </script>
 </head>
@@ -136,7 +136,7 @@ img {
     </form>
     <center>
         {% for rec in data %}
-        <div class="div_tbl" onclick="R_manu()">{{rec.name}} 
+        <div class="div_tbl" onclick="R_menu()">{{rec.name}}
             <span><div class="div_avgP">平均價位：${{rec.avg}}</div></span>
             <div class="div_star">
                 {% for i in range(rec.rating) %}
