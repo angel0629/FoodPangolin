@@ -133,18 +133,16 @@ img {
     <button type="submit" id="search" onclick="Search()">查詢</button>
     <button type="button" id="search_list" onclick="listinfo()">下單查詢</button>
     <center>
-        <div class="div_tbl" onclick="R_manu()">餐廳 1 
-            <span><div class="div_avgP">平均價位：$200</div></span>
-            <div class="div_star"><img src="star.png"><img src="star.png"><img src="star.png"></div>
+        {% for rec in data %}
+        <div class="div_tbl" onclick="R_manu()">{{rec.name}} 
+            <span><div class="div_avgP">平均價位：${{rec.avg}}</div></span>
+            <div class="div_star">
+                {% for i in range(rec.rating) %}
+                <img src="star.png">
+                {% endfor %}
+            </div>
         </div>
-        <div class="div_tbl" onclick="R_manu()">餐廳 2 
-            <span><div class="div_avgP">平均價位：$150</div></span>
-            <div class="div_star"><img src="star.png"><img src="star.png"><img src="star.png"><img src="star.png"></div>
-        </div>
-        <div class="div_tbl" onclick="R_manu()">餐廳 3 
-            <span><div class="div_avgP">平均價位：$250</div></span>
-            <div class="div_star"><img src="star.png"><img src="star.png"></div>
-        </div>
+        {% endfor %}
     </center>
     
 </div>

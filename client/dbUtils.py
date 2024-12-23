@@ -27,3 +27,7 @@ def C_insertacc(acc, psw, fname, lname, tel, email, add):
 	conn.commit()
 	return
 
+def C_gethome():
+	sql="SELECT r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT rating FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name;"
+	cursor.execute(sql)
+	return cursor.fetchall()

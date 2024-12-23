@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 from functools import wraps
-from dbUtils import C_insertacc
+from dbUtils import *
 # creates a Flask application, specify a static folder on /
 app = Flask(__name__, static_folder='static',static_url_path='/')
 #set a secret key to hash cookies
@@ -37,7 +37,8 @@ def c_insertdo():
 #客戶homepage
 @app.route("/c_home")
 def c_homepage():
-	return render_template('c_homepage.html')
+	data=C_gethome()
+	return render_template('c_homepage.html', data=data)
 
 #條件搜尋
 
