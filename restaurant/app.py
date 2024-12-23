@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect,url_for, flash
 from functools import wraps
-from dbUtils import r_getList, r_add, r_editList, r_update, r_delete , r_getallList#, details, add, delete, editList, update, buy, new_buy, get_shop
+from dbUtils import r_getList, r_add, r_editList, r_update, r_delete , r_getallList,r_acceptList,r_announced_deliver#, details, add, delete, editList, update, buy, new_buy, get_shop
 import os
 # creates a Flask application, specify a static folder on /
 #app = Flask(__name__, static_folder='static',static_url_path='/')
@@ -97,6 +97,18 @@ def r_delete_form(id):
 def r_delete_form_error():
 	return redirect(url_for('r_get_food'))
 	#return render_template('delete.html',id)
+
+@app.route("/r_accept_ord/<int:id>")
+#使用server side render: template 樣板
+def r_accept(id):
+	dat=r_acceptList(id)
+	return redirect(url_for('r_get_sell'))
+
+@app.route("/r_announced_deliver/<int:id>")
+#使用server side render: template 樣板
+def announced(id):
+	dat=r_announced_deliver(id)
+	return redirect(url_for('r_get_sell'))
 
 '''
 

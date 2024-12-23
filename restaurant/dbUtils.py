@@ -75,12 +75,23 @@ def r_getList(my_id):
 	return cursor.fetchall()
 
 
-
-
-
-
 #顯示所有訂單清單
 def r_getallList(my_id):
+	try:
+		#連線DB
+		conn = mysql.connector.connect(
+			user="root",
+			password="",
+			host="localhost",
+			port=3306,
+			database="food_pangolin"
+		)
+		#建立執行SQL指令用之cursor, 設定傳回dictionary型態的查詢結果 [{'欄位名':值, ...}, ...]
+		cursor=conn.cursor(dictionary=True)
+	except mysql.connector.Error as e: # mariadb.Error as e:
+		print(e)
+		print("Error connecting to DB")
+		exit(1)
 	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
 		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
 		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
@@ -88,6 +99,20 @@ def r_getallList(my_id):
 		WHERE restaurant.r_id=%s;"""
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
+
+def r_acceptList(o_id):
+	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
+	param=("已接單",o_id)
+	cursor.execute(sql,param)
+	conn.commit()
+
+def r_announced_deliver(o_id):
+	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
+	param=("配送中",o_id)
+	cursor.execute(sql,param)
+	conn.commit()
+
+
 '''
 #顯示細節
 def details(id):

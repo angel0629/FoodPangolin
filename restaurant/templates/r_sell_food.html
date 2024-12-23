@@ -16,7 +16,7 @@
       
   }
 </script>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 <h1>上架食物清單</h1>
@@ -28,28 +28,28 @@
 
 <section class="my_table" >
 
-    <table>
+  <table>
+    <tr>
+      <th>圖片</th>
+      <th>名稱</th>
+      <th>價錢</th>
+      <th>內容</th>
+      <th></th>
+      <th> </th>
+    </tr>
+    {% for i in data %}
       <tr>
-        <th>圖片</th>
-        <th>名稱</th>
-        <th>價錢</th>
-        <th>內容</th>
-        <th></th>
-        <th> </th>
+        <td><img src="static/uploads/{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 200px; height: auto;"></td>
+        <!--<th style="background-color: rgb(255, 186, 186);">{{i.m_picture}}</th> -->
+        <th>{{i.m_name}}</th>
+        <th>${{i.m_price}}</th>
+        <th>{{i.m_detail}}</th>
+        <!--<img src="{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 100px; height: auto;">-->
+        <td><a href="/r_edit_product/{{i.m_id}}"><button style="background-color:yellowgreen">修改</button></td>
+        <td><button onclick="alert_del('{{i.m_id}}')" style="background-color:orangered">刪除</button></td>
       </tr>
-      {% for i in data %}
-        <tr>
-          <td><img src="static/uploads/{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 300px; height: auto;"></td>
-          <!--<th style="background-color: rgb(255, 186, 186);">{{i.m_picture}}</th> -->
-          <th style="background-color: rgb(255, 186, 186);">{{i.m_name}}</th>
-          <th style="background-color: rgb(255, 186, 186);">${{i.m_price}}</th>
-          <th style="background-color: rgb(255, 186, 186);">{{i.m_detail}}</th>
-          <!--<img src="{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 100px; height: auto;">-->
-          <td><a href="/r_edit_product/{{i.m_id}}"><button style="background-color:yellowgreen">修改</button></td>
-          <td><button onclick="alert_del('{{i.m_id}}')" style="background-color:orangered">刪除</button></td>
-        </tr>
-      {% endfor %}
-    </table>  
+    {% endfor %}
+  </table>  
 
 </section>
 </body></html>
