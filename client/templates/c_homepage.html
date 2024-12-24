@@ -110,6 +110,9 @@ img {
     function search() {
         window.location.href = "/search";
     }
+    function options() {
+        window.location.href = "/option_selected";
+    }
     function listinfo() {
         window.location.href = "/c_orderlist";
     }
@@ -126,7 +129,7 @@ img {
         <p><input type="text" placeholder="搜尋餐廳..." name="text"></p>
         <p><select name="select" id="">
             <option value="0" selected disabled>條件篩選...</option>
-            <option value="1" onclick="">平均價位低</option>
+            <option value="1">平均價位低</option>
             <option value="2">平均價位高</option>
             <option value="3">評價低</option>
             <option value="4">評價高</option>
