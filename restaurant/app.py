@@ -20,7 +20,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 #自己的拍賣品清單
-@app.route("/")
+@app.route("/restaurant")
 #使用server side render: template 樣板
 def r_get_sell():
 	dat=r_getallList(my_id)
