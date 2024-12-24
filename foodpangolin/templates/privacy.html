@@ -103,7 +103,7 @@
 </head>
 <body>
     <div class="brand-section">
-        <img src="/templates/img/brand.png" alt="品牌圖片">
+        <img src="/img/brand.png" alt="品牌圖片">
         <p class="brand-text">全台第一外送平台</p>
     </div>
 
@@ -129,12 +129,31 @@
   <script>
     // 返回上一頁
     function goBack() {
-        window.location.href = 'register.html'; // 返回上一頁
+        window.location.href = '/register'; // 返回上一頁
     }
 
     // 用戶同意隱私政策並跳轉到下一頁
+    function goBack() {
+    window.location.href = '/register'; // 返回註冊選擇頁面
+  }
+
+    // 用戶同意隱私政策並跳轉到適當的註冊畫面
     function agreeToPrivacy() {
-      window.location.href = '下一步的頁面.html'; // 跳轉到下一頁
+      // 從 URL 中獲取選擇的身份
+      const urlParams = new URLSearchParams(window.location.search);
+      const identity = urlParams.get('identity');
+
+      // 根據身份跳轉到對應的註冊畫面
+      if (identity === '消費客戶') {
+        window.location.href = '/register_customer';
+      } else if (identity === '外送人員') {
+        window.location.href = '/register_delivery';
+      } else if (identity === '餐廳業者') {
+        window.location.href = '/register_restaurant';
+      } else {
+        alert('無效的身份，請返回重新選擇。');
+        goBack();
+      }
     }
   </script>
 
