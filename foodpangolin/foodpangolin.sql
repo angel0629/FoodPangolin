@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-12-23 15:46:39
+-- 產生時間： 2024-12-24 14:16:58
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -212,8 +212,9 @@ INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`
 CREATE TABLE `orders` (
   `o_id` int(11) NOT NULL,
   `r_id` int(20) NOT NULL,
+  `m_id` int(10) NOT NULL,
   `c_id` varchar(100) NOT NULL,
-  `o_status` enum('待接單','已接單','配送中','已完成') DEFAULT '待接單',
+  `o_status` int(11) DEFAULT NULL,
   `d_sid` int(11) DEFAULT NULL,
   `pickup_time` datetime DEFAULT NULL,
   `delivery_time` datetime DEFAULT NULL
@@ -223,11 +224,13 @@ CREATE TABLE `orders` (
 -- 傾印資料表的資料 `orders`
 --
 
-INSERT INTO `orders` (`o_id`, `r_id`, `c_id`, `o_status`, `d_sid`, `pickup_time`, `delivery_time`) VALUES
-(1, 1, '1', '已接單', 6, NULL, NULL),
-(2, 1, '1', '配送中', 6, NULL, NULL),
-(3, 1, '1', '配送中', 7, NULL, NULL),
-(4, 1, '1', '已完成', 6, NULL, NULL);
+INSERT INTO `orders` (`o_id`, `r_id`, `m_id`, `c_id`, `o_status`, `d_sid`, `pickup_time`, `delivery_time`) VALUES
+(1, 1, 1, '1', 3, 6, NULL, NULL),
+(2, 1, 2, '1', 2, 6, NULL, NULL),
+(3, 1, 3, '1', 5, 7, NULL, NULL),
+(4, 1, 4, '1', 4, 6, NULL, NULL),
+(5, 3, 8, '1', 1, 7, NULL, NULL),
+(6, 1, 4, '1', 2, 7, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -275,6 +278,28 @@ CREATE TABLE `r_star` (
 
 INSERT INTO `r_star` (`r_star_id`, `c_id`, `r_id`, `rating`, `comments`) VALUES
 (1, 1, 1, 5, '我覺得很棒！');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `status`
+--
+
+CREATE TABLE `status` (
+  `status_id` int(11) NOT NULL,
+  `status_name` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- 傾印資料表的資料 `status`
+--
+
+INSERT INTO `status` (`status_id`, `status_name`) VALUES
+(1, '待餐廳接單'),
+(2, '待外送員接單'),
+(3, '待外送員取餐'),
+(4, '配送中'),
+(5, '已完成');
 
 --
 -- 已傾印資料表的索引
@@ -387,7 +412,7 @@ ALTER TABLE `menu`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `restaurant`

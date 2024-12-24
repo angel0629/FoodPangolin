@@ -142,23 +142,26 @@ def r_getallList(my_id):
 		print(e)
 		print("Error connecting to DB")
 		exit(1)
-	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
+	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status,status.status_name
 		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
 		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
 		INNER JOIN restaurant ON orders.r_id=restaurant.r_id
-		WHERE restaurant.r_id=%s;"""
+        INNER JOIN status ON status.status_id=orders.o_status
+		WHERE restaurant.r_id=%s
+        ORDER BY o_status;
+        """
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
 
 def r_acceptList(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=("已接單",o_id)
+	param=(2,o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 
 def r_announced_deliver(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=("配送中",o_id)
+	param=(4,o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 def get_r_id(account):

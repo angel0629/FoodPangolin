@@ -48,13 +48,15 @@
     {% for i in data %}
     <tr>
       <tr 
-      {% if i.o_status == "待接單" %}
+      {% if i.o_status == 1 %}
       style="background-color: rgb(251, 88, 88);"
-      {% elif i.o_status == "已接單" %}
+      {% elif i.o_status == 2 %}
       style="background-color: rgb(245, 245, 128);"
-      {% elif i.o_status == "配送中" %}
+      {% elif i.o_status == 3 %}
+      style="background-color: rgb(245, 245, 128);"
+      {% elif i.o_status == 4 %}
       style="background-color: rgb(189, 244, 101);"
-      {% elif i.o_status == "已完成" %}
+      {% elif i.o_status == 5 %}
       style="background-color: transparent;"
       {% endif %}
     >
@@ -64,19 +66,22 @@
       <th >{{i.pickup_time}}</th>
       <th >{{i.d_name}}</th>
       <th > {{i.delivery_time}}</th>
-      <th > {{i.o_status}}</th>
+      <th > {{i.status_name}}</th>
 
 
-      {% if i.o_status =="待接單" %}
+      {% if i.o_status == 1 %}
       <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_accept('{{i.o_id}}')" style="background-color:rgb(251, 88, 88)" >確定接單</button></td>
       {% endif %}
-      {% if i.o_status =="已接單" %} 
-      <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_announced('{{i.o_id}}')" style="background-color:rgb(245, 245, 128)">通知外送員</button></td>
-      {% endif %}
-      {% if i.o_status =="配送中" %}
+      {% if i.o_status == "2" %}
       <th style="background-color:rgb(250, 226, 195)"></th>
       {% endif %}
-      {% if i.o_status =="已完成" %}
+      {% if i.o_status == "3" %} 
+      <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_announced('{{i.o_id}}')" style="background-color:rgb(245, 245, 128)">通知外送員</button></td>
+      {% endif %}
+      {% if i.o_status == "4" %}
+      <th style="background-color:rgb(250, 226, 195)"></th>
+      {% endif %}
+      {% if i.o_status == "5" %}
       <th style="background-color:transparent"></th>
       {% endif %}
     </tr>

@@ -92,10 +92,11 @@ def r_getallList(my_id):
 		print(e)
 		print("Error connecting to DB")
 		exit(1)
-	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
+	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status,status.status_name
 		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
 		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
 		INNER JOIN restaurant ON orders.r_id=restaurant.r_id
+        INNER JOIN status ON status.status_id=orders.o_status
 		WHERE restaurant.r_id=%s;"""
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
