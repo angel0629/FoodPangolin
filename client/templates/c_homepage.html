@@ -113,8 +113,8 @@ img {
     function listinfo() {
         window.location.href = "/c_orderlist";
     }
-    function R_menu() {
-        window.location.href = "/c_Rmenu";
+    function R_menu(Rname, Rid) {
+        window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
     }
     </script>
 </head>
@@ -123,10 +123,10 @@ img {
 <div id="div_position">
     <div class="div_user" onclick="userinfo()">邱</div>
     <form action="/search" method="post">
-        <p><input type="text" placeholder="搜尋餐廳..."></p>
+        <p><input type="text" placeholder="搜尋餐廳..." name="text"></p>
         <p><select name="select" id="">
             <option value="0" selected disabled>條件篩選...</option>
-            <option value="1">平均價位低</option>
+            <option value="1" onclick="">平均價位低</option>
             <option value="2">平均價位高</option>
             <option value="3">評價低</option>
             <option value="4">評價高</option>
@@ -136,7 +136,7 @@ img {
     </form>
     <center>
         {% for rec in data %}
-        <div class="div_tbl" onclick="R_menu()">{{rec.name}}
+        <div class="div_tbl" onclick="R_menu('{{ rec.name | urlencode }}', '{{ rec.rid }}')">{{rec.name}}
             <span><div class="div_avgP">平均價位：${{rec.avg}}</div></span>
             <div class="div_star">
                 {% for i in range(rec.rating) %}

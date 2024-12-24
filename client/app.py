@@ -40,18 +40,20 @@ def c_homepage():
 	data=C_gethome()
 	return render_template('c_homepage.html', data=data)
 
-#條件搜尋
+#條件搜尋(下拉)
 @app.route("/search", methods=['get','post'])
 def c_search():
 	option=request.form.get('select')
-	data=C_gethome2(option)
+	text=request.form.get('text')
+	data=C_gethome2(option, text)
 	return render_template('c_homepage.html', data=data)
 
 #各餐廳菜單
-@app.route("/c_Rmenu")
-def c_showmanu():
-	data=C_getmenu()
-	return render_template('c_Rmanu.html', data=data)
+@app.route("/c_Rmenu/<string:Rname>/<int:Rid>")
+def c_showmanu(Rname, Rid):
+	data=C_getmenu(Rid)
+	fbdata=C_getfeedback(Rid)
+	return render_template('c_Rmanu.html', data=data, Rname=Rname, fbdata=fbdata)
 
 #已下定清單
 @app.route("/c_orderlist")
@@ -72,7 +74,6 @@ def c_check():
 @app.route("/c_feedbackUPL")
 def c_feedback():
 	return render_template('c_feedbackUPL.html')
-
 
 
 #購物車
