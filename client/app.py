@@ -34,7 +34,7 @@ def c_insertdo():
 	C_insertacc(acc, psw, fname, lname, tel, email, add)
 	return render_template('c_register.html')
 
-#客戶homepage
+#客戶homepage #無任何商品菜單之餐廳不會顯示於列表上
 @app.route("/c_home")
 def c_homepage():
 	data=C_gethome()
@@ -53,7 +53,7 @@ def c_search():
 def c_showmanu(Rname, Rid):
 	data=C_getmenu(Rid)
 	fbdata=C_getfeedback(Rid)
-	return render_template('c_Rmanu.html', data=data, Rname=Rname, fbdata=fbdata)
+	return render_template('c_Rmanu.html', data=data, Rname=Rname, Rid=Rid, fbdata=fbdata)
 
 #已下定清單
 @app.route("/c_orderlist")

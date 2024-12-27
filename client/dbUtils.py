@@ -10,7 +10,8 @@ try:
 		password="rc0428",
 		host="localhost",
 		port=3306,
-		database="FoodDelivery platform"
+		database="foodpangolin"
+		#database="FoodDelivery platform"
 	)
 	#建立執行SQL指令用之cursor, 設定傳回dictionary型態的查詢結果 [{'欄位名':值, ...}, ...]
 	cursor=conn.cursor(dictionary=True)
@@ -29,7 +30,7 @@ def C_insertacc(acc, psw, fname, lname, tel, email, add):
 
 #取得homepage
 def C_gethome():
-	sql="SELECT restaurant.r_id rid, r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  r_name;"
+	sql="SELECT restaurant.r_id rid, r_name name,sum(m_price) DIV COUNT(m_id) avg, (SELECT sum(rating) DIV COUNT(rating) FROM r_star WHERE r_star.r_id = restaurant.r_id LIMIT 1) rating FROM restaurant, menu WHERE restaurant.r_id = menu.r_id GROUP BY  rid;"
 	cursor.execute(sql)
 	return cursor.fetchall()
 
