@@ -91,7 +91,7 @@ button {
     bottom: 5.5%;
     left: 44.5%;
 }
-.crenum {
+.innum {
     position: absolute;
     bottom: 5.5%;
     right: 39%;
@@ -116,7 +116,14 @@ button {
     function go_back(Rname, Rid) {
         window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
     }
-
+    function updnum(num, btnName) {
+        const btn =document.getElementById(btnName);
+        const inputbox=document.getElementById('quantity');
+        let oldnum=parseInt(inputbox.value);
+        if (oldnum+parseInt(num)>-1){
+            inputbox.value=oldnum+parseInt(num);
+        }
+    }
     </script>
 </head>
 <body>
@@ -133,11 +140,11 @@ button {
 <ul>
     <li>{{data.detail}}</li>
 </ul>
-<button type="button" class="denum" onclick="updnum(-1)">-</button>
+<button type="button" class="denum" onclick="updnum(-1,'debtn')" id="debtn">-</button>
 <div class="quantity-selector">
     <input type="text" id="quantity" value="1" readonly>
 </div>
-<button type="button" class="crenum" onclick="updnum(1)">+</button>
+<button type="button" class="innum" onclick="updnum(1, 'inbtn')" id="inbtn">+</button>
 <button type="button" class="add" onclick="addcar()">加入購物車</button>
 </body>
 </html>
