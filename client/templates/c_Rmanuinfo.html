@@ -116,6 +116,7 @@ button {
     function go_back(Rname, Rid) {
         window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
     }
+
     </script>
 </head>
 <body>
@@ -123,7 +124,7 @@ button {
 <div id="div_position">
     <center>
         <div class="div_pic"><img src="/{{data.pic}}"></div>
-        <div id="back" onclick="go_back()"></div>
+        <div id="back" onclick="go_back('{{Rname}}','{{Rid}}')"></div>
     </center>
 </div>
 <div class="title">{{data.name}}</div>
