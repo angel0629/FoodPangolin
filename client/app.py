@@ -59,7 +59,15 @@ def c_showmanu(Rname, Rid):
 @app.route("/c_manuinfo/<string:Rname>/<int:Rid>/<string:Mname>/<int:Mid>")
 def c_showmanuinfo(Rname, Rid, Mname, Mid):
 	data=C_getmenuinfo(Rid, Mid)
-	return render_template('c_Rmanuinfo.html',data=data, Rname=Rname, Mname=Mname, Rid=Rid)
+	return render_template('c_Rmanuinfo.html',data=data, Rname=Rname, Rid=Rid, Mname=Mname, Mid=Mid)
+
+#加入購物車
+@app.route("/c_addcar/<string:Rname>/<int:Rid>/<string:Dname>/<int:Dprice>/<int:Num>/<int:Sum>")
+def c_addtocar(Rname, Rid, Dname, Dprice, Num, Sum):
+	data=C_getmenu(Rid)
+	fbdata=C_getfeedback(Rid)
+	C_addcar(Rname, Dname, Dprice, Num, Sum)
+	return render_template('c_Rmanu.html', data=data, Rname=Rname, Rid=Rid, fbdata=fbdata)
 
 #已下定清單
 @app.route("/c_orderlist")

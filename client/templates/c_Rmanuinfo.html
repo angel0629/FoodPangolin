@@ -110,8 +110,10 @@ button {
 }
 </style>
 <script>
-    function addcar() {
-        window.location.href = "";
+    function addcar(Rname, Rid, Dname, Dprice) {
+        const Num=parseInt(document.getElementById('quantity').value);
+        let Sum=parseInt(Dprice)*Num
+        window.location.href = "/c_addcar/"+Rname+"/"+Rid+"/"+Dname+"/"+Dprice+"/"+Num+"/"+Sum;
     }
     function go_back(Rname, Rid) {
         window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
@@ -145,6 +147,6 @@ button {
     <input type="text" id="quantity" value="1" readonly>
 </div>
 <button type="button" class="innum" onclick="updnum(1, 'inbtn')" id="inbtn">+</button>
-<button type="button" class="add" onclick="addcar()">加入購物車</button>
+<button type="button" class="add" onclick="addcar('{{Rname}}','{{Rid}}','{{data.name}}','{{data.price}}')">加入購物車</button>
 </body>
 </html>

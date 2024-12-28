@@ -75,3 +75,10 @@ def C_getmenuinfo(Rid, Mid):
 	sql="SELECT m_id mid, m_name name, m_price price, m_detail detail, m_picture pic FROM menu WHERE r_id=%s AND m_id=%s;"
 	cursor.execute(sql, (Rid, Mid,))
 	return cursor.fetchone()
+
+#加入購物車
+def C_addcar(Rname, Dname, Dprice, Num, Sum):
+	sql="insert into Client_carlist (r_name, ca_Id, ccl_DName, ccl_Dprice, ccl_Num, ccl_Sum) value(%s,%s,%s,%s,%s,%s);"
+	cursor.execute(sql, (Rname, 1, Dname, Dprice, Num, Sum,))
+	conn.commit()
+	return
