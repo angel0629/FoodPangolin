@@ -60,7 +60,7 @@ def C_gethome2(option, text):
 
 #取得各餐廳menu
 def C_getmenu(Rid):
-	sql="SELECT m_name name, m_price price, m_picture pic FROM menu WHERE r_id=%s;"
+	sql="SELECT m_id mid, m_name name, m_price price, m_picture pic FROM menu WHERE r_id=%s;"
 	cursor.execute(sql,(Rid,))
 	return cursor.fetchall()
 
@@ -69,3 +69,9 @@ def C_getfeedback(Rid):
 	sql="SELECT (SELECT ca_Fname FROM client_account WHERE r_star.ca_Id = client_account.ca_Id )user , rating, comments feedback FROM r_star WHERE r_star.r_id = %s;"
 	cursor.execute(sql, (Rid,))
 	return cursor.fetchall()
+
+#取得菜單詳細資訊
+def C_getmenuinfo(Rid, Mid):
+	sql="SELECT m_id mid, m_name name, m_price price, m_detail detail, m_picture pic FROM menu WHERE r_id=%s AND m_id=%s;"
+	cursor.execute(sql, (Rid, Mid,))
+	return cursor.fetchone()

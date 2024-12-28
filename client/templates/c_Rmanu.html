@@ -124,8 +124,8 @@ img {
     function car() {
         window.location.href = "/c_car";
     }
-    function p_info() {
-        window.location.href = "/c_manuinfo";
+    function p_info(Rname, Rid, Mname, Mid) {
+        window.location.href = "/c_manuinfo/"+Rname+"/"+Rid+"/"+Mname+"/"+Mid;
     }
     function go_back() {
         window.location.href = "/c_home";
@@ -141,7 +141,7 @@ img {
     <p></p>
     <center>
         {% for rec in data %}
-        <div class="div_tbl" onclick="p_info()">{{rec.name}}
+        <div class="div_tbl" onclick="p_info('{{Rname}}','{{Rid}}','{{rec.name}}','{{rec.mid}}')">{{rec.name}}
             <span><div class="div_P">${{rec.price}}</div></span>
             <div class="div_pic"><img src="/{{rec.pic}}"></div>
         </div>

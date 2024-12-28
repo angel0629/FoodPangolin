@@ -55,6 +55,12 @@ def c_showmanu(Rname, Rid):
 	fbdata=C_getfeedback(Rid)
 	return render_template('c_Rmanu.html', data=data, Rname=Rname, Rid=Rid, fbdata=fbdata)
 
+#菜品詳細資訊
+@app.route("/c_manuinfo/<string:Rname>/<int:Rid>/<string:Mname>/<int:Mid>")
+def c_showmanuinfo(Rname, Rid, Mname, Mid):
+	data=C_getmenuinfo(Rid, Mid)
+	return render_template('c_Rmanuinfo.html',data=data, Rname=Rname, Mname=Mname, Rid=Rid)
+
 #已下定清單
 @app.route("/c_orderlist")
 def c_Olist():
@@ -81,9 +87,6 @@ def c_feedback():
 def c_showcar():
 	return render_template('c_carlist.html')
 
-#菜品詳細資訊
-@app.route("/c_manuinfo")
-def c_showmanuinfo():
-	return render_template('c_Rmanuinfo.html')
+
 
 #加入購物車

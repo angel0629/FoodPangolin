@@ -122,17 +122,15 @@ button {
 <p></p>
 <div id="div_position">
     <center>
-        <div class="div_pic"><img src="manu01.png"></div>
+        <div class="div_pic"><img src="/{{data.pic}}"></div>
         <div id="back" onclick="go_back()"></div>
     </center>
 </div>
-<div class="title">爌肉飯</div>
-<div class="div_P">$50</div>
+<div class="title">{{data.name}}</div>
+<div class="div_P">${{data.price}}</div>
 <p>產品說明：</p>
 <ul>
-    <li>g3fm;ls jfps </li>
-    <li>.....................................................</li>
-    <li>....................................</li>
+    <li>{{data.detail}}</li>
 </ul>
 <button type="button" class="denum" onclick="updnum(-1)">-</button>
 <div class="quantity-selector">
