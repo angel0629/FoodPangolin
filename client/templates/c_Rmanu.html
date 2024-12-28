@@ -121,11 +121,11 @@ img {
 }
 </style>
 <script>
-    function car() {
-        window.location.href = "/c_car";
+    function car(Rname, Rid) {
+        window.location.href = "/c_car/"+Rname+"/"+Rid;
     }
     function p_info(Rname, Rid, Mname, Mid) {
-        window.location.href = "/c_manuinfo/"+Rname+"/"+Rid+"/"+Mname+"/"+Mid;
+        window.location.href = "/c_menuinfo/"+Rname+"/"+Rid+"/"+Mname+"/"+Mid;
     }
     function go_back() {
         window.location.href = "/c_home";
@@ -137,7 +137,7 @@ img {
 <div id="div_position">
     <div id="back" onclick="go_back()"></div>
     <span class="title">{{Rname}}</sapn>
-    <button type="button" onclick="car()">查看購物車</button>
+    <button type="button" onclick="car('{{Rname}}','{{Rid}}')">查看購物車</button>
     <p></p>
     <center>
         {% for rec in data %}

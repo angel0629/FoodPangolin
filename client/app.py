@@ -56,7 +56,7 @@ def c_showmanu(Rname, Rid):
 	return render_template('c_Rmanu.html', data=data, Rname=Rname, Rid=Rid, fbdata=fbdata)
 
 #菜品詳細資訊
-@app.route("/c_manuinfo/<string:Rname>/<int:Rid>/<string:Mname>/<int:Mid>")
+@app.route("/c_menuinfo/<string:Rname>/<int:Rid>/<string:Mname>/<int:Mid>")
 def c_showmanuinfo(Rname, Rid, Mname, Mid):
 	data=C_getmenuinfo(Rid, Mid)
 	return render_template('c_Rmanuinfo.html',data=data, Rname=Rname, Rid=Rid, Mname=Mname, Mid=Mid)
@@ -68,6 +68,13 @@ def c_addtocar(Rname, Rid, Dname, Dprice, Num, Sum):
 	fbdata=C_getfeedback(Rid)
 	C_addcar(Rname, Dname, Dprice, Num, Sum)
 	return render_template('c_Rmanu.html', data=data, Rname=Rname, Rid=Rid, fbdata=fbdata)
+
+#購物車
+@app.route("/c_car/<string:Rname>/<int:Rid>")
+def c_showcar(Rname, Rid):
+	data=C_getcar(Rname)
+	total=C_getcartotal(Rname)['total']
+	return render_template('c_carlist.html', data=data, Rname=Rname, total=total, Rid=Rid)
 
 #已下定清單
 @app.route("/c_orderlist")
@@ -88,13 +95,6 @@ def c_check():
 @app.route("/c_feedbackUPL")
 def c_feedback():
 	return render_template('c_feedbackUPL.html')
-
-
-#購物車
-@app.route("/c_car")
-def c_showcar():
-	return render_template('c_carlist.html')
-
 
 
 #加入購物車

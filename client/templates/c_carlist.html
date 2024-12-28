@@ -69,8 +69,8 @@ button {
     color: white;
     cursor: pointer;
     position: absolute;
-    right: 12%;
-    bottom: -24%;
+    right: 3%;
+    bottom: 10px;
 }
 div.title {
     font-weight: bold;
@@ -112,7 +112,9 @@ img {
     text-indent: 1.5em;
     padding-top: 10px;
     padding-bottom: 10px;
-    margin-bottom: -20px;
+    position: fixed;
+    bottom: 0;
+    left:10%;
     width: 80%;
     height: 45px;
     background-color: #eedede;
@@ -125,8 +127,8 @@ img {
 }
 </style>
 <script>
-    function go_back() {
-        window.location.href = "/c_Rmanu";
+    function go_back(Rname, Rid) {
+        window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
     }
     function del() {
         window.location.href = "";
@@ -140,50 +142,26 @@ img {
 <p></p>
 <div id="div_position">
     <center>
-        <div class="div_title"><div class="title">購物車</div></div>
-        <div id="back" onclick="go_back()"></div>
+        <div class="div_title"><div class="title">購物車-{{Rname}}</div></div>
+        <div id="back" onclick="go_back('{{Rname}}','{{Rid}}')"></div>
     </center>
     
     <p></p>
     <center>
-        <div class="div_tbl">爌肉飯 
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$50</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
+        {% for rec in data %}
+        <div class="div_tbl">{{rec.Dname}} 
+            <span><div class="div_N">數量：{{rec.num}}</div></span>
+            <span><div class="div_P">${{rec.sum}}</div></span>
+            <div class="div_pic" onclick="del()"><img src="/delete.png"></div>
         </div>
-        <div class="div_tbl">拉麵
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$90</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
-        </div>
-        <div class="div_tbl">炒飯 
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$65</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
-        </div>
-        <div class="div_tbl">炒飯 
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$65</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
-        </div>
-        <div class="div_tbl">炒飯 
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$65</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
-        </div>
-        <div class="div_tbl">炒飯 
-            <span><div class="div_N">數量：1</div></span>
-            <span><div class="div_P">$65</div></span>
-            <div class="div_pic" onclick="del()"><img src="delete.png"></div>
-        </div>
+        {% endfor %}
     </center>
     <p></p>
     <center>
         <div class="div_bottom">
-            <div class="sum">總金額：$400
+            <div class="sum">總金額：${{total}}
                 <button type="button" onclick="order()">下單</button>
             </div>
-            
         </div>
     </center>
     

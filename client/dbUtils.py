@@ -82,3 +82,15 @@ def C_addcar(Rname, Dname, Dprice, Num, Sum):
 	cursor.execute(sql, (Rname, 1, Dname, Dprice, Num, Sum,))
 	conn.commit()
 	return
+
+#取得購物車清單
+def C_getcar(Rname):
+	sql="SELECT ccl_DName Dname, ccl_DPrice Dprice, ccl_Num num, ccl_Sum sum FROM client_carlist WHERE r_name=%s;"
+	cursor.execute(sql, (Rname,))
+	return cursor.fetchall()
+
+#取得購物車總金額
+def C_getcartotal(Rname):
+	sql="SELECT SUM(ccl_Sum) total FROM client_carlist WHERE r_name=%s;"
+	cursor.execute(sql, (Rname,))
+	return cursor.fetchone()
