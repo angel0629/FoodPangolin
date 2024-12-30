@@ -70,11 +70,11 @@ div.title {
     function go_back(Rname, Oid) {
         window.location.href = "/c_orderlistinfo/"+Rname+"/"+Oid;
     }
-    function fb_n() {
-        window.location.href = "/c_home";
+    function fb_n(Oid) {
+        window.location.href = "/c_feedbackNUPL/"+Oid;
     }
-    function fb_y() {
-        window.location.href = "/c_feedbackUPL";
+    function fb_y(Oid) {
+        window.location.href = "/c_feedbackUPL/"+Oid;
     }
     </script>
 </head>
@@ -97,8 +97,8 @@ div.title {
         </div>
     </center>
     <p></p>
-    <button type="button" class="n" onclick="fb_n()">確認，不予評價</button>
-    <button type="button" class="y" onclick="fb_y()">確認，給予評價</button>
+    <button type="button" class="n" onclick="fb_n('{{Oid}}')">確認，不予評價</button>
+    <button type="button" class="y" onclick="fb_y('{{Oid}}')">確認，給予評價</button>
 </div>
 
 

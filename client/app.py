@@ -127,9 +127,16 @@ def c_check(Rname, msg, Oid):
 	else:
 		return render_template('c_recievecheck.html', Rname=Rname, Oid=Oid)
 	
+#不予評價
+@app.route("/c_feedbackNUPL/<int:Oid>")
+def c_nofeedback(Oid):
+	C_getbtnfunc(Oid)
+	data=C_gethome()
+	return render_template('c_homepage.html', data=data)
 
 #給予評價
-@app.route("/c_feedbackUPL")
-def c_feedback():
+@app.route("/c_feedbackUPL/<int:Oid>")
+def c_feedback(Oid):
+	C_getbtnfunc(Oid)
 	return render_template('c_feedbackUPL.html')
 
