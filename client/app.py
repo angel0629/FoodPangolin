@@ -84,6 +84,13 @@ def c_rmcar(Rname, Rid, Dname):
 	total=C_getcartotal(Rname)['total']
 	return render_template('c_carlist.html', data=data, Rname=Rname, total=total, Rid=Rid)
 
+#下單
+@app.route("/c_addorder/<string:Rname>")
+def c_addorder(Rname):
+	C_addorder(Rname)
+	data=C_gethome()
+	return render_template('c_homepage.html', data=data)
+
 #已下定清單
 @app.route("/c_orderlist")
 def c_Olist():

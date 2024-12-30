@@ -93,11 +93,27 @@ def C_getcar(Rname):
 def C_getcartotal(Rname):
 	sql="SELECT SUM(ccl_Sum) total FROM client_carlist WHERE r_name=%s;"
 	cursor.execute(sql, (Rname,))
-	return cursor.fetchone()
+	data=cursor.fetchone()
+	if data['total']!=None:
+		return data
+	else:
+		data['total']= 0
+		return data
+	
 
 #自購物車移除
 def C_removecar(Rname, Dname):
 	sql="Delete FROM client_carlist WHERE r_name=%s AND ccl_DName=%s;"
 	cursor.execute(sql, (Rname, Dname,))
+	conn.commit()
+	return
+
+#下單
+def C_addorder(Rname):
+	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_DPrice, col_Sum) SELECT r_name,GROUP_CONCAT(ccl_DName SEPARATOR ', ') ,GROUP_CONCAT(ccl_DPrice SEPARATOR ', ') , sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
+	cursor.execute(sql, (Rname,))
+	conn.commit()
+	sql1=sql="Delete FROM client_carlist WHERE r_name=%s;"
+	cursor.execute(sql1, (Rname,))
 	conn.commit()
 	return

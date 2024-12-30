@@ -133,8 +133,8 @@ img {
     function del(Rname, Rid, Dname) {
         window.location.href = "/c_delcar/"+Rname+"/"+Rid+"/"+Dname;
     }
-    function order() {
-        window.location.href = "";
+    function order(Rname) {
+        window.location.href = "/c_addorder/"+Rname;
     }
     </script>
 </head>
@@ -160,7 +160,7 @@ img {
     <center>
         <div class="div_bottom">
             <div class="sum">總金額：${{total}}
-                <button type="button" onclick="order()">下單</button>
+                <button type="button" onclick="order('{{Rname}}')">下單</button>
             </div>
         </div>
     </center>
