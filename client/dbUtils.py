@@ -125,6 +125,12 @@ def C_getorderlist():
 
 #取得訂單詳細內容
 def C_getorderinfo(Rname):
-	sql="SELECT col_RName Rname, col_DName Dname, col_DPrice Dprice, col_Num num, col_Sum sum FROM client_orderlist WHERE client_orderlist.col_RName=%s"
+	sql="SELECT col_RName Rname, col_DName Dname, col_DPrice Dprice, col_Num num, col_Sum sum, col_status status FROM client_orderlist WHERE client_orderlist.col_RName=%s"
 	cursor.execute(sql, (Rname,))
 	return cursor.fetchall()
+
+#取得訂單狀態
+def C_getstatus(statusid):
+	sql="SELECT status_name status FROM status WHERE status.status_id=%s"
+	cursor.execute(sql, (statusid,))
+	return cursor.fetchone()
