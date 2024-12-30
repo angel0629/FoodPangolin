@@ -114,7 +114,8 @@ def c_Olistinfo(Rname):
         'Dprice': int(data_Dprice[i].strip()),
         'num': int(data_Num[i].strip())
     })
-	return render_template('c_orderlistinfo.html', Rname=Rname, sum=sum, status=status, data2=data2)
+	msg=C_getbtntext(statusid)
+	return render_template('c_orderlistinfo.html', Rname=Rname, sum=sum, status=status, data2=data2, msg=msg)
 
 #收貨確認
 @app.route("/c_recievecheck")

@@ -134,3 +134,11 @@ def C_getstatus(statusid):
 	sql="SELECT status_name status FROM status WHERE status.status_id=%s"
 	cursor.execute(sql, (statusid,))
 	return cursor.fetchone()
+
+#取得對應按鈕
+def C_getbtntext(statusid):
+	if statusid==1:
+		msg="取消訂單"
+	else:
+		msg="確認收貨"
+	return msg
