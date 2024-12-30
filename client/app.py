@@ -76,6 +76,14 @@ def c_showcar(Rname, Rid):
 	total=C_getcartotal(Rname)['total']
 	return render_template('c_carlist.html', data=data, Rname=Rname, total=total, Rid=Rid)
 
+#購物車：移除
+@app.route("/c_delcar/<string:Rname>/<int:Rid>/<string:Dname>")
+def c_rmcar(Rname, Rid, Dname):
+	C_removecar(Rname, Dname)
+	data=C_getcar(Rname)
+	total=C_getcartotal(Rname)['total']
+	return render_template('c_carlist.html', data=data, Rname=Rname, total=total, Rid=Rid)
+
 #已下定清單
 @app.route("/c_orderlist")
 def c_Olist():
@@ -96,5 +104,3 @@ def c_check():
 def c_feedback():
 	return render_template('c_feedbackUPL.html')
 
-
-#加入購物車

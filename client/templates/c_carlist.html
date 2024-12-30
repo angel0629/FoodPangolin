@@ -130,8 +130,8 @@ img {
     function go_back(Rname, Rid) {
         window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
     }
-    function del() {
-        window.location.href = "";
+    function del(Rname, Rid, Dname) {
+        window.location.href = "/c_delcar/"+Rname+"/"+Rid+"/"+Dname;
     }
     function order() {
         window.location.href = "";
@@ -152,7 +152,7 @@ img {
         <div class="div_tbl">{{rec.Dname}} 
             <span><div class="div_N">數量：{{rec.num}}</div></span>
             <span><div class="div_P">${{rec.sum}}</div></span>
-            <div class="div_pic" onclick="del()"><img src="/delete.png"></div>
+            <div class="div_pic" onclick="del('{{Rname}}','{{Rid}}','{{rec.Dname}}')"><img src="/delete.png"></div>
         </div>
         {% endfor %}
     </center>

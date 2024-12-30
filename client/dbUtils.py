@@ -94,3 +94,10 @@ def C_getcartotal(Rname):
 	sql="SELECT SUM(ccl_Sum) total FROM client_carlist WHERE r_name=%s;"
 	cursor.execute(sql, (Rname,))
 	return cursor.fetchone()
+
+#自購物車移除
+def C_removecar(Rname, Dname):
+	sql="Delete FROM client_carlist WHERE r_name=%s AND ccl_DName=%s;"
+	cursor.execute(sql, (Rname, Dname,))
+	conn.commit()
+	return
