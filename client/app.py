@@ -98,9 +98,9 @@ def c_Olist():
 	return render_template('c_orderlist.html', data=data)
 
 #已下定清單詳細內容
-@app.route("/c_orderlistinfo/<string:Rname>")
-def c_Olistinfo(Rname):
-	data=C_getorderinfo(Rname)
+@app.route("/c_orderlistinfo/<string:Rname>/<int:Oid>")
+def c_Olistinfo(Rname, Oid):
+	data=C_getorderinfo(Rname, Oid)
 	statusid=data[0]['status']
 	status=C_getstatus(statusid)['status']
 	sum=data[0]['sum']

@@ -119,14 +119,14 @@ def C_addorder(Rname):
 
 #取得訂單列表
 def C_getorderlist():
-	sql="SELECT col_RName Rname, col_Sum sum FROM client_orderlist;"
+	sql="SELECT col_Id Oid, col_RName Rname, col_Sum sum FROM client_orderlist;"
 	cursor.execute(sql)
 	return cursor.fetchall()
 
 #取得訂單詳細內容
-def C_getorderinfo(Rname):
-	sql="SELECT col_RName Rname, col_DName Dname, col_DPrice Dprice, col_Num num, col_Sum sum, col_status status FROM client_orderlist WHERE client_orderlist.col_RName=%s"
-	cursor.execute(sql, (Rname,))
+def C_getorderinfo(Rname, Oid):
+	sql="SELECT col_RName Rname, col_DName Dname, col_DPrice Dprice, col_Num num, col_Sum sum, col_status status FROM client_orderlist WHERE client_orderlist.col_RName=%s AND client_orderlist.col_Id=%s"
+	cursor.execute(sql, (Rname, Oid,))
 	return cursor.fetchall()
 
 #取得訂單狀態
