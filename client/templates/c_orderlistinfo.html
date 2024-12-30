@@ -112,34 +112,17 @@ div.title {
     
     <p></p>
     <center>
-        <div class="div_tbl">餐廳1 
-            <div class="div_Olist">爌肉飯
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$50</div></span>
+        <div class="div_tbl">{{Rname}}
+            <p></p>
+            {% for rec in data2 %}
+            <div class="div_Olist">{{rec.Dname}}
+                <span><div class="div_N">數量：{{rec.num}}</div></span>
+                <span><div class="div_P">${{rec.Dprice}}</div></span>
             </div>
-            <div class="div_Olist">拉麵
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$90</div></span>
-            </div>
-            <div class="div_Olist">炒飯
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$65</div></span>
-            </div>
-            <div class="div_Olist">炒飯
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$65</div></span>
-            </div>
-            <div class="div_Olist">炒飯
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$65</div></span>
-            </div>
-            <div class="div_Olist">炒飯
-                <span><div class="div_N">數量：1</div></span>
-                <span><div class="div_P">$65</div></span>
-            </div>
+            {% endfor %}
             <p>訂單狀況：商家已接單</p>
             <h6></h6>
-            <div class="div_sum">訂單總金額：$400</div>
+            <div class="div_sum">訂單總金額：${{sum}}</div>
         </div>
     </center>
     <p></p>

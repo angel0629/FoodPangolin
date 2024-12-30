@@ -109,7 +109,7 @@ def C_removecar(Rname, Dname):
 
 #下單
 def C_addorder(Rname):
-	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_Num, col_DPrice, col_Sum) SELECT r_name, GROUP_CONCAT(ccl_DName SEPARATOR ', '), GROUP_CONCAT(ccl_Num SEPARATOR ', '), GROUP_CONCAT(ccl_DPrice SEPARATOR ', '), sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
+	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_Num, col_DPrice, col_Sum) SELECT r_name, GROUP_CONCAT(ccl_DName SEPARATOR ', '), GROUP_CONCAT(ccl_Num SEPARATOR ', '), GROUP_CONCAT(ccl_Sum SEPARATOR ', '), sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
 	cursor.execute(sql, (Rname,))
 	conn.commit()
 	sql1=sql="Delete FROM client_carlist WHERE r_name=%s;"
@@ -121,4 +121,10 @@ def C_addorder(Rname):
 def C_getorderlist():
 	sql="SELECT col_RName Rname, col_Sum sum FROM client_orderlist;"
 	cursor.execute(sql)
+	return cursor.fetchall()
+
+#取得訂單詳細內容
+def C_getorderinfo(Rname):
+	sql="SELECT col_RName Rname, col_DName Dname, col_DPrice Dprice, col_Num num, col_Sum sum FROM client_orderlist WHERE client_orderlist.col_RName=%s"
+	cursor.execute(sql, (Rname,))
 	return cursor.fetchall()

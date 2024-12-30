@@ -76,8 +76,8 @@ div.title {
     function go_back() {
         window.location.href = "/c_home";
     }
-    function orderinfo() {
-        window.location.href = "/c_orderlistinfo";
+    function orderinfo(Rname) {
+        window.location.href = "/c_orderlistinfo/"+Rname;
     }
     </script>
 </head>
@@ -92,7 +92,7 @@ div.title {
     <p></p>
     <center>
         {% for rec in data %}
-        <div class="div_tbl" onclick="orderinfo()">{{rec.Rname}} 
+        <div class="div_tbl" onclick="orderinfo('{{rec.Rname}}')">{{rec.Rname}} 
             <span><div class="div_P">訂單總金額：${{rec.sum}}</div></span>
         </div>
         {% endfor %}
