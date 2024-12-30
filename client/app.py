@@ -134,9 +134,13 @@ def c_nofeedback(Oid):
 	data=C_gethome()
 	return render_template('c_homepage.html', data=data)
 
-#給予評價
+#前往給予評價
 @app.route("/c_feedbackUPL/<int:Oid>")
 def c_feedback(Oid):
 	C_getbtnfunc(Oid)
 	return render_template('c_feedbackUPL.html')
 
+#給予評價
+@app.route("/")
+def c_insertfb():
+	return
