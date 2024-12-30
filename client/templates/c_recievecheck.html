@@ -67,8 +67,8 @@ div.title {
 }
 </style>
 <script>
-    function go_back() {
-        window.location.href = "/c_orderlistinfo";
+    function go_back(Rname, Oid) {
+        window.location.href = "/c_orderlistinfo/"+Rname+"/"+Oid;
     }
     function fb_n() {
         window.location.href = "/c_home";
@@ -83,7 +83,7 @@ div.title {
 <div id="div_position">
     <center>
         <div class="div_title"><div class="title">收貨確認</div></div>
-        <div id="back" onclick="go_back()"></div>
+        <div id="back" onclick="go_back('{{Rname}}','{{Oid}}')"></div>
     </center>
     
     <p></p>

@@ -97,8 +97,8 @@ div.title {
     function go_back() {
         window.location.href = "/c_orderlist";
     }
-    function recieveCheck(msg, Oid) {
-        window.location.href = "/c_recievecheck/"+msg+"/"+Oid;
+    function recieveCheck(Rname, msg, Oid) {
+        window.location.href = "/c_recievecheck/"+Rname+"/"+msg+"/"+Oid;
     }
     </script>
 </head>
@@ -126,7 +126,7 @@ div.title {
         </div>
     </center>
     <p></p>
-    <button type="button" onclick="recieveCheck('{{msg}}','{{Oid}}')">{{msg}}</button>
+    <button type="button" onclick="recieveCheck('{{Rname}}','{{msg}}','{{Oid}}')">{{msg}}</button>
 </div>
 
 
