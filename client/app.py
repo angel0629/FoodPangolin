@@ -94,7 +94,8 @@ def c_addorder(Rname):
 #已下定清單
 @app.route("/c_orderlist")
 def c_Olist():
-	return render_template('c_orderlist.html')
+	data=C_getorderlist()
+	return render_template('c_orderlist.html', data=data)
 
 #已下定清單詳細內容
 @app.route("/c_orderlistinfo")

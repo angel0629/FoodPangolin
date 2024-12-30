@@ -100,7 +100,6 @@ def C_getcartotal(Rname):
 		data['total']= 0
 		return data
 	
-
 #自購物車移除
 def C_removecar(Rname, Dname):
 	sql="Delete FROM client_carlist WHERE r_name=%s AND ccl_DName=%s;"
@@ -117,3 +116,9 @@ def C_addorder(Rname):
 	cursor.execute(sql1, (Rname,))
 	conn.commit()
 	return
+
+#取得訂單列表
+def C_getorderlist():
+	sql="SELECT col_RName Rname, col_Sum sum FROM client_orderlist;"
+	cursor.execute(sql)
+	return cursor.fetchall()

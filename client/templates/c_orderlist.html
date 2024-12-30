@@ -91,9 +91,11 @@ div.title {
     
     <p></p>
     <center>
-        <div class="div_tbl" onclick="orderinfo()">餐廳1 
-            <span><div class="div_P">訂單總金額：$400</div></span>
+        {% for rec in data %}
+        <div class="div_tbl" onclick="orderinfo()">{{rec.Rname}} 
+            <span><div class="div_P">訂單總金額：${{rec.sum}}</div></span>
         </div>
+        {% endfor %}
     </center>
 </div>
 
