@@ -109,7 +109,7 @@ def C_removecar(Rname, Dname):
 
 #下單
 def C_addorder(Rname):
-	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_DPrice, col_Sum) SELECT r_name,GROUP_CONCAT(ccl_DName SEPARATOR ', ') ,GROUP_CONCAT(ccl_DPrice SEPARATOR ', ') , sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
+	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_Num, col_DPrice, col_Sum) SELECT r_name, GROUP_CONCAT(ccl_DName SEPARATOR ', '), GROUP_CONCAT(ccl_Num SEPARATOR ', '), GROUP_CONCAT(ccl_DPrice SEPARATOR ', '), sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
 	cursor.execute(sql, (Rname,))
 	conn.commit()
 	sql1=sql="Delete FROM client_carlist WHERE r_name=%s;"
