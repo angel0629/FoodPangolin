@@ -115,12 +115,19 @@ def c_Olistinfo(Rname, Oid):
         'num': int(data_Num[i].strip())
     })
 	msg=C_getbtntext(statusid)
-	return render_template('c_orderlistinfo.html', Rname=Rname, sum=sum, status=status, data2=data2, msg=msg)
+	return render_template('c_orderlistinfo.html', Rname=Rname, sum=sum, status=status, data2=data2, msg=msg, Oid=Oid)
 
-#收貨確認
-@app.route("/c_recievecheck")
-def c_check():
-	return render_template('c_recievecheck.html')
+#取消訂單/收貨確認
+@app.route("/c_recievecheck/<string:msg>/<int:Oid>")
+def c_check(msg, Oid):
+	if msg=="取消訂單":
+		C_getbtnfunc(Oid)
+		data=C_gethome()
+		return render_template('c_homepage.html', data=data)
+	else:
+		C_getbtnfunc(Oid)
+		return render_template('c_recievecheck.html')
+	
 
 #給予評價
 @app.route("/c_feedbackUPL")
