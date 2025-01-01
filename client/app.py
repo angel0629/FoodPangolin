@@ -135,12 +135,17 @@ def c_nofeedback(Oid):
 	return render_template('c_homepage.html', data=data)
 
 #前往給予評價
-@app.route("/c_feedbackUPL/<int:Oid>")
-def c_feedback(Oid):
+@app.route("/c_feedbackUPL/<string:Rname>/<int:Oid>")
+def c_feedback(Rname, Oid):
 	C_getbtnfunc(Oid)
-	return render_template('c_feedbackUPL.html')
+	return render_template('c_feedbackUPL.html', Rname=Rname)
 
-#給予評價
-@app.route("/")
-def c_insertfb():
-	return
+#確實給予評價
+@app.route("/c_insertfeedback/<string:Rname>", methods=['get','post'])
+def c_insertfb(Rname):
+	comment=request.form.get('feedback')
+	rating=request.form.get('rating')
+	rid=C_getrid(Rname)['rid']
+	C_insertfb(rid, rating, comment)
+	data=C_gethome()
+	return render_template('c_homepage.html', data=data)

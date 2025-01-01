@@ -73,8 +73,8 @@ div.title {
     function fb_n(Oid) {
         window.location.href = "/c_feedbackNUPL/"+Oid;
     }
-    function fb_y(Oid) {
-        window.location.href = "/c_feedbackUPL/"+Oid;
+    function fb_y(Rname, Oid) {
+        window.location.href = "/c_feedbackUPL/"+Rname+"/"+Oid;
     }
     </script>
 </head>
@@ -98,7 +98,7 @@ div.title {
     </center>
     <p></p>
     <button type="button" class="n" onclick="fb_n('{{Oid}}')">確認，不予評價</button>
-    <button type="button" class="y" onclick="fb_y('{{Oid}}')">確認，給予評價</button>
+    <button type="button" class="y" onclick="fb_y('{{Rname}}','{{Oid}}')">確認，給予評價</button>
 </div>
 
 

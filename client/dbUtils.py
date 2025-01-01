@@ -155,3 +155,16 @@ def C_getbtnfunc(Oid):
 	cursor.execute(sql, (Oid,))
 	conn.commit()
 	return
+
+#取得rid
+def C_getrid(Rname):
+	sql="SELECT r_id rid FROM restaurant WHERE restaurant.r_name=%s"
+	cursor.execute(sql, (Rname, ))
+	return cursor.fetchone()
+
+#新增評論至DB
+def C_insertfb(rid, rating, comment):
+	sql="INSERT INTO r_star (ca_Id, r_id, rating, comments) VALUE(%s, %s, %s, %s);"
+	cursor.execute(sql, (1, rid, rating, comment,))
+	conn.commit()
+	return 
