@@ -70,7 +70,70 @@ def add_restaurant_to_db(r_account, r_pwd, r_name, r_phone, r_addr, r_time, iden
     cursor.execute(sql, param)
     conn.commit()
     return
+#找出今日營業額 chrisluo
+def find_today_total_sales(r_id):
+    sql = "SELECT sum(m_price) as total_sales FROM `menu` WHERE r_id=%s;"
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchone()  
+    return result
+#找出該餐廳有多少餐點被下訂 chrisluo
+def find_today_total_orders(r_id):
+    sql = "SELECT COUNT(o_id) AS total_orders FROM `orders` WHERE r_id = %s;"
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchone()  
+    return result
+#找出status=5，已完成訂單 chrisluo
+def find_finished_order(r_id):
+    sql = "SELECT COUNT(orders.o_status) AS completed_orders FROM orders INNER JOIN status ON orders.o_status = status.status_id WHERE orders.r_id = %s AND status.status_id = 5;"
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchone()  
+    return result
+#找出明星商品跟銷售數量chrisluo
+def find_bestsell_and_num(r_id):
+    sql = "select menu.m_name,menu.order_count from menu where menu.r_id=%s group by menu.order_count Desc;"
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchall()  
+    return result
+#抓出客戶評論chrisluo
+def find_comments(r_id):
+    sql='select r_star.comments,r_star.c_id,r_star.rating from r_star where r_id = %s;'
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchall()  
+    return result
 
+#抓出turnover資料chrisluo
+def find_r_turnover(r_id):
+    sql='SELECT orders.o_id, orders.pickup_time, menu.m_detail, menu.m_price, menu.m_id AS menu_item_id,status.status_name FROM orders INNER JOIN menu ON orders.m_id = menu.m_id INNER JOIN status ON orders.o_status = status.status_id WHERE orders.r_id = %s AND status.status_id = 2 ORDER BY orders.pickup_time DESC, orders.o_id ASC;'
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchall()  
+    return result
+
+def find_r_turnover_complete_order(r_id):
+    sql='SELECT SUM(menu.m_price) AS total_revenue, COUNT(*) AS completed_orders FROM orders INNER JOIN menu ON orders.m_id = menu.m_id INNER JOIN status ON orders.o_status = status.status_id WHERE orders.r_id = %s AND status.status_id = 5;'
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchall()  
+    return result
+
+def find_r_information(r_id):
+    sql='SELECT * FROM `restaurant` WHERE r_id=%s;'
+    param = (r_id,)  
+    cursor.execute(sql, param)
+    result = cursor.fetchall()  
+    return result
+
+def update_restaurant_info(r_addr,r_phone,r_time,r_id,):
+    sql='UPDATE restaurant SET r_addr = %s, r_phone = %s, r_time = %s WHERE r_id = %s'
+    param = (r_addr,r_phone,r_time,r_id,)  
+    cursor.execute(sql, param)
+    conn.commit()
+    
 #新增產品
 def r_add(name,price,more,picture,my_id):
 	#在自己的上架清單新增上架
@@ -142,26 +205,23 @@ def r_getallList(my_id):
 		print(e)
 		print("Error connecting to DB")
 		exit(1)
-	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status,status.status_name
+	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
 		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
 		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
 		INNER JOIN restaurant ON orders.r_id=restaurant.r_id
-        INNER JOIN status ON status.status_id=orders.o_status
-		WHERE restaurant.r_id=%s
-        ORDER BY o_status;
-        """
+		WHERE restaurant.r_id=%s;"""
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
 
 def r_acceptList(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=(2,o_id)
+	param=("已接單",o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 
 def r_announced_deliver(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=(4,o_id)
+	param=("配送中",o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 def get_r_id(account):

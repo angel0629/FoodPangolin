@@ -1,7 +1,7 @@
 from flask import Flask , render_template ,request , session , redirect,url_for
 from functools import wraps
 import os
-from Database import get_users_from_db,get_customer_cart_from_sql,add_deliverer_to_db,add_customer_to_db,add_restaurant_to_db,r_getList, r_add, r_editList, r_update, r_delete , r_getallList,r_acceptList,r_announced_deliver,get_r_id
+from Database import get_users_from_db,get_customer_cart_from_sql,add_deliverer_to_db,add_customer_to_db,add_restaurant_to_db,r_getList, r_add, r_editList, r_update, r_delete , r_getallList,r_acceptList,r_announced_deliver,get_r_id,find_today_total_sales,find_today_total_orders,find_finished_order,find_bestsell_and_num,find_comments,find_r_turnover,find_r_turnover_complete_order,find_r_information,update_restaurant_info
 #app = Flask(__name__ , static_folder = 'static' , static_url_path = '/')
 app = Flask(__name__ , static_folder = 'static/img')
 app.config['SECRET_KEY'] = '123456/-+*'
@@ -49,8 +49,11 @@ def loginforall():
 
     # 如果是 GET 請求，顯示登錄頁面
     return render_template('login_or_register.html')
-
-
+#登出
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return redirect('login_or_register')
 
 @app.route('/customer_home')
 def home1():
@@ -65,7 +68,7 @@ def home1():
     return render_template('user_home2.html', data=cart_data)
 
 
-@app.route('/restaurant_home')
+@app.route('/restaurant_home')#新版
 def home2():
     if 'loginAcc' not in session:
         return redirect('/login_or_register')  # 未登入時重定向到登入頁面
@@ -73,18 +76,48 @@ def home2():
     account = session['loginAcc']
     my_id_dict = get_r_id(account)
     global my_id
-    my_id=my_id_dict["r_id"]
+    my_id=my_id_dict["r_id"]#字典轉變數
     #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
-
     
     if not my_id:  # 如果 my_id 是 None，表示查詢失敗
         return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
 
     get_order = r_getallList(my_id)
+    total_sales = find_today_total_sales(my_id)
+    total_orders = find_today_total_orders(my_id)
+    finished_order = find_finished_order(my_id)
+    bestsell_and_num = find_bestsell_and_num(my_id)
+    find_comment = find_comments(my_id)
+    #total_sales = find_today_total_sales(my_id)
     if not get_order:  # 如果 cart_data 是 None 或空
         get_order = "目前沒有購物車資料"  # 顯示提示訊息
 
-    return render_template('r_sell_list.html', data=get_order,acc=get_r_id(account))
+    return render_template('home.html', data=get_order,acc=get_r_id(account),data2=total_sales,data3=total_orders,data4=finished_order,data5=bestsell_and_num,data6=find_comment)
+
+
+@app.route('/restaurant_sell_list')#原先restaurant_home
+def restaurant_sell_list():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id:  # 如果 my_id 是 None，表示查詢失敗
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+
+    get_order = r_getallList(my_id)
+    #bestsell_and_num = find_bestsell_and_num(my_id)
+    #total_sales = find_today_total_sales(my_id)
+    if not get_order:  # 如果 cart_data 是 None 或空
+        get_order = "目前沒有購物車資料"  # 顯示提示訊息
+
+    return render_template('r_sell_list.html', data=get_order,acc=get_r_id(account))#,data5=bestsell_and_num
+
+
 
 
 @app.route('/delivery_home')
@@ -125,7 +158,7 @@ def privacy():
 @app.route('/register_customer', methods=['GET', 'POST'])
 def register_customer():
     if request.method == 'POST':
-        # 從表單中獲取資料
+        
         acc = request.form['acc']
         pwd = request.form['pwd']
         name = request.form['name']
@@ -134,13 +167,11 @@ def register_customer():
         address = request.form['address']
         identity = "消費客戶"  # 設定身份為一般用戶
         
-        # 呼叫函數來插入資料
         add_customer_to_db(acc, pwd, name, telephone, email, address, identity)
         
-        # 完成後導向到登入頁或其他頁面
         return redirect('/login_or_register')  # 假設註冊完成後導向登入頁面
     
-    # 如果是 GET 請求，則渲染註冊頁面
+
     return render_template("c_register.html")
 
 # @app.route('/register_restaurant')
@@ -150,7 +181,7 @@ def register_customer():
 @app.route('/register_restaurant', methods=['GET', 'POST'])
 def register_restaurant():
     if request.method == 'POST':
-        # 從表單中獲取資料
+        
         r_account = request.form['r_account']
         r_pwd = request.form['r_pwd']
         r_name = request.form['r_name']
@@ -159,9 +190,8 @@ def register_restaurant():
         r_time = request.form['r_time']
         identity = "餐廳業者"  # 設定身份為餐廳業者
         
-        # 呼叫函數來插入資料
         add_restaurant_to_db(r_account, r_pwd, r_name, r_phone, r_addr, r_time, identity)
-        # 完成後導向至其他頁面，例如登入頁
+
         return redirect('login_or_register')  # 假設註冊完成後導向 login 頁面
     
     # 如果是 GET 請求，則渲染註冊頁面
@@ -185,16 +215,132 @@ def register_delivery():
         d_gmail = request.form['d_gmail']
         identity = request.form['identity']  # 這會是 "外送人員"
         
-        # 呼叫資料庫函數來插入資料
         add_deliverer_to_db(d_account, d_pwd, d_name, d_phone, d_city, d_car, d_gmail, identity)
-        # 完成後導向至其他頁面，例如首頁或登入頁
+
         return redirect('login_or_register') # 假設註冊完成後導向 home 頁面
     
-    # 如果是 GET 請求，則渲染註冊頁面
+
     return render_template("d_register.html")
 
 
+@app.route("/sales")
+#使用server side render: template 樣板
+def restaurant_sales():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
 
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id:  # 如果 my_id 是 None，表示查詢失敗
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+    bestsell_and_num = find_bestsell_and_num(my_id)
+
+    #total_sales = find_today_total_sales(my_id)
+    # if not get_order:  # 如果 cart_data 是 None 或空
+    #     get_order = "目前沒有購物車資料"  # 顯示提示訊息
+
+    return render_template('r_salessummary.html',acc=get_r_id(account),data5=bestsell_and_num)
+
+
+@app.route('/restaurant_turnover')
+def restaurant_turnover():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id: 
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+    get_information=find_r_turnover(my_id)
+    get_information2=find_r_turnover_complete_order(my_id)
+
+    return render_template('r_turnover.html', data=get_information,data2=get_information2)
+
+
+@app.route('/restaurant_comment')
+def restaurant_comment():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id:  # 如果 my_id 是 None，表示查詢失敗
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+    find_comment = find_comments(my_id)
+    #total_sales = find_today_total_sales(my_id)
+
+    return render_template('r_comment.html',acc=get_r_id(account),data6=find_comment)
+
+
+@app.route("/r_money")
+def r_money():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id:  # 如果 my_id 是 None，表示查詢失敗
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+    find_restaurant_info = find_r_information(my_id)
+
+    #total_sales = find_today_total_sales(my_id)
+    # if not get_order:  # 如果 cart_data 是 None 或空
+    #     get_order = "目前沒有購物車資料"  # 顯示提示訊息
+
+    return render_template('r_money.html',acc=get_r_id(account),data=find_restaurant_info)
+
+@app.route('/update_restaurant/<int:r_id>', methods=['POST'])
+def restaurant_update(r_id):  # 接收從 URL 傳遞過來的 r_id
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+    
+    form = request.form
+    r_addr = form['r_addr']
+    r_phone = form['r_phone']
+    r_time = form['r_time']
+    
+    # 呼叫更新商家資料的函數
+    update_restaurant_info(r_addr, r_phone, r_time, r_id)
+
+    return redirect('/restaurant_manage')
+
+
+@app.route('/restaurant_manage')#原先restaurant_home
+def restaurant_manage():
+    if 'loginAcc' not in session:
+        return redirect('/login_or_register')  # 未登入時重定向到登入頁面
+
+    account = session['loginAcc']
+    my_id_dict = get_r_id(account)
+    global my_id
+    my_id=my_id_dict["r_id"]#字典轉變數
+    #app.logger.info(f"查詢帳號 {account} 的 r_id: {my_id}")
+    
+    if not my_id:  # 如果 my_id 是 None，表示查詢失敗
+        return "查無此帳號，請重新登入", 403  # 回應 403 Forbidden 或引導至登入
+
+    find_restaurant_info = find_r_information(my_id)
+    #bestsell_and_num = find_bestsell_and_num(my_id)
+    #total_sales = find_today_total_sales(my_id)
+
+    return render_template('r_manage.html',acc=get_r_id(account),data=find_restaurant_info)#,data5=bestsell_and_num  
+     
 
 @app.route("/r_sell_food")
 #使用server side render: template 樣板

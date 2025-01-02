@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-12-24 14:16:58
+-- 產生時間： 2025-01-02 04:47:04
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -187,21 +187,22 @@ CREATE TABLE `menu` (
   `m_price` int(11) NOT NULL,
   `m_detail` text NOT NULL,
   `m_picture` varchar(50) NOT NULL,
-  `r_id` int(11) NOT NULL
+  `r_id` int(11) NOT NULL,
+  `order_count` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 傾印資料表的資料 `menu`
 --
 
-INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`) VALUES
-(1, '早午餐套餐', 150, '漢堡、薯條、飲料', 'pangolin_drive-removebg-preview.png', 1),
-(2, 'test', 123, '主餐*2', 'pangolin_drive-removebg-preview (1).png', 1),
-(3, 'test', 100, '主餐*2 飲料*2 炸物*2  點心*2', '路徑', 1),
-(4, '龍蝦', 999, '一隻大隻的龍蝦', '路徑', 1),
-(5, '123', 123, '一隻大隻的龍蝦', '路徑', 1),
-(6, 'hi', 0, 'hi222', 'bus.jpg', 1),
-(8, 'test3', 333, '333', '-----------.png', 3);
+INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`, `order_count`) VALUES
+(1, '早午餐套餐', 150, '漢堡、薯條、飲料', 'pangolin_drive-removebg-preview.png', 1, 1),
+(2, 'test', 123, '主餐*2', 'pangolin_drive-removebg-preview (1).png', 1, 2),
+(3, 'test', 100, '主餐*2 飲料*2 炸物*2  點心*2', '路徑', 1, 3),
+(4, '龍蝦', 999, '一隻大隻的龍蝦', '路徑', 1, 4),
+(5, '123', 123, '一隻大隻的龍蝦', '路徑', 1, 5),
+(6, 'hi', 0, 'hi222', 'bus.jpg', 1, 7),
+(8, 'test3', 333, '333', '-----------.png', 3, 8);
 
 -- --------------------------------------------------------
 
@@ -227,7 +228,7 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`o_id`, `r_id`, `m_id`, `c_id`, `o_status`, `d_sid`, `pickup_time`, `delivery_time`) VALUES
 (1, 1, 1, '1', 3, 6, NULL, NULL),
 (2, 1, 2, '1', 2, 6, NULL, NULL),
-(3, 1, 3, '1', 5, 7, NULL, NULL),
+(3, 1, 3, '1', 5, 7, '2025-01-23 06:55:31', NULL),
 (4, 1, 4, '1', 4, 6, NULL, NULL),
 (5, 3, 8, '1', 1, 7, NULL, NULL),
 (6, 1, 4, '1', 2, 7, NULL, NULL);
@@ -254,8 +255,8 @@ CREATE TABLE `restaurant` (
 --
 
 INSERT INTO `restaurant` (`r_id`, `identity`, `r_account`, `r_pwd`, `r_name`, `r_addr`, `r_phone`, `r_time`) VALUES
-(1, '餐廳業者', 'spring35', '123', '春三朝五', '台中市西屯區', '0987654321', '24營業'),
-(2, '1', '8', '7', '6', '3', '5', '2'),
+(1, '餐廳業者', 'spring35', '123', '春三朝五', '台中市西屯區', '09876543277', '24營業喔'),
+(2, '1', '8', '7', '6', '蔡英文', '9222', '0800'),
 (3, '餐廳業者', 'asdf', 'hbh', 'chris luo', 'bjjbj', 'asdf', 'nkn');
 
 -- --------------------------------------------------------

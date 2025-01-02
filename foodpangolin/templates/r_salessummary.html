@@ -311,78 +311,46 @@
     <!-- 側邊欄 -->
     <nav class="sidebar" id="sidebar">
         <button class="toggle-button" id="toggleButton">☰</button>
-        <img src="/templates/img/good_pangolin2.png" alt="品牌圖片">
+        <img src="/img/good_pangolin2.png" alt="品牌圖片">
         <ul>
             <li class="hint"><a>監控餐廳各項指標</a></li>
-            <li><a href="#首頁">首頁</a></li>
-            <li><a href="#營業額">營業額</a></li>
-            <li><a href="#銷售品項">銷售品項</a></li>
-            <li><a href="#評分與評論">評分與評論</a></li>
-            <li><a href="#對帳單">對帳單</a></li>
+            <li><a href="/restaurant_home">首頁</a></li>
+            <li><a href="/restaurant_turnover">營業額</a></li>
+            <li><a href="/sales">銷售榜</a></li>
+            <li><a href="/restaurant_comment">評分與評論</a></li>
+            <li><a href="/r_money">對帳單</a></li>
             <hr>
             <li class="hint"><a>管理餐廳</a></li>
-            <li><a href="#菜單管理">菜單管理</a></li>
-            <li><a href="#營業時間">營業時間</a></li>
-            <li><a href="#使用者管理">使用者管理</a></li>
-            <li><a href="#設定">設定</a></li>
+            <li><a href="/restaurant_sell_list">接單管理</a></li>
+            <li><a href="r_sell_food">菜單管理</a></li>
+            <li><a href="r_new">新增上架食物</a></li>
+            <li><a href="/restaurant_manage">設定</a></li>
         </ul>
         <button class="logout-button">登出</button>
     </nav>
 
-    <div class="container">
-        <!-- 銷售榜 -->
-        <div class="ranking-container">
-            <h2>銷售榜</h2>
-            <ul class="ranking-list">
-                <!-- 第一名 -->
+    <div class="ranking-container">
+        <h2>銷售榜</h2>
+        <ul class="ranking-list">
+            {% for item in data5 %}
                 <li class="ranking-item">
-                    <span class="rank-icon">🥇</span>
-                    <span class="item-name">消魂控肉飯</span>
-                    <span class="sales-count">銷售數：1250</span>
+                    {% if loop.index == 1 %}
+                        <span class="rank-icon">🥇</span>
+                    {% elif loop.index == 2 %}
+                        <span class="rank-icon">🥈</span>
+                    {% elif loop.index == 3 %}
+                        <span class="rank-icon">🥉</span>
+                    {% else %}
+                        <span class="rank-icon">🔥</span>
+                    {% endif %}
+                    <span class="item-name">{{ item['m_name'] }}</span>
+                    <span class="sales-count">銷售數：{{ item['order_count'] }}</span>
                 </li>
-                <!-- 第二名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🥈</span>
-                    <span class="item-name">無敵雞腿飯</span>
-                    <span class="sales-count">銷售數：1002</span>
-                </li>
-                <!-- 第三名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🥉</span>
-                    <span class="item-name">色素雪花冰</span>
-                    <span class="sales-count">銷售數：850</span>
-                </li>
-                <!-- 第四名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🔥</span>
-                    <span class="item-name">超辣雞腿堡</span>
-                    <span class="sales-count">銷售數：350</span>
-                </li>
-                <!-- 第五名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🔥</span>
-                    <span class="item-name">豪大大雞排</span>
-                    <span class="sales-count">銷售數：125</span>
-                </li>
-                <!-- 第六名 (只顯示在下一頁) -->
-                <li class="ranking-item hidden">
-                    <span class="rank-icon">🔥</span>
-                    <span class="item-name">香辣雙層牛堡</span>
-                    <span class="sales-count">銷售數：100</span>
-                </li>
-            </ul>           
-        </div>
-            <button class="pagination-button previous">上一頁</button>
-            <button class="pagination-button next">下一頁</button>
+            {% endfor %}
+        </ul>
+        
     </div>
     
-
-    <!-- 銷售圖表 -->
-    <div class="chart-container">
-        <h2>銷售數據分析</h2>
-        <canvas id="salesChart"></canvas>
-        <button class="page-button back-home-button" onclick="goToHomePage()">＜ 返回首頁</button>
-    </div>
 
 
 
@@ -407,9 +375,9 @@
             <div class="footer-section">
                 <h4>追蹤我們</h4>
                 <div class="social-icons">
-                    <a href="#"><img src="/templates/img/fb.png" alt="Facebook"></a>
-                    <a href="#"><img src="/templates/img/ig.png" alt="Instagram"></a>
-                    <a href="#"><img src="/templates/img/line.png" alt="Twitter"></a>
+                    <a href="#"><img src="/img/fb.png" alt="Facebook"></a>
+                    <a href="#"><img src="/img.png" alt="Instagram"></a>
+                    <a href="#"><img src="/img/line.png" alt="Twitter"></a>
                 </div>
             </div>
         </div>
@@ -452,12 +420,6 @@
             }
         };
 
-        // 繪製圖表
-        const salesChart = new Chart(
-            document.getElementById('salesChart'),
-            config
-        );
-
         // JavaScript 控制側邊欄顯示/隱藏
         const sidebar = document.getElementById('sidebar');
             const toggleButton = document.getElementById('toggleButton');
@@ -476,79 +438,71 @@
                 window.location.href = 'home.html'; 
             }
             // 模擬資料
-const data = [
-    { name: '消魂控肉飯', sales: 1250 },
-    { name: '無敵雞腿飯', sales: 1002 },
-    { name: '色素雪花冰', sales: 850 },
-    { name: '超辣雞腿堡', sales: 350 },
-    { name: '豪大大雞排', sales: 125 },
-    { name: '招牌魯肉飯', sales: 90 },
-    { name: '香酥雞柳', sales: 75 }
-];
 
-// 分頁設定
-const itemsPerPage = 5;
-let currentPage = 1;
 
-// 選擇 DOM 節點
-const rankingList = document.querySelector('.ranking-list');
-const previousButton = document.querySelector('.pagination-button.previous');
-const nextButton = document.querySelector('.pagination-button.next');
+    // 分頁設定
+    const itemsPerPage = 5;
+    let currentPage = 1;
 
-// 更新列表顯示
-function updateRankingList() {
-    rankingList.innerHTML = ''; // 清空列表
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    // 選擇 DOM 節點
+    const rankingList = document.querySelector('.ranking-list');
+    const previousButton = document.querySelector('.pagination-button.previous');
+    const nextButton = document.querySelector('.pagination-button.next');
 
-    data.slice(startIndex, endIndex).forEach((item, index) => {
-        const li = document.createElement('li');
-        li.className = 'ranking-item';
+    // 更新列表顯示
+    function updateRankingList() {
+        rankingList.innerHTML = ''; // 清空列表
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
 
-        const rankIcon = document.createElement('span');
-        rankIcon.className = 'rank-icon';
-        rankIcon.textContent = (startIndex + index + 1 <= 3) ? ['🥇', '🥈', '🥉'][startIndex + index] : '🔥';
+        data.slice(startIndex, endIndex).forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'ranking-item';
 
-        const itemName = document.createElement('span');
-        itemName.className = 'item-name';
-        itemName.textContent = item.name;
+            const rankIcon = document.createElement('span');
+            rankIcon.className = 'rank-icon';
+            rankIcon.textContent = (startIndex + index + 1 <= 3) ? ['🥇', '🥈', '🥉'][startIndex + index] : '🔥';
 
-        const salesCount = document.createElement('span');
-        salesCount.className = 'sales-count';
-        salesCount.textContent = `銷售數：${item.sales}`;
+            const itemName = document.createElement('span');
+            itemName.className = 'item-name';
+            itemName.textContent = item.name;
 
-        li.appendChild(rankIcon);
-        li.appendChild(itemName);
-        li.appendChild(salesCount);
+            const salesCount = document.createElement('span');
+            salesCount.className = 'sales-count';
+            salesCount.textContent = `銷售數：${item.sales}`;
 
-        rankingList.appendChild(li);
+            li.appendChild(rankIcon);
+            li.appendChild(itemName);
+            li.appendChild(salesCount);
+
+            rankingList.appendChild(li);
+        });
+
+        // 更新按鈕狀態
+        previousButton.style.display = currentPage > 1 ? 'block' : 'none';
+        nextButton.style.display = endIndex < data.length ? 'block' : 'none';
+    }
+
+    // 添加按鈕事件
+    previousButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateRankingList();
+        }
     });
 
-    // 更新按鈕狀態
-    previousButton.style.display = currentPage > 1 ? 'block' : 'none';
-    nextButton.style.display = endIndex < data.length ? 'block' : 'none';
-}
+    nextButton.addEventListener('click', () => {
+        if (currentPage * itemsPerPage < data.length) {
+            currentPage++;
+            updateRankingList();
+        }
+    });
 
-// 添加按鈕事件
-previousButton.addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        updateRankingList();
-    }
-});
-
-nextButton.addEventListener('click', () => {
-    if (currentPage * itemsPerPage < data.length) {
-        currentPage++;
-        updateRankingList();
-    }
-});
-
-// 初始化列表
-updateRankingList();
+    // 初始化列表
+    updateRankingList();
 
 
-    </script>
+</script>
 
 </body>
 </html>
