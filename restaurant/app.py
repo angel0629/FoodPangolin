@@ -1,72 +1,114 @@
 from flask import Flask, render_template, request, session, redirect,url_for, flash
 from functools import wraps
-from dbUtils import getList, add, editList, update, delete #, getallList, details, add, delete, editList, update, buy, new_buy, get_shop
-
+from dbUtils import r_getList, r_add, r_editList, r_update, r_delete , r_getallList,r_acceptList,r_announced_deliver#, details, add, delete, editList, update, buy, new_buy, get_shop
+import os
 # creates a Flask application, specify a static folder on /
-app = Flask(__name__, static_folder='static',static_url_path='/')
+#app = Flask(__name__, static_folder='static',static_url_path='/')
+app = Flask(__name__, static_folder='static')
 #set a secret key to hash cookies
 app.config['SECRET_KEY'] = '123TyU%^&'
 
 global my_id
 my_id=1
 	
+# 設置上傳目錄
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# 確保上傳目錄存在
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
 #自己的拍賣品清單
-@app.route("/")
+@app.route("/restaurant")
 #使用server side render: template 樣板
-def get_sell():
-	
-	return render_template('sell_list.html')
+def r_get_sell():
+	dat=r_getallList(my_id)
+	return render_template('r_sell_list.html',data=dat, id_in=my_id)
 
 
-@app.route("/sell_food")
+@app.route("/r_sell_food")
 #使用server side render: template 樣板
-def get_food():
-	dat=getList(my_id)
-	return render_template('sell_food.html',data=dat,id_in=my_id)
+def r_get_food():
+	dat=r_getList(my_id)
+	return render_template('r_sell_food.html',data=dat,id_in=my_id)
 
-@app.route("/new")
+@app.route("/r_new")
 #使用server side render: template 樣板
-def add_new():
+def r_add_new():
 
-	return render_template('add_product.html')
+	return render_template('r_add_product.html')
 
-@app.route('/add_product', methods=['POST'])
-def add_form():
-	form = request.form
-	name = form['name']
-	price = form['price']
-	more = form['more']
-	picture = form['picture']
-	add(name,price,more,picture,my_id)
-	return redirect(url_for('get_food'))
+@app.route('/r_add_product', methods=['POST'])
+def r_add_form():
+    form = request.form
+    name = form['name']
+    price = form['price']
+    detail = form['more']
+    file = request.files.get('picture')
+
+    if file and file.filename:
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filename)
+        picture_path=file.filename
+    else:
+        picture_path = "default.jpg"
+    r_add(name, price, detail, picture_path, my_id)
+    return redirect(url_for('r_get_food'))
 	#return render_template('add_product.html')
 
 #編輯產品submit
-@app.route('/edit_product', methods=['POST'])
-def edit_form():
+@app.route('/r_edit_product', methods=['POST'])
+def r_edit_form():
 	form = request.form
 	name = form['name']
 	price = form['price']
-	more = form['more']
-	picture = form['picture']
-	update(name,price,more,picture,my_id)
-	#dat=update(name,info,price, s_id)
-	return redirect(url_for('get_food'))
+	detail = form['more']
+	edit_id = form['edit_id']
+	current_pix = form['current_pix']
+	file = request.files.get('picture')
 
+	if file and file.filename:
+		filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+		file.save(filename)
+		picture_path=file.filename
+	else:
+		picture_path = current_pix
+
+	r_update(name,price,detail,picture_path,edit_id)
+	#dat=update(name,info,price, s_id)
+	return redirect(url_for('r_get_food'))
 #編輯產品頁面
-@app.route("/edit_product/<int:id>")
+@app.route("/r_edit_product/<int:id>")
 #使用server side render: template 樣板
-def edit(id):
-	dat=editList(id)
-	return render_template('edit_product.html', data=dat,id_in=my_id)
+def r_edit(id):
+	dat=r_editList(id)
+	return render_template('r_edit_product.html', data=dat,id_in=my_id,edit_id=id)
 
 #刪除產品
-@app.route("/delete_product/<int:id>")
+@app.route("/r_delete_product/<int:id>")
 #使用server side render: template 樣板
-def delete_form(id):
-	dat=delete(id)
-	return redirect(url_for('get_food'))
+def r_delete_form(id):
+	dat=r_delete(id)
+	return redirect(url_for('r_get_food'))
 	#return render_template('delete.html',id)
+@app.route("/r_delete_product")
+#使用server side render: template 樣板
+def r_delete_form_error():
+	return redirect(url_for('r_get_food'))
+	#return render_template('delete.html',id)
+
+@app.route("/r_accept_ord/<int:id>")
+#使用server side render: template 樣板
+def r_accept(id):
+	dat=r_acceptList(id)
+	return redirect(url_for('r_get_sell'))
+
+@app.route("/r_announced_deliver/<int:id>")
+#使用server side render: template 樣板
+def announced(id):
+	dat=r_announced_deliver(id)
+	return redirect(url_for('r_get_sell'))
 
 '''
 

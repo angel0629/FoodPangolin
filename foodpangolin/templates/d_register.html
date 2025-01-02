@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="keywords" content="外送人員註冊, 外送平台" />
+<meta name="description" content="註冊成為外送人員" />
+<title>外送人員註冊</title>
+<style>
+/* 背景與整體樣式 */
+body {
+    background-color: #f4e1f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+#div_01 {
+    background-color: #d3b0d9;
+    width: 70%;
+    margin: 50px auto;
+    border-radius: 25px;
+    text-align: center;
+    padding: 20px 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+#div_01t {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #9b7abf;
+    border-radius: 25px;
+    padding: 10px;
+    color: #ffffff;
+}
+h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+/* 表單輸入框樣式 */
+input {
+    border: 1px solid #9b7abf;
+    border-radius: 25px;
+    width: 60%;
+    height: 30px;
+    padding: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1em;
+}
+
+/* 按鈕樣式 */
+button {
+    font-weight: bold;
+    padding: 10px 26px;
+    border-radius: 25px;
+    background-color: #9b7abf;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+}
+button:hover {
+    background-color: #7b5f96;
+}
+
+/* 返回箭頭樣式 */
+#back {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 30px solid #f4e1f0;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="div_01">
+    <div id="div_01t">
+        <div id="back" onclick="goBack()"></div>
+        <h2>外送人員註冊</h2>
+    </div>
+    <form action="/register_delivery" method="POST">
+        <p>帳號：<input type="text" name="d_account" placeholder="請輸入帳號" required></p>    
+        <p>密碼：<input type="password" name="d_pwd" placeholder="請輸入密碼" required></p>
+        <p>姓名：<input type="text" name="d_name" placeholder="請輸入姓名" required></p>
+        <p>電話：<input type="text" name="d_phone" placeholder="請輸入電話號碼" required></p>
+        <p>城市：<input type="text" name="d_city" placeholder="請輸入城市" required></p>
+        <p>交通工具：<input type="text" name="d_car" placeholder="請輸入交通工具" required></p>
+        <p>電子郵件：<input type="email" name="d_gmail" placeholder="請輸入電子郵件" required></p>
+        <input type="hidden" name="identity" value="外送人員">
+        <p><button type="submit">註冊</button></p>
+    </form>
+</div>
+
+<script>
+function goBack() {
+    window.location.href = '/register'; // 返回註冊選擇頁面
+}
+</script>
+</body>
+</html>

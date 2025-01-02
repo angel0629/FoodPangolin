@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前往取餐</title>
+</head>
+<body>
+    <nav class="sidebar">
+        <a href="/delivery_home">狀態</a>
+        <a href="">訂單</a>
+        <a href="/delivery_record/{{staff.d_sid}}">已完成訂單</a>
+    </nav>
+
+    <h1>前往客戶地址</h1>
+    <h1>訂單{{data.o_id}}</h1>
+      <section class="my_table" >
+        <table>
+          <tr>
+            <th>配送資訊</th> 
+            <th>地址</th>
+            <th>連絡電話</th>
+          </tr>
+          
+          <tr>
+            <th >{{ customer.ca_Acc }}</th>
+            <th >{{ customer.ca_Add }}</th>
+            <th >{{ customer.ca_Tel }}</th>
+            <th>
+        </tr><hr/>
+        </table></section>
+        <hr/>
+        <section><a href="/order_status/finish/{{ data.o_id }}/delivery/finish/{{staff.d_sid}}"><button style="background-color:rgb(255, 166, 166);">抵達消費者位置</button></a></section>
+    <p></p>
+    
+    <h1></h1>
+</body>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>狀態</title>
+    <link rel="stylesheet" href="/css/stateUI.css">  
+    <!-- 外加css -->
+</head>
+<body>
+    <nav class="sidebar">
+        <a href="/delivery_home">狀態</a>
+        <a href="">訂單</a>
+        <a href="/delivery_record/{{staff.d_sid}}">已完成訂單</a>
+    </nav>
+    <header>
+        <a href="#" class="back-button">返回</a>
+        <h1>狀態</h1>
+        <div class="profile">
+            <img src="/img/profile-placeholder.png" alt="Profile Picture">
+            <span>{{ data[0].d_name if data else '未登入' }}</span>
+        </div>
+    </header>
+
+    <main class="content">
+      <div class="staff">
+          <p><strong>姓名:</strong> {{ staff.d_name }}</p>
+          <p><strong>目前狀態:</strong> {{ staff.d_status }}</p>
+          <p><strong>目前訂單:</strong> {{ staff.d_current_order or '無訂單' }}</p>
+      </div>
+      <hr>
+    </main>
+    <section>
+        <a href="/delivery_status/online/{{ staff.d_sid }}"><button style="background-color:rgb(255, 166, 166);">上線</button></a>
+        <a href="/delivery_status/offline/{{ staff.d_sid }}"><button style="background-color:rgb(255, 166, 166);">下線</button></a>
+        <a href="/logout"><button style="background-color:rgb(255, 166, 166);">登出</button></a>
+      </section>
+      <h1>{{acc}}</h1>
+      <section class="my_table" >
+        <table>
+          <tr>
+            <th>訂單編號</th> 
+            <th>餐廳</th>
+            <th>金額</th>
+            <th>選擇訂單</th>
+            
+
+          </tr>
+          {% for i in data %}
+          <tr>
+            <th >{{i.o_id}}</th>
+            <th ></th>
+            <th></th>
+            <th>
+              <section>
+                {% if staff.d_status == '空閒' %}
+                <a href="/order_status/{{ i.o_id }}/delivery/{{ staff.d_sid }}">
+                    <button style="background-color:rgb(255, 166, 166);">接單</button>
+                </a>
+                {% else %}
+                <button style="background-color:rgb(200, 200, 200);" disabled>不可接單</button>
+            {% endif %}
+          </section>
+          </th>
+          {% endfor %}
+        </table>
+      </section>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完成訂單</title>
+</head>
+<body>
+    <nav class="sidebar">
+        <a href="/delivery_home">狀態</a>
+        <a href="">訂單</a>
+        <a href="/delivery_record/{{staff.d_sid}}">已完成訂單</a>
+    </nav>
+
+    
+      <section class="my_table" >
+        <table>
+          <tr>
+            <th>訂單編號({{ data.o_id }})</th> 
+          </tr>
+          <tr>
+            <th >於{{data.delivery_time}}分送達</th> 
+        <hr/>
+        </table></section>
+        <hr/>
+        <h1>訂單已完成</h1>
+    <p></p>
+    
+    <h1></h1>
+</body>
