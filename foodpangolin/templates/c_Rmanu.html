@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="keywords" content=" " />
+<meta name="description" content=" " />
+<title>菜單</title>
+<style>
+body{
+    background-color: #faf6f1;
+}
+#div_position {
+    text-align: center;
+}
+.div_tbl {
+    margin-left: 5%;
+    border: 5px solid #faf6f1;
+    text-align: left;
+    padding-top: 45px;
+    padding-bottom: 40px;
+    background-color: #eedede;
+    border-radius: 25px;
+    text-indent: 1em;
+    font-weight: bold;
+    font-size: 30px;
+    width: 50%;
+    cursor: pointer;
+}
+.div_pic {
+    text-align: center;
+    position: absolute;
+    right: 22.5%;
+    margin-top: -85px;
+    padding-right: 5%;
+    width: 10%;
+    height: 125px;
+    background-color: #d0a6a6;
+    border-radius: 20px;
+}
+.div_P {
+    margin-top: -30px;
+    position: absolute;
+    left: 45%;
+    font-weight: normal;
+}
+button {
+    font-weight: bold;
+    padding: 10px 26px;
+    border-radius: 25px;
+    background-color: #d0a6a6;
+    border: 0px solid;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 35px;
+    right: 20%;
+}
+span.title {
+    font-weight: bold;
+    font-size: 40px;
+}
+img {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    top: 50%; /* 垂直置中 */
+    left: 50%; /* 水平置中 */
+    transform: translate(-50%, -50%);/* 將圖片移至中心 */
+    object-fit: cover; /* 保持圖片比例，填充大小 */
+}
+.div_list {
+    position: relative;
+    left: 28%;
+    background-color: #eedede;
+    font-size: 25px;
+    padding: 8px 20px;
+    border: 2px solid black;
+    border-radius: 15px;
+    width: 110px;
+}
+.j_list {
+    position: relative;
+    left: 28%;
+    width: 49%;
+    text-align: left;
+    padding: 9px;
+    background-color: #fff6f6;
+    border: 2px solid;
+    border-radius: 15px;
+}
+.j_content {
+    font-weight: lighter;
+    font-size: 25px;
+    position: relative;
+    top: -35px;
+    text-indent: 2em;
+}
+.div_user {
+    text-align: center;
+    text-indent: 0em;
+    margin-top: 8px;
+    padding: 9px;
+    background-color: #d0a6a6;
+    width: 22px;
+    border-radius: 50%;
+    color: white;
+    font-size: small;
+    font-weight: bold;
+}
+#back {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 30px solid #d0a6a6;
+    border-radius: 0px;
+    cursor: pointer;
+    position: absolute;
+    top: 35px;
+    left: 20%;
+}
+</style>
+<script>
+    function car(Rname, Rid) {
+        window.location.href = "/c_car/"+Rname+"/"+Rid;
+    }
+    function p_info(Rname, Rid, Mname, Mid) {
+        window.location.href = "/c_menuinfo/"+Rname+"/"+Rid+"/"+Mname+"/"+Mid;
+    }
+    function go_back() {
+        window.location.href = "/c_home";
+    }
+    </script>
+</head>
+<body>
+<p></p>
+<div id="div_position">
+    <div id="back" onclick="go_back()"></div>
+    <span class="title">{{Rname}}</sapn>
+    <button type="button" onclick="car('{{Rname}}','{{Rid}}')">查看購物車</button>
+    <p></p>
+    <center>
+        {% for rec in data %}
+        <div class="div_tbl" onclick="p_info('{{Rname}}','{{Rid}}','{{rec.name}}','{{rec.mid}}')">{{rec.name}}
+            <span><div class="div_P">${{rec.price}}</div></span>
+            <div class="div_pic"><img src="/img/{{rec.pic}}"></div>
+        </div>
+        {% endfor %}
+    </center>
+    <p></p>
+    <div class="div_list">評價表</div>
+    <div class="j_list">
+        {% for rec2 in fbdata %}
+        <span><div class="div_user">{{rec2.user}}</div></span>
+        <span><div class="j_content">{{rec2.feedback}} </div></span>
+        {% endfor %}
+    </div>
+    <table class="tbl_list">
+        <tr><td></td></tr>
+    </table>
+</div>
+
+
+</body>
+</html>

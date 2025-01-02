@@ -1,94 +1,94 @@
 <html><head>
-<meta charset="utf-8">
-<title>Sell List</title>
-<script>
-  function alert_accept(o_id){
-    sure_to_delete=window.confirm('確定要接單嗎?') //系統跳出視窗詢問是否要刪除s
-    if (sure_to_delete){//如果按確定刪除
-        console.log(o_id);
-        window.location.href='/r_accept_ord/'+o_id; //連到資料庫刪除資料
-        alert("已接單");
-        
+  <meta charset="utf-8">
+  <title>Sell List</title>
+  <script>
+    function alert_accept(o_id){
+      sure_to_delete=window.confirm('確定要接單嗎?') //系統跳出視窗詢問是否要刪除s
+      if (sure_to_delete){//如果按確定刪除
+          console.log(o_id);
+          window.location.href='/r_accept_ord/'+o_id; //連到資料庫刪除資料
+          alert("已接單");
+          
+      }
+      else{
+        alert("已取消");
+      }
     }
-    else{
-      alert("已取消");
+    function alert_announced(o_id){
+      sure_to_delete=window.confirm('確定要通知外送員取餐嗎?') 
+      if (sure_to_delete){
+          console.log(o_id);
+          window.location.href='/r_announced_deliver/'+o_id; 
+          alert("已通知外送員");
+          
+      }
+      else{
+        alert("已取消");
+      }
     }
-  }
-  function alert_announced(o_id){
-    sure_to_delete=window.confirm('確定要通知外送員取餐嗎?') 
-    if (sure_to_delete){
-        console.log(o_id);
-        window.location.href='/r_announced_deliver/'+o_id; 
-        alert("已通知外送員");
-        
-    }
-    else{
-      alert("已取消");
-    }
-  }
-</script>
-<link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-<h1>我的訂單</h1>
-<hr />
-<section>
-  <a href="/r_sell_food"><button style="background-color:rgb(255, 166, 166);">上架食物清單</button></a>
-</section>
-<h1>{{acc}}</h1>
-<section class="my_table" >
-  <table>
-    <tr>
-      <th>訂單編號</th> 
-      <th>客戶名稱</th>
-      <th>下單時間</th>
-      <th>接單外送員</th>
-      <th> 取餐時間</th>
-      <th> 訂單狀態</th>
-    </tr>
-    {% for i in data %}
-    <tr>
-      <tr 
-      {% if i.status_name == "待餐廳接單" %}
-      style="background-color: rgb(251, 88, 88);"
-      {% elif i.status_name == "待外送員接單" %}
-      style="background-color: rgb(245, 245, 128);"
-      {% elif i.status_name == "待外送員取餐" %}
-      style="background-color: rgb(245, 245, 128);"
-      {% elif i.status_name == "配送中" %}
-      style="background-color: rgb(189, 244, 101);"
-      {% elif i.status_name == "已完成" %}
-      style="background-color: transparent;"
-      {% endif %}
-    >
-
-      <th > {{i.o_id}}</th> 
-      <th >{{i.name}}</th>
-      <th >{{i.pickup_time}}</th>
-      <th >{{i.d_name}}</th>
-      <th > {{i.delivery_time}}</th>
-      <th > {{i.status_name}}</th>
-
-
-      {% if i.status_name =="待餐廳接單" %}
-      <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_accept('{{i.o_id}}')" style="background-color:rgb(251, 88, 88)" >確定接單</button></td>
-      {% endif %}
-      {% if i.status_name =="待外送員接單" %}
-      <th style="background-color:rgb(250, 226, 195)"></th>
-      {% endif %}
-      {% if i.status_name =="待外送員取餐" %} 
-      <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_announced('{{i.o_id}}')" style="background-color:rgb(245, 245, 128)">通知外送員</button></td>
-      {% endif %}
-      {% if i.status_name =="配送中" %}
-      <th style="background-color:rgb(250, 226, 195)"></th>
-      {% endif %}
-      {% if i.status_name =="已完成" %}
-      <th style="background-color:transparent"></th>
-      {% endif %}
-    </tr>
-  {% endfor %}
-
-  </table>  
-</section>
-</body></html>
-
+  </script>
+  <link rel="stylesheet" href="static/style.css">
+  </head>
+  <body>
+  <h1>我的訂單</h1>
+  <hr />
+  <section>
+    <a href="/r_sell_food"><button style="background-color:rgb(255, 166, 166);">上架食物清單</button></a>
+  </section>
+  <section class="my_table" >
+    <table>
+      <tr>
+        <th>訂單編號</th> 
+        <th>客戶名稱</th>
+        <th>下單時間</th>
+        <th>接單外送員</th>
+        <th> 取餐時間</th>
+        <th> 訂單狀態</th>
+      </tr>
+      {% for i in data %}
+      <tr>
+        <tr 
+        {% if i.o_status == 1 %}
+        style="background-color: rgb(251, 88, 88);"
+        {% elif i.o_status == 2 %}
+        style="background-color: rgb(245, 245, 128);"
+        {% elif i.o_status == 3 %}
+        style="background-color: rgb(245, 245, 128);"
+        {% elif i.o_status == 4 %}
+        style="background-color: rgb(189, 244, 101);"
+        {% elif i.o_status == 5 %}
+        style="background-color: transparent;"
+        {% endif %}
+      >
+  
+        <th > {{i.o_id}}</th> 
+        <th >{{i.name}}</th>
+        <th >{{i.pickup_time}}</th>
+        <th >{{i.d_name}}</th>
+        <th > {{i.delivery_time}}</th>
+        <th > {{i.status_name}}</th>
+  
+  
+        {% if i.o_status == 1 %}
+        <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_accept('{{i.o_id}}')" style="background-color:rgb(251, 88, 88)" >確定接單</button></td>
+        {% endif %}
+        {% if i.o_status == "2" %}
+        <th style="background-color:rgb(250, 226, 195)"></th>
+        {% endif %}
+        {% if i.o_status == "3" %} 
+        <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_announced('{{i.o_id}}')" style="background-color:rgb(245, 245, 128)">通知外送員</button></td>
+        {% endif %}
+        {% if i.o_status == "4" %}
+        <th style="background-color:rgb(250, 226, 195)"></th>
+        {% endif %}
+        {% if i.o_status == "5" %}
+        <th style="background-color:transparent"></th>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  
+    </table>  
+  </section>
+  </body></html>
+  
+  

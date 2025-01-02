@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-12-24 14:16:58
+-- 產生時間： 2025-01-02 15:54:39
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -49,7 +49,8 @@ INSERT INTO `cart` (`cart_id`, `c_id`, `m_id`, `count`, `total_price`) VALUES
 --
 
 CREATE TABLE `client_account` (
-  `ca_Id` int(5) UNSIGNED NOT NULL DEFAULT 1,
+  `ca_Id` int(5) UNSIGNED NOT NULL,
+  `identity` varchar(20) NOT NULL,
   `ca_Acc` varchar(20) NOT NULL,
   `ca_Psw` varchar(30) NOT NULL,
   `ca_FName` varchar(10) NOT NULL,
@@ -63,8 +64,9 @@ CREATE TABLE `client_account` (
 -- 傾印資料表的資料 `client_account`
 --
 
-INSERT INTO `client_account` (`ca_Id`, `ca_Acc`, `ca_Psw`, `ca_FName`, `ca_LName`, `ca_Email`, `ca_Tel`, `ca_Add`) VALUES
-(0, 'RC', 'RC0000', '邱', '昀晴', '99138joyce@gmail.com', '0909017161', '南投縣埔里鎮');
+INSERT INTO `client_account` (`ca_Id`, `identity`, `ca_Acc`, `ca_Psw`, `ca_FName`, `ca_LName`, `ca_Email`, `ca_Tel`, `ca_Add`) VALUES
+(1, '消費客戶', 'RC', 'RC0000', '邱', '昀晴', '99138joyce@gmail.com', '0909017161', '南投縣埔里鎮'),
+(2, '消費客戶', '159', '951', 'oooooo', 'xxxxxxxx', 'email@gmail.com', '4444444', '台北');
 
 -- --------------------------------------------------------
 
@@ -74,12 +76,20 @@ INSERT INTO `client_account` (`ca_Id`, `ca_Acc`, `ca_Psw`, `ca_FName`, `ca_LName
 
 CREATE TABLE `client_carlist` (
   `r_name` varchar(15) NOT NULL DEFAULT '',
-  `ca_id` int(5) UNSIGNED NOT NULL,
+  `ca_Id` int(5) UNSIGNED NOT NULL,
   `ccl_DName` varchar(10) NOT NULL,
   `ccl_DPrice` int(5) UNSIGNED NOT NULL,
   `ccl_Num` int(3) UNSIGNED NOT NULL,
   `ccl_Sum` int(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `client_carlist`
+--
+
+INSERT INTO `client_carlist` (`r_name`, `ca_Id`, `ccl_DName`, `ccl_DPrice`, `ccl_Num`, `ccl_Sum`) VALUES
+('春三朝五', 1, 'test', 123, 1, 123),
+('春三朝五', 1, 'test', 123, 1, 123);
 
 -- --------------------------------------------------------
 
@@ -88,13 +98,25 @@ CREATE TABLE `client_carlist` (
 --
 
 CREATE TABLE `client_orderlist` (
-  `col_Id` varchar(6) NOT NULL,
+  `col_Id` int(11) NOT NULL,
   `col_RName` varchar(10) NOT NULL,
-  `col_DName` varchar(10) NOT NULL,
-  `col_DPrice` int(5) UNSIGNED NOT NULL,
-  `col_Status` int(1) UNSIGNED NOT NULL,
+  `col_DName` varchar(100) NOT NULL,
+  `col_DPrice` varchar(50) NOT NULL DEFAULT '',
+  `col_Num` varchar(50) NOT NULL DEFAULT '',
+  `col_Status` int(1) UNSIGNED NOT NULL DEFAULT 1,
   `col_Sum` int(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `client_orderlist`
+--
+
+INSERT INTO `client_orderlist` (`col_Id`, `col_RName`, `col_DName`, `col_DPrice`, `col_Num`, `col_Status`, `col_Sum`) VALUES
+(4, '春三朝五', '早午餐套餐, 龍蝦炒飯', '150, 999', '1', 1, 1149),
+(7, '小七', '拉麵', '200', '2', 1, 200),
+(11, '春三朝五', '高級爌肉飯', '666', '2', 1, 666),
+(12, '春三朝五', 'hi', '0', '23', 1, 0),
+(13, '春三朝五', 'test, test, test, test', '123, 123, 123, 123', '1, 1, 1, 1', 1, 492);
 
 -- --------------------------------------------------------
 
@@ -187,21 +209,23 @@ CREATE TABLE `menu` (
   `m_price` int(11) NOT NULL,
   `m_detail` text NOT NULL,
   `m_picture` varchar(50) NOT NULL,
-  `r_id` int(11) NOT NULL
+  `r_id` int(11) NOT NULL,
+  `order_count` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 傾印資料表的資料 `menu`
 --
 
-INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`) VALUES
-(1, '早午餐套餐', 150, '漢堡、薯條、飲料', 'pangolin_drive-removebg-preview.png', 1),
-(2, 'test', 123, '主餐*2', 'pangolin_drive-removebg-preview (1).png', 1),
-(3, 'test', 100, '主餐*2 飲料*2 炸物*2  點心*2', '路徑', 1),
-(4, '龍蝦', 999, '一隻大隻的龍蝦', '路徑', 1),
-(5, '123', 123, '一隻大隻的龍蝦', '路徑', 1),
-(6, 'hi', 0, 'hi222', 'bus.jpg', 1),
-(8, 'test3', 333, '333', '-----------.png', 3);
+INSERT INTO `menu` (`m_id`, `m_name`, `m_price`, `m_detail`, `m_picture`, `r_id`, `order_count`) VALUES
+(1, '早午餐套餐', 150, '漢堡、薯條、飲料', 'good_deliver.png', 1, 1),
+(2, 'test', 123, '主餐*2', 'pangolin_drive-removebg-preview (1).png', 1, 2),
+(3, 'test', 100, '主餐*2 飲料*2 炸物*2  點心*2', '路徑', 1, 3),
+(4, '龍蝦', 999, '一隻大隻的龍蝦', '路徑', 1, 4),
+(5, '123', 123, '一隻大隻的龍蝦', '路徑', 1, 5),
+(6, 'hi', 0, 'hi222', 'bus.jpg', 1, 7),
+(8, 'test3', 333, '333', '-----------.png', 3, 8),
+(9, '不知道', 200, '蛤', '螢幕擷取畫面 2025-01-02 032700.png', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -217,20 +241,21 @@ CREATE TABLE `orders` (
   `o_status` int(11) DEFAULT NULL,
   `d_sid` int(11) DEFAULT NULL,
   `pickup_time` datetime DEFAULT NULL,
-  `delivery_time` datetime DEFAULT NULL
+  `delivery_time` datetime DEFAULT NULL,
+  `col_Id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 傾印資料表的資料 `orders`
 --
 
-INSERT INTO `orders` (`o_id`, `r_id`, `m_id`, `c_id`, `o_status`, `d_sid`, `pickup_time`, `delivery_time`) VALUES
-(1, 1, 1, '1', 3, 6, NULL, NULL),
-(2, 1, 2, '1', 2, 6, NULL, NULL),
-(3, 1, 3, '1', 5, 7, NULL, NULL),
-(4, 1, 4, '1', 4, 6, NULL, NULL),
-(5, 3, 8, '1', 1, 7, NULL, NULL),
-(6, 1, 4, '1', 2, 7, NULL, NULL);
+INSERT INTO `orders` (`o_id`, `r_id`, `m_id`, `c_id`, `o_status`, `d_sid`, `pickup_time`, `delivery_time`, `col_Id`) VALUES
+(1, 1, 1, '1', 3, 6, '2025-01-02 22:02:07', NULL, 0),
+(2, 1, 2, '1', 2, 6, NULL, NULL, 0),
+(3, 1, 3, '1', 5, 7, '2025-01-23 06:55:31', NULL, 0),
+(4, 1, 4, '1', 4, 6, NULL, NULL, 0),
+(5, 1, 8, '1', 0, 7, NULL, NULL, 0),
+(6, 1, 4, '1', 2, 7, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -254,8 +279,8 @@ CREATE TABLE `restaurant` (
 --
 
 INSERT INTO `restaurant` (`r_id`, `identity`, `r_account`, `r_pwd`, `r_name`, `r_addr`, `r_phone`, `r_time`) VALUES
-(1, '餐廳業者', 'spring35', '123', '春三朝五', '台中市西屯區', '0987654321', '24營業'),
-(2, '1', '8', '7', '6', '3', '5', '2'),
+(1, '餐廳業者', 'spring35', '123', '春三朝五', '台中市西屯區', '09876543277', '24營業5555'),
+(2, '1', '8', '7', '6', '蔡英文', '9222', '0800'),
 (3, '餐廳業者', 'asdf', 'hbh', 'chris luo', 'bjjbj', 'asdf', 'nkn');
 
 -- --------------------------------------------------------
@@ -269,15 +294,17 @@ CREATE TABLE `r_star` (
   `c_id` int(11) NOT NULL,
   `r_id` int(11) NOT NULL,
   `rating` int(11) NOT NULL,
-  `comments` text NOT NULL
+  `comments` text NOT NULL,
+  `ca_Id` int(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 傾印資料表的資料 `r_star`
 --
 
-INSERT INTO `r_star` (`r_star_id`, `c_id`, `r_id`, `rating`, `comments`) VALUES
-(1, 1, 1, 5, '我覺得很棒！');
+INSERT INTO `r_star` (`r_star_id`, `c_id`, `r_id`, `rating`, `comments`, `ca_Id`) VALUES
+(1, 1, 1, 5, '我覺得很棒！', 1),
+(2, 5, 3, 4, '還可以:p', 2);
 
 -- --------------------------------------------------------
 
@@ -316,12 +343,6 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `client_account`
   ADD PRIMARY KEY (`ca_Id`);
-
---
--- 資料表索引 `client_carlist`
---
-ALTER TABLE `client_carlist`
-  ADD PRIMARY KEY (`r_name`);
 
 --
 -- 資料表索引 `client_orderlist`
@@ -385,6 +406,18 @@ ALTER TABLE `cart`
   MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `client_account`
+--
+ALTER TABLE `client_account`
+  MODIFY `ca_Id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `client_orderlist`
+--
+ALTER TABLE `client_orderlist`
+  MODIFY `col_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `customer`
 --
 ALTER TABLE `customer`
@@ -406,7 +439,7 @@ ALTER TABLE `d_star`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orders`
@@ -424,7 +457,7 @@ ALTER TABLE `restaurant`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `r_star`
 --
 ALTER TABLE `r_star`
-  MODIFY `r_star_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `r_star_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 已傾印資料表的限制式

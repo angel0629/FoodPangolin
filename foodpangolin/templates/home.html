@@ -157,6 +157,7 @@
             gap: 20px; /* 區塊間距 */
             padding: 20px;
             max-width: 1200px;
+            margin-left:200px;
             
         }
         .sales-info {
@@ -478,117 +479,90 @@
     <!-- 側邊欄 -->
     <nav class="sidebar" id="sidebar">
         <button class="toggle-button" id="toggleButton">☰</button>
-        <img src="/static/img/good_pangolin2.png" alt="品牌圖片">
+        <img src="/img/good_pangolin2.png" alt="品牌圖片">
         <ul>
             <li class="hint"><a>監控餐廳各項指標</a></li>
-            <li><a href="home.html">首頁</a></li>
-            <li><a href="turnover.html">營業額</a></li>
-            <li><a href="salessummary.html">銷售品項</a></li>
-            <li><a href="comment.html">評分與評論</a></li>
-            <li><a href="money.html">對帳單</a></li>
+            <li><a href="/restaurant_home">首頁</a></li>
+            <li><a href="/restaurant_turnover">營業額</a></li>
+            <li><a href="/sales">銷售榜</a></li>
+            <li><a href="/restaurant_comment">評分與評論</a></li>
+            <li><a href="/r_money">對帳單</a></li>
             <hr>
             <li class="hint"><a>管理餐廳</a></li>
-            <li><a href="#菜單管理">菜單管理</a></li>
-            <li><a href="#營業時間">營業時間</a></li>
-            <li><a href="#使用者管理">使用者管理</a></li>
-            <li><a href="#設定">設定</a></li>
+            <li><a href="/restaurant_sell_list">接單管理</a></li>
+            <li><a href="r_sell_food">菜單管理</a></li>
+            <li><a href="r_new">新增上架食物</a></li>
+            <li><a href="/restaurant_manage">設定</a></li>
         </ul>
-        <button class="logout-button">登出</button>
+        <form action="/logout" method="POST" style="margin: 0;">
+            <button type="submit" class="logout-button">登出</button>
+        </form>
     </nav>
     
 
     <!-- front_page內容 -->
 
     <div class="brand-section">
-        <img src="/static/img/brand.png" alt="品牌圖片">
+        <img src="/img/brand.png" alt="品牌圖片">
         <p class="brand-text">全台第一外送平台</p>
-        <img src="/static/img/city-move.png" alt="移動圖片" class="moving-image">
+        <img src="/img/city-move.png" alt="移動圖片" class="moving-image">
     </div>
     <div class="sales-container">
         <!-- 正式內容 -->
         <div class="sales-info">
             <div class="sales-data">
                 <h3>今日銷售額</h3>
-                <p class="value" id="totalSales" data-target="25400">$0</p>
+                <p class="value" id="totalSales" data-target="{{data2['total_sales']}}">$0</p>
                 <h3>今日銷售數量</h3>
-                <p class="value" id="salesQuantity" data-target="123">0</p>
+                <p class="value" id="salesQuantity" data-target="{{ data3['total_orders'] }}">0</p>
                 <h3>成交數量</h3>
-                <p class="value" id="salesQuantity" data-target="25">0</p>
+                <p class="value" id="salesQuantity" data-target="{{ data4['completed_orders'] }}">0</p>
             </div>
             <button class="view-more" onclick="goTurnover()">查看更多</button>
         </div>
         <div class="ranking-container">
             <h2>銷售榜</h2>
             <ul class="ranking-list">
-                <!-- 第一名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🥇</span>
-                    <span class="item-name">消魂控肉飯</span>
-                    <span class="sales-count">銷售數：1250</span>
-                </li>
-                <!-- 第二名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🥈</span>
-                    <span class="item-name">無敵雞腿飯</span>
-                    <span class="sales-count">銷售數：1002</span>
-                </li>
-                <!-- 第三名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🥉</span>
-                    <span class="item-name">色素雪花冰</span>
-                    <span class="sales-count">銷售數：850</span>
-                </li>
-                <!-- 第四名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🔥</span>
-                    <span class="item-name">超辣雞腿堡</span>
-                    <span class="sales-count">銷售數：350</span>
-                </li>
-                <!-- 第五名 -->
-                <li class="ranking-item">
-                    <span class="rank-icon">🔥</span>
-                    <span class="item-name">豪大大雞排</span>
-                    <span class="sales-count">銷售數：125</span>
-                </li>
+                {% for item in data5 %}
+                    <li class="ranking-item">
+                        {% if loop.index == 1 %}
+                            <span class="rank-icon">🥇</span>
+                        {% elif loop.index == 2 %}
+                            <span class="rank-icon">🥈</span>
+                        {% elif loop.index == 3 %}
+                            <span class="rank-icon">🥉</span>
+                        {% else %}
+                            <span class="rank-icon">🔥</span>
+                        {% endif %}
+                        <span class="item-name">{{ item['m_name'] }}</span>
+                        <span class="sales-count">銷售數：{{ item['order_count'] }}</span>
+                    </li>
+                {% endfor %}
             </ul>
             <a href="#" class="see-more" onclick="goSales()">查看你最熱銷的餐點</a>
-        </div>
+        </div>        
     </div>
-    
     <!-- 評論 -->
     <div class="reviews-section">
         <h2>使用者評論</h2>
-    
-        <!-- 評論排序 -->
-        <div class="sort-options">
-            <select>
-                <option value="1">最新評論</option>
-                <option value="2">最高評價</option>
-                <option value="3">最低評價</option>
-            </select>
-        </div>
-    
         <!-- 顯示評論列表 -->
         <div class="reviews-list">
+            {% for review in data6 %}
             <div class="review">
                 <div class="review-header">
-                    <span class="review-author">用戶編號</span>
-                    <span class="review-rating">★★★★★</span>
+                    <span class="review-author">用戶編號: {{ review.c_id }}</span>
+                    <span class="review-rating">
+                        {{ '★' * review.rating + '☆' * (5 - review.rating) }}
+                    </span>
                 </div>
-                <p class="review-content">這家餐廳的食物非常美味，服務也很到位！</p>
+                <p class="review-content">{{ review.comments }}</p>
             </div>
-            <div class="review">
-                <div class="review-header">
-                    <span class="review-author">用戶編號</span>
-                    <span class="review-rating">★★★★☆</span>
-                </div>
-                <p class="review-content">環境不錯，但等菜的時間有點長。</p>
-            </div>    
+            {% endfor %}
         </div>
         <button class="review-more" onclick="goComment()">查看更多</button>
     </div>
-    
-        
+
+
     <!-- footer內容 -->
     <footer class="footer">
         <div class="footer-content">
@@ -610,9 +584,9 @@
             <div class="footer-section">
                 <h4>追蹤我們</h4>
                 <div class="social-icons">
-                    <a href="#"><img src="/templates/img/fb.png" alt="Facebook"></a>
-                    <a href="#"><img src="/templates/img/ig.png" alt="Instagram"></a>
-                    <a href="#"><img src="/templates/img/line.png" alt="Twitter"></a>
+                    <a href="#"><img src="/img/fb.png" alt="Facebook"></a>
+                    <a href="#"><img src="/img/ig.png" alt="Instagram"></a>
+                    <a href="#"><img src="/img/line.png" alt="Twitter"></a>
                 </div>
             </div>
         </div>
@@ -635,50 +609,47 @@
             const movingImage = document.querySelector('.moving-image');
             movingImage.style.left = '80%';  // 使圖片從左邊移動到右邊
         };
+        //數字跳動
+        document.addEventListener('DOMContentLoaded', function() {
+            const counters = document.querySelectorAll('.value');  // 獲取所有擁有 'value' 類的元素
 
-        // 選取所有數字元素
-        const counters = document.querySelectorAll('.value');
+            counters.forEach(counter => {
+                const updateCounter = () => {
+                    const target = +counter.getAttribute('data-target'); // 目標數字
+                    const current = +counter.innerText.replace(/[^0-9]/g, ''); // 當前顯示的數字，過濾非數字字符
+                    const increment = Math.ceil(target / 100); // 每次增加的數字量
 
-        // 定義滾動動畫函數
-        counters.forEach(counter => {
-            const updateCounter = () => {
-                const target = +counter.getAttribute('data-target'); // 目標值
-                const current = +counter.innerText.replace(/[^0-9]/g, ''); // 目前值（過濾非數字）
-                const increment = Math.ceil(target / 100); // 增量值
-
-                if (current < target) {
-                    if (counter.id === "totalSales") {
-                        // 銷售額格式
-                        counter.innerText = `$${current + increment}`;
+                    // 如果當前數字小於目標數字，則繼續增加
+                    if (current < target) {
+                        counter.innerText = counter.id === "totalSales"
+                            ? `$${current + increment}`  // 格式化銷售額
+                            : current + increment;  // 其他數字不需要額外格式化
+                        
+                        // 設置定時器，繼續增加數字
+                        setTimeout(updateCounter, 20);
                     } else {
-                        // 銷售數量格式
-                        counter.innerText = current + increment;
+                        // 完成後，鎖定目標值
+                        counter.innerText = counter.id === "totalSales"
+                            ? `$${target}`  // 格式化銷售額
+                            : target;  // 其他數字直接顯示
                     }
-                    setTimeout(updateCounter, 20); // 每 20 毫秒遞增
-                } else {
-                    // 鎖定目標值
-                    if (counter.id === "totalSales") {
-                        counter.innerText = `$${target}`; // 銷售額顯示
-                    } else {
-                        counter.innerText = target; // 銷售數量顯示
-                    }
-                }
-            };
+                };
 
-            updateCounter();
+                updateCounter();
+            });
         });
+
         function goTurnover() {
-        window.location.href = 'turnover.html'; // 返回上一頁
+        window.location.href = '/restaurant_turnover'; // 返回上一頁
         }
         function goSales() {
-            window.location.href = 'salessummary.html'; // 返回上一頁
+            window.location.href = '/sales'; // 返回上一頁
         }
         function goComment() {
-            window.location.href = 'comment.html'; // 返回上一頁
+            window.location.href = '/restaurant_comment'; // 返回上一頁
         }
         function goMoney() {
-            window.location.href = 'money.html'; // 返回上一頁
+            window.location.href = '/r_money'; // 返回上一頁
         }
     </script>
-</body>
 </html>
