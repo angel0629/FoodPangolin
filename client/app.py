@@ -45,8 +45,16 @@ def c_homepage():
 def c_search():
 	option=request.form.get('select')
 	text=request.form.get('text')
-	data=C_gethome2(option, text)
-	return render_template('c_homepage.html', data=data)
+	if (option!=None):
+		data=C_gethome2(option, text)
+		return render_template('c_homepage.html', data=data)
+	elif(text!=""):
+		data=C_gethome2(option, text)
+		return render_template('c_homepage.html', data=data)
+	else:
+		data=C_gethome()
+		return render_template('c_homepage.html', data=data)
+
 
 #各餐廳菜單
 @app.route("/c_Rmenu/<string:Rname>/<int:Rid>")
