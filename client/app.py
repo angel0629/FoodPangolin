@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 from functools import wraps
 from dbUtils import *
 # creates a Flask application, specify a static folder on /
@@ -92,12 +92,16 @@ def c_rmcar(Rname, Rid, Dname):
 	total=C_getcartotal(Rname)['total']
 	return render_template('c_carlist.html', data=data, Rname=Rname, total=total, Rid=Rid)
 
-#下單
+##下單
 @app.route("/c_addorder/<string:Rname>")
 def c_addorder(Rname):
+	rid=C_getrid(Rname)['rid']
+	mids=C_getmid(rid)['mids']
 	C_addorder(Rname)
-	data=C_gethome()
-	return render_template('c_homepage.html', data=data)
+	colid=C_getcolid()['colid']
+	status=C_getstatusid(colid)['status']
+	C_addoders(rid, mids, status, colid)
+	return redirect(url_for('c_homepage'))
 
 #已下定清單
 @app.route("/c_orderlist")
@@ -125,13 +129,12 @@ def c_Olistinfo(Rname, Oid):
 	msg=C_getbtntext(statusid)
 	return render_template('c_orderlistinfo.html', Rname=Rname, sum=sum, status=status, data2=data2, msg=msg, Oid=Oid)
 
-#取消訂單/收貨確認
+##取消訂單/收貨確認
 @app.route("/c_recievecheck/<string:Rname>/<string:msg>/<int:Oid>")
 def c_check(Rname, msg, Oid):
 	if msg=="取消訂單":
 		C_getbtnfunc(Oid)
-		data=C_gethome()
-		return render_template('c_homepage.html', data=data)
+		return redirect(url_for('c_homepage'))
 	else:
 		return render_template('c_recievecheck.html', Rname=Rname, Oid=Oid)
 	

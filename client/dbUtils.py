@@ -113,13 +113,38 @@ def C_removecar(Rname, Dname):
 	conn.commit()
 	return
 
-#下單
+#下單(client_orderlist)
 def C_addorder(Rname):
 	sql="INSERT INTO Client_orderlist (col_RName, col_DName, col_Num, col_DPrice, col_Sum) SELECT r_name, GROUP_CONCAT(ccl_DName SEPARATOR ', '), GROUP_CONCAT(ccl_Num SEPARATOR ', '), GROUP_CONCAT(ccl_Sum SEPARATOR ', '), sum(ccl_Sum) FROM client_carlist WHERE client_carlist.r_name=%s;"
 	cursor.execute(sql, (Rname,))
 	conn.commit()
-	sql1=sql="Delete FROM client_carlist WHERE r_name=%s;"
+	sql1="Delete FROM client_carlist WHERE r_name=%s;"
 	cursor.execute(sql1, (Rname,))
+	conn.commit()
+	return
+
+##取得訂單colid
+def C_getcolid():
+	sql="SELECT LAST_INSERT_ID() AS colid;"
+	cursor.execute(sql)
+	return cursor.fetchone()
+
+##取得下單餐點mid
+def C_getmid(rid):
+	sql="SELECT GROUP_CONCAT(menu.m_id SEPARATOR ', ') AS mids FROM menu  JOIN client_carlist ON client_carlist.ccl_DName = menu.m_name AND menu.r_id = %s"
+	cursor.execute(sql, (rid,))
+	return cursor.fetchone()
+
+##取得訂單statusid
+def C_getstatusid(colid):
+	sql="SELECT col_status status FROM client_orderlist WHERE col_Id=%s"
+	cursor.execute(sql, (colid,))
+	return cursor.fetchone()
+
+##下單(orders)
+def C_addoders(rid, mid, status, colid):
+	sql="INSERT INTO orders (r_id, m_id, ca_Id, o_status, col_Id) value(%s, %s, %s, %s, %s)"
+	cursor.execute(sql, (rid, mid, 1, status, colid,))
 	conn.commit()
 	return
 
@@ -149,10 +174,13 @@ def C_getbtntext(statusid):
 		msg="確認收貨"
 	return msg
 
-#取得按鈕功能
+##取得按鈕功能
 def C_getbtnfunc(Oid):
 	sql="Delete FROM client_orderlist WHERE client_orderlist.col_Id=%s;"
 	cursor.execute(sql, (Oid,))
+	conn.commit()
+	sql1="Delete FROM orders WHERE orders.col_Id=%s;"
+	cursor.execute(sql1, (Oid,))
 	conn.commit()
 	return
 
