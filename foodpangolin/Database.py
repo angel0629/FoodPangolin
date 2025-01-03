@@ -6,7 +6,7 @@ try:
         password="",
         host="localhost",
         port="3306",
-        database="foodpangolin"
+        database="foodpangolin2"
     )
     cursor = conn.cursor(dictionary=True)
 except mysql.connector.Error as e:
@@ -219,7 +219,7 @@ def r_getallList(my_id):
 			password="",
 			host="localhost",
 			port=3306,
-			database="foodpangolin"
+			database="foodpangolin2"
 		)
 		#建立執行SQL指令用之cursor, 設定傳回dictionary型態的查詢結果 [{'欄位名':值, ...}, ...]
 		cursor=conn.cursor(dictionary=True)
@@ -227,29 +227,31 @@ def r_getallList(my_id):
 		print(e)
 		print("Error connecting to DB")
 		exit(1)
-	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status
+	sql="""SELECT orders.o_id, customer.name,delivery_staff.d_name, orders.pickup_time, orders.delivery_time, orders.o_status, status.status_name
 		FROM orders INNER JOIN customer ON orders.c_id=customer.c_id
 		INNER JOIN delivery_staff ON orders.d_sid=delivery_staff.d_sid
 		INNER JOIN restaurant ON orders.r_id=restaurant.r_id
-		WHERE restaurant.r_id=%s;"""
+		INNER JOIN status ON orders.o_status=status.status_id
+		WHERE restaurant.r_id=%s
+		ORDER BY o_status;
+		"""
 	cursor.execute(sql,(my_id,))
 	return cursor.fetchall()
 
 def r_acceptList(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=("已接單",o_id)
+	param=(2,o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 
 def r_announced_deliver(o_id):
 	sql="UPDATE `orders` SET `o_status` = %s WHERE `orders`.`o_id` = %s"
-	param=("配送中",o_id)
+	param=(4,o_id)
 	cursor.execute(sql,param)
 	conn.commit()
 def get_r_id(account):
 	sql="""SELECT restaurant.r_id From restaurant where r_account=%s
             """
-
 	cursor.execute(sql,(account,))
 	return cursor.fetchone()      
 
@@ -401,6 +403,237 @@ def C_insertfb(rid, rating, comment):
 	cursor.execute(sql, (1, rid, rating, comment,))
 	conn.commit()
 	return 
+#_________________________________
+#外送員的部分
+def get_d_id(account):
+	sql="""SELECT * From delivery_staff where d_account=%s
+            """
+
+	cursor.execute(sql,(account,))
+	return cursor.fetchone() 
+
+
+def get_delivery_staff(d_sid):  # 取得外送員資訊
+    sql = "SELECT * FROM delivery_staff WHERE d_sid = %s"
+    cursor.execute(sql, (d_sid,))  # 注意這裡加上逗號，確保是 tuple
+    result = cursor.fetchone()
+    if result:
+        return result
+    return None
+
+
+def d_get_orderlist(): #查看目前訂單
+	sql="""
+    SELECT 
+        restaurant.r_name , orders.*
+    FROM orders
+    INNER JOIN restaurant
+    ON orders.r_id = restaurant.r_id
+    WHERE orders.o_status = 2;
+    """
+	cursor.execute(sql)
+	return cursor.fetchall()
+
+
+def d_status(d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+        UPDATE `delivery_staff`
+		SET `d_status` = '空閒'
+		WHERE `d_sid` = %s;
+
+        """
+        cursor.execute(sql, (d_sid,))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise	
+    
+def d_status_out(d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+        UPDATE `delivery_staff`
+		SET `d_status` = '未上線'
+		WHERE `d_sid` = %s;
+
+        """
+        cursor.execute(sql, (d_sid,))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+
+def d_change_staff_status(d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+		UPDATE `delivery_staff`
+		SET `d_status` = '忙碌'
+		WHERE `d_sid` = %s;
+        """
+        cursor.execute(sql, (d_sid,))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+def d_change_order_statusto3(o_id, d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+		UPDATE `orders`
+		SET `d_sid` = %s, 
+			`o_status` = 3
+		WHERE `o_id` = %s;
+        """
+        cursor.execute(sql, (d_sid ,o_id))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+def d_change_order_statusto4(o_id, d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+		UPDATE `orders`
+		SET `d_sid` = %s, 
+			`o_status` = 4
+		WHERE `o_id` = %s;
+        """
+        cursor.execute(sql, (d_sid ,o_id))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+def d_change_order_statusto5(o_id, d_sid): #點選上線或接單 改變外送員狀態
+    try:
+        sql = """
+		UPDATE `orders`
+		SET `d_sid` = %s, 
+			`o_status` = 5
+		WHERE `o_id` = %s;
+        """
+        cursor.execute(sql, (d_sid ,o_id))
+        conn.commit()  # 提交更改
+        print("Status updated successfully!")  # 確認訊息
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+
+def d_find_taked_order(d_sid):
+    try:
+        sql = """
+		SELECT * FROM `orders`
+		WHERE `o_status` = 3
+        AND `d_sid` = %s
+        """
+        cursor.execute(sql, (d_sid,))
+        return cursor.fetchone()
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+def d_find_arrived_order(d_sid):
+    try:
+        sql = """
+		SELECT * FROM `orders`
+		WHERE `o_status` = 4
+        AND `d_sid` = %s
+        """
+        cursor.execute(sql, (d_sid,))
+        return cursor.fetchone()
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+
+
+def d_find_finished_order(d_sid):
+    try:
+        sql = """
+		SELECT * FROM `orders`
+		WHERE `o_status` = 5
+        AND `d_sid` = %s
+        """
+        cursor.execute(sql, (d_sid,))
+        return cursor.fetchone()
+    except mysql.connector.Error as err:
+        print(f"Database error: {err}")
+        conn.rollback()  # 發生錯誤時回滾
+        raise
+    
+    
+def d_rinformation(r_id):
+	sql="SELECT * FROM restaurant WHERE `r_id` = %s"
+	param=(r_id,)
+	cursor.execute(sql, param)
+	return cursor.fetchone()
+
+def d_cinformation(c_id):
+	sql="SELECT * FROM client_account WHERE `ca_Id` = %s"
+	param=(c_id,)
+	cursor.execute(sql, param)
+	return cursor.fetchone()
+
+def d_getrecord(d_sid):
+	sql="""
+        SELECT restaurant.*
+		FROM 
+			orders
+		INNER JOIN 
+			restaurant
+		ON 
+			orders.r_id = restaurant.r_id
+		WHERE 
+			orders.o_status = 5 AND orders.d_sid = %s;
+        """
+	param=(d_sid,)
+	cursor.execute(sql, param)
+	return cursor.fetchall()
+
+def d_get_order_status(d_sid):
+    query = "SELECT * FROM orders WHERE d_sid = %s and o_status = 3 or o_status = 4;"
+    cursor.execute(query, (d_sid,))
+    result = cursor.fetchone()
+    return result
+
+#chrisluo新增delivery_home
+def get_dsid(account):
+	sql="SELECT d_sid From delivery_staff where d_account=%s"
+	cursor.execute(sql,(account,))
+	return cursor.fetchone() 
+
+def total_order_info(d_sid):
+    query = "SELECT SUM(client_orderlist.col_Sum * 0.15) as total_revnue FROM orders INNER JOIN client_orderlist ON client_orderlist.col_Id = orders.col_Id WHERE orders.d_sid = %s;"
+    cursor.execute(query, (d_sid,))
+    result = cursor.fetchone()
+    return result
+
+def order_info(d_sid):
+    query = "SELECT orders.o_id,orders.delivery_time,restaurant.r_name,restaurant.r_addr,(client_orderlist.col_Sum * 0.15) AS income FROM orders INNER JOIN restaurant ON orders.r_id = restaurant.r_id INNER JOIN client_orderlist ON client_orderlist.col_Id = orders.col_Id WHERE orders.d_sid = %s;"
+    cursor.execute(query, (d_sid,))
+    result = cursor.fetchone()
+    return result
+
+def count_delivery_goodrate(d_sid):
+    query = "SELECT d_star.c_id,SUM(CASE WHEN d_star.rating >= 4 THEN 1 ELSE 0 END) AS GOOD_TIMES, (SUM(CASE WHEN d_star.rating >= 4 THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS good_review_rate, d_star.d_sid, d_star.comments, d_star.rating FROM d_star INNER JOIN delivery_staff ON d_star.d_sid = delivery_staff.d_sid WHERE d_star.d_sid = %s;"
+    cursor.execute(query, (d_sid,))
+    result = cursor.fetchone()
+    return result
+
+
 # def add_product_to_sql(pro_name,pro_content,pro_price):
 #     # 資料庫語句，後面的值也是資料庫中項目的名子
 #     sql="insert into product_list (pro_name,pro_content,pro_price) VALUES (%s,%s,%s) " 

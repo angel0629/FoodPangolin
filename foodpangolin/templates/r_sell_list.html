@@ -34,6 +34,9 @@
   <hr />
   <section>
     <a href="/r_sell_food"><button style="background-color:rgb(255, 166, 166);">上架食物清單</button></a>
+    <a href="/restaurant_home">
+      <button class="back-home-button">返回首頁</button>
+    </a>
   </section>
   <section class="my_table" >
     <table>
@@ -72,16 +75,16 @@
         {% if i.o_status == 1 %}
         <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_accept('{{i.o_id}}')" style="background-color:rgb(251, 88, 88)" >確定接單</button></td>
         {% endif %}
-        {% if i.o_status == "2" %}
+        {% if i.o_status == 2 %}
         <th style="background-color:rgb(250, 226, 195)"></th>
         {% endif %}
-        {% if i.o_status == "3" %} 
+        {% if i.o_status == 3 %} 
         <th style="background-color:rgb(250, 226, 195)"><button onclick="alert_announced('{{i.o_id}}')" style="background-color:rgb(245, 245, 128)">通知外送員</button></td>
         {% endif %}
-        {% if i.o_status == "4" %}
+        {% if i.o_status == 4 %}
         <th style="background-color:rgb(250, 226, 195)"></th>
         {% endif %}
-        {% if i.o_status == "5" %}
+        {% if i.o_status == 5 %}
         <th style="background-color:transparent"></th>
         {% endif %}
       </tr>

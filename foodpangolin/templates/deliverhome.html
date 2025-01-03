@@ -457,29 +457,31 @@
     <!-- 側邊欄 -->
     <nav class="sidebar" id="sidebar">
         <button class="toggle-button" id="toggleButton">☰</button>
-        <img src="/static/img/good_deliver.png" alt="品牌圖片">
+        <img src="/img/good_deliver.png" alt="品牌圖片">
         <ul>
-            <li class="hint"><a>監控外送人員指標</a></li>            <li><a href="#首頁">首頁</a></li>
-            <li><a href="#完成訂單資訊">完成訂單資訊</a></li>
-            <li><a href="#收入">收入</a></li>
-            <li><a href="#評分與評論">評分與評論</a></li>
-            <li><a href="#錢包">錢包</a></li>
+            <li class="hint"><a>監控餐廳各項指標</a></li>
+            <li><a href="/restaurant_home">首頁</a></li>
+            <li><a href="/restaurant_turnover">營業額</a></li>
+            <li><a href="/sales">銷售榜</a></li>
+            <li><a href="/restaurant_comment">評分與評論</a></li>
+            <li><a href="/r_money">對帳單</a></li>
             <hr>
-            <li class="hint"><a>管理個人資料</a></li>
-            <li><a href="#菜單管理">偏好時段</a></li>
-            <li><a href="#營業時間">選擇你所在的區域</a></li>
-            <li><a href="#設定">設定</a></li>
-            <hr>
-            <li class="hint"><a>其他</a></li>
-            <li><a href="#幫助">幫助</a></li>
+            <li class="hint"><a>管理餐廳</a></li>
+            <li><a href="/restaurant_sell_list">接單管理</a></li>
+            <li><a href="r_sell_food">菜單管理</a></li>
+            <li><a href="r_new">新增上架食物</a></li>
+            <li><a href="/restaurant_msanage">設定</a></li>
         </ul>
         <button class="logout-button">登出</button>
+        <form action="/logout" method="get" style="margin: 0;">
+            <button type="submit" class="logout-button">登出</button>
+        </form>
     </nav>
     
     <div class="brand-section">
-        <img src="/static/img/brand.png" alt="品牌圖片">
+        <img src="/img/brand.png" alt="品牌圖片">
         <p class="brand-text">全台第一外送平台</p>
-        <img src="/static/img/city-move.png" alt="移動圖片" class="moving-image">
+        <img src="/img/city-move.png" alt="移動圖片" class="moving-image">
     </div>
     <div class="container">
         <h1>所有訂單</h1>
@@ -488,79 +490,52 @@
             <p>該筆收入</p>
             <p>訂單最後狀態</p>
         </div>
-        <!-- 第一筆訂單 -->
-        <div class="order-card">
-            <div class="order-info">
-                <div>訂單編號：<strong>#20241001</strong></div>
-                <div>日期：2024/10/01</div>
-                <div>店家名稱：好棒棒餐廳</div>
-                <div>目的地：台北市信義區123號</div>
+        {% if orders['rating'] != None %}
+        <!-- 遍歷訂單資料 -->
+            <div class="order-card">
+                <div class="order-info">
+                    <div>訂單編號：<strong>#{{ orders['o_id'] }}</strong></div>
+                    <div>日期：{{ orders['delivery_time'] }}</div>
+                    <div>店家名稱：{{ orders['r_name'] }}</div>
+                    <div>目的地：{{ orders['r_addr'] }}</div>
+                </div>
+                <div class="order-income">${{ orders['income'] }}</div>
+                <div class="order-status">已完成</div>
             </div>
-            <div class="order-income">$250</div>
-            <div class="order-status">完成</div>
-        </div>
-
-        <!-- 第二筆訂單 (已取消) -->
-        <div class="order-card cancelled">
-            <div class="order-info">
-                <div>訂單編號：<strong>#20241002</strong></div>
-                <div>日期：2024/10/02</div>
-                <div>店家名稱：超級牛肉麵</div>
-                <div>目的地：新北市板橋區456號</div>
-            </div>
-            <div class="order-income">$0</div>
-            <div class="order-status">已取消</div>
-        </div>
-
-        <!-- 第三筆訂單 -->
-        <div class="order-card">
-            <div class="order-info">
-                <div>訂單編號：<strong>#20241003</strong></div>
-                <div>日期：2024/10/03</div>
-                <div>店家名稱：鮮炸雞腿堡</div>
-                <div>目的地：桃園市中壢區789號</div>
-            </div>
-            <div class="order-income">$250</div>
-            <div class="order-status">完成</div>
-        </div>
-        <div class="summary">
-            <p>總共金額：</p>
-            <p>每單保底費用 + 額外距離費用 + bonus (雨天或達到跑單量加成費用)</p>
-            <div class="total-amount">總計收入：<strong>$500</strong></div>
-        </div>
+            <div class="summary">
+                <p>總共金額：</p>
+                {% set total = total_order['total_revnue'] %}
+                <div class="total-amount">總計收入：<strong>${{ total | float | round(2) }}</strong></div>
+            </div>            
+            {% endif %}
+            <!-- fetchone字典、fetchall陣列字典 -->
     </div>
+    
     <div class="delivery-partner-section">
         <h2>Pangolin優質合作夥伴</h2>
         <p class="partner-stats">
-            <span>拿到好評次數：<strong>15次</strong></span>
-            <span>好評率：<strong>85%</strong></span>
-            <span>加入時間：<strong>2023/06/15</strong></span>
+            <span>拿到好評次數：<strong>{{ data['GOOD_TIMES'] }}次</strong></span>
+            <span>好評率：<strong>{{ data['good_review_rate'] }}%</strong></span>
         </p>
-    
         <!-- 顧客評論列表 -->
         <div class="reviews-section">
             <h3>顧客評論</h3>
-    
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">顧客編號</span>
-                    <span class="review-rating">★★★★★</span>
+            {% if data['rating'] != None %}
+            {% set rate =  data['rating'] %}               
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-author">顧客編號{{ data['c_id'] }}</span>
+                        <span class="review-rating">{{ '★' * (rate | int) }}{{ '☆' * (5 - (rate | int)) }}</span>
+
+                    </div>
+                    <p class="review-content">{{ data['comments'] }}</p>
                 </div>
-                <p class="review-content">外送員非常準時，服務態度也很好！</p>
-            </div>
-    
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-author">顧客編號</span>
-                    <span class="review-rating">★★★★☆</span>
-                </div>
-                <p class="review-content">服務還不錯，希望能更快些。</p>
-            </div>
-            
+            {% endif %}
             <!-- 更多評論按鈕 -->
             <button class="view-more-reviews">查看更多評論</button>
         </div>
     </div>
+    
     
     <!-- footer內容 -->
     <footer class="footer">
@@ -583,9 +558,9 @@
             <div class="footer-section">
                 <h4>追蹤我們</h4>
                 <div class="social-icons">
-                    <a href="#"><img src="/templates/img/fb.png" alt="Facebook"></a>
-                    <a href="#"><img src="/templates/img/ig.png" alt="Instagram"></a>
-                    <a href="#"><img src="/templates/img/line.png" alt="Twitter"></a>
+                    <a href="#"><img src="/img/fb.png" alt="Facebook"></a>
+                    <a href="#"><img src="/img/ig.png" alt="Instagram"></a>
+                    <a href="#"><img src="/img/line.png" alt="Twitter"></a>
                 </div>
             </div>
         </div>

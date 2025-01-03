@@ -38,9 +38,9 @@ def loginforall():
             if identity == '消費客戶':
                 return redirect("/c_home")  # 跳轉到消費者主頁
             elif identity == '餐廳業者':
-                return redirect('/restaurant_home')  # 跳轉到餐廳業者主頁
+                return redirect('/restaurant_sell_list')  # 跳轉到餐廳業者主頁
             elif identity == '外送人員':
-                return redirect('/delivery_home')  # 跳轉到外送員主頁
+                return redirect('/delivery_status')  # 跳轉到外送員主頁
             else:
                 return redirect('/home')  # 預設主頁（如果身份不正確）
         else:
@@ -50,10 +50,14 @@ def loginforall():
     # 如果是 GET 請求，顯示登錄頁面
     return render_template('login_or_register.html')
 #登出
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['GET'])
 def logout():
     session.clear()
     return redirect('login_or_register')
+
+
+
+
 
 # @app.route('/customer_home')
 # def home1():
@@ -138,18 +142,32 @@ def restaurant_sell_list():
     return render_template('r_sell_list.html', data=get_order,acc=get_r_id(account))#,data5=bestsell_and_num
 
 
-@app.route('/delivery_home')
+@app.route('/delivery_status')
 def home3():
     if 'loginAcc' not in session:
         return render_template('login_or_register.html')  # 如果未登入，跳轉到登入頁面
     
     account = session['loginAcc']
-    cart_data = get_customer_cart_from_sql(account, cart_id=1)
-    if not cart_data:  # 如果 cart_data 是 None 或空
-        cart_data = "目前沒有購物車資料"  # 可以顯示一個提示訊息
+    delivery_staff = get_d_id(account)
 
-    return render_template('delivery_home2.html', data=cart_data)
+    if not delivery_staff:
+        return "找不到外送員資訊", 404  # 如果找不到該外送員，返回 404
 
+    # 將資料傳遞到 HTML 模板中
+    return render_template('d_status_and_getorder.html', staff=delivery_staff)
+
+
+# @app.route('/delivery_status/<int:d_sid>')
+# @login_confirm_acc_and_pwd #上鎖
+# def delivery_status(d_sid):
+#     # 使用 d_sid 從資料庫取得外送員資訊
+#     staff_data = get_delivery_staff(d_sid)
+    
+#     if not staff_data:
+#         return "找不到外送員資訊", 404  # 如果找不到該外送員，返回 404
+
+#     # 將資料傳遞到 HTML 模板中
+#     return render_template('d_status_and_getorder.html', staff=staff_data)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -444,13 +462,120 @@ def r_delete_form_error():
 #使用server side render: template 樣板
 def r_accept(id):
 	dat=r_acceptList(id)
-	return redirect(url_for('home2'))
+	return redirect(url_for('restaurant_sell_list'))
 
 @app.route("/r_announced_deliver/<int:id>")
 #使用server side render: template 樣板
 def announced(id):
 	dat=r_announced_deliver(id)
-	return redirect(url_for('home2'))
+	return redirect(url_for('restaurant_sell_list'))
+#_____________________________________________________________________________________________________________________
+#外送員開始#
+
+
+
+@app.route('/delivery_status/online/<int:d_sid>')
+@login_confirm_acc_and_pwd #上鎖
+def d_update_status_to_online(d_sid):
+    # 使用 d_sid 從資料庫取得外送員資訊
+    d_status(d_sid)
+    account = session['loginAcc']
+    staff_data = get_d_id(account)  
+    get_order = d_get_orderlist()
+    if not get_order:  # 如果 cart_data 是 None 或空
+        get_order = "目前沒有待接訂單"  # 顯示提示訊息
+    return render_template('d_status_and_getorder.html', data=get_order, acc=staff_data["d_account"], staff=staff_data)
+
+
+@app.route('/delivery_status/offline/<int:d_sid>')
+@login_confirm_acc_and_pwd #上鎖
+def d_update_status_to_offline(d_sid):
+    # 使用 d_sid 從資料庫取得外送員資訊
+    d_status_out(d_sid)
+    account = session['loginAcc']
+    staff_data = get_d_id(account)  
+    get_order = d_get_orderlist()
+    if not get_order:  # 如果 cart_data 是 None 或空
+        get_order = "目前沒有待接訂單"  # 顯示提示訊息
+    return render_template('d_status_and_getorder.html', data=get_order, acc=staff_data["d_account"], staff=staff_data)
+
+
+@app.route('/order_status/<int:o_id>/delivery/<int:d_sid>') #接訂單
+@login_confirm_acc_and_pwd #上鎖
+def d_get_order(o_id, d_sid): #訂單已取
+    d_change_staff_status(d_sid)
+    d_change_order_statusto3(o_id, d_sid)
+    account = session['loginAcc']
+    staff_data = get_d_id(account)
+    get_order = d_find_taked_order(d_sid)
+    r_id = get_order["r_id"]
+    restaurant = d_rinformation(r_id)
+    return render_template('pickup.html', data=get_order, restaurant=restaurant, acc=staff_data["d_account"], staff=staff_data)
+
+@app.route('/order_status/arrive/<int:o_id>/delivery/arrive/<int:d_sid>') #取到餐
+@login_confirm_acc_and_pwd #上鎖
+def d_arrive(o_id, d_sid): 
+    d_change_order_statusto4(o_id, d_sid)
+    account = session['loginAcc']
+    staff_data = get_d_id(account)
+    get_order = d_find_arrived_order(d_sid)
+    c_id = get_order["c_id"]
+    customer = d_cinformation(c_id)
+    return render_template('arrive.html', data=get_order, customer=customer, acc=staff_data["d_account"], staff=staff_data)
+
+@app.route('/order_status/finish/<int:o_id>/delivery/finish/<int:d_sid>') #抵達客戶地址 完成定單
+@login_confirm_acc_and_pwd #上鎖
+def d_finish(o_id, d_sid): 
+    d_change_order_statusto5(o_id, d_sid)
+    d_status(d_sid)
+    account = session['loginAcc']
+    staff_data = get_d_id(account)
+    get_order = d_find_finished_order(d_sid)
+    return render_template('finish.html', data=get_order, acc=staff_data["d_account"], staff=staff_data)
+
+@app.route('/delivery_record/<int:d_sid>')
+def d_record(d_sid):
+    if 'loginAcc' not in session:
+        return render_template('login_or_register.html')  # 如果未登入，跳轉到登入頁面
+    account = session['loginAcc']
+    staff_data = get_d_id(account)
+
+    get_order = d_getrecord(d_sid)
+    if not get_order:  # 如果 cart_data 是 None 或空
+        get_order = "目前沒有接單紀錄"  # 顯示提示訊息
+    return render_template('d_record.html', data=get_order, staff=staff_data,)
+
+
+
+@app.route('/track_order_status/<int:d_sid>')
+def track_order_status(d_sid):
+    if 'loginAcc' not in session:
+        return render_template('login_or_register.html')  # 如果未登入，跳轉到登入頁面
+
+    # 獲取登入用戶的資料
+    account = session['loginAcc']
+    staff_data = get_d_id(account)  # 獲取外送人員資料
+    d_sid = staff_data["d_sid"]  # 登入者的 d_sid
+
+    # 查詢該 d_sid 接的訂單
+    orders = d_get_order_status(d_sid)  # 返回該外送人員的所有訂單
+    if not orders:
+        return render_template('no_order.html', staff=staff_data)    # 若該外送人員沒有訂單，顯示提示訊息
+
+    # 假設這裡只取第一個訂單
+    o_id = orders["o_id"]
+    o_status = orders["o_status"]
+
+    # 根據訂單狀態顯示相應的頁面
+    if o_status == 3:
+        return  redirect(url_for('d_get_order', o_id=o_id, d_sid=d_sid))
+    elif o_status == 4:
+        return  redirect(url_for('d_arrive', o_id=o_id, d_sid=d_sid))
+    elif o_status == 5:
+        return  redirect(url_for('home3', o_id=o_id, d_sid=d_sid))
+    else:
+        return "未知的訂單狀態，請聯繫管理員"
+
 # ____________________________________________________________________________________________________________________
 #客戶註冊頁面
 # @app.route("/") 
@@ -592,7 +717,27 @@ def c_insertfb(Rname):
 	C_insertfb(rid, rating, comment)
 	data=C_gethome()
 	return render_template('c_homepage.html', data=data)
+
+@app.route('/delivery_home')
+def delivery_home():
+    # 檢查用戶是否已登入
+    if 'loginAcc' not in session:
+        return render_template('login_or_register.html')  # 如果未登入，跳轉到登入頁面
+    
+    account = session['loginAcc']  
+    get_d_sid = get_dsid(account)
+    
+    getdsid = get_d_sid['d_sid']
+    print(getdsid,"7777")
+
+    order = order_info(getdsid)  # 返回的是字典形式的訂單資料
+    goodrate = count_delivery_goodrate(getdsid)  
+    total_order = total_order_info(getdsid)
+    return render_template('deliverhome.html', data=goodrate,orders=order,total_order=total_order)
+
+
 # ________________________________________________________________________________________________________________
+
 # @app.route('/test')
 # def show_list():
 #     data_test = [

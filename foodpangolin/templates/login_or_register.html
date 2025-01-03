@@ -204,6 +204,31 @@
     .register-hint a:hover {
       text-decoration: underline;
     }
+    p.error {
+      color: #b22222; /* 深紅色，醒目但不刺眼 */
+      font-weight: bold;
+      border-radius: 8px; /* 圓角 */
+      padding: 10px 15px; /* 增加內部空間 */
+      margin: 10px auto; /* 上下間距和居中 */
+      width: 80%; /* 控制寬度 */
+      text-align: center; /* 文字置中 */
+      box-shadow: none; /* 移除陰影 */
+      animation: fadeIn 0.5s ease-in-out; /* 淡入效果 */
+    }
+
+
+    /* 淡入動畫 */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -249,8 +274,8 @@
       </div>
       <input type="submit" value="登入">
     </form>
-    
 
+    <p class="error">{{ error }}</p>
     <div class="register-hint">
         還沒註冊過? <a href="/register">>>註冊</a>
     </div>
