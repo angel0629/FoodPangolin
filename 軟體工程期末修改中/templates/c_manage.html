@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>對帳單</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+    body{
+    background-color: #faf6f1;
+    }
+    
+    #div_01{
+        background-color: #eedede;
+        width: 50%;
+        margin:auto;
+        border-radius: 25px;
+        text-align: left;
+        padding-bottom: 3px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .restaurant-info {
+        text-align: left;
+        width: 80%;
+        padding: 20px;
+        padding-top: 40px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .restaurant-info input {
+        font-family: 'Noto Sans SC', sans-serif;
+        border-color: #3498db; /* 邊框顏色 */
+        color: #000; /* 文字顏色 */
+        font-weight: bold; /* 文字加粗 */
+        background-color: #fff; /* 背景顏色 */
+        padding: 10px; /* 內邊距 */
+        border-radius: 5px; /* 邊角圓角 */
+        box-sizing: border-box; /* 確保寬高包含內邊距和邊框 */
+        width: 100%; /* 全寬 */
+        margin-bottom: 15px; /* 元素間距 */
+    }
+    button {
+        font-weight: bold;
+        padding: 10px 26px;
+        border-radius: 25px;
+        background-color: #d0a6a6;
+        border: 0px solid;
+        color: white;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <form action="/c_home" method="get" style="margin: 0;">
+        <button type="submit" class="backup-button">返回主頁面</button>
+    </form>
+
+    <div id="div_01">
+        <form method="POST" action="/update_customer/{{ data['ca_Id'] }}">
+            <center>
+                <div class="restaurant-info">
+                    <div>客戶編號：<strong>{{ data["ca_Id"] }}</strong></div>
+                    <div>客戶帳號：<strong>{{ data["ca_Acc"] }}</strong></div>
+                    <div>客戶密碼：<strong>{{ data["ca_Psw"] }}</strong></div>
+                    <hr>
+                    <div>
+                        <label for="ca_FName">客戶姓氏：</label>
+                        <input type="text" id="ca_FName" name="ca_FName" value="{{ data['ca_FName'] }}" required>
+                    </div>
+        
+                    <div>
+                        <label for="ca_LName">客戶姓名：</label>
+                        <input type="text" id="ca_LName" name="ca_LName" value="{{ data['ca_LName'] }}" required>
+                    </div>
+    
+                    <div>
+                        <label for="ca_Email">客戶email：</label>
+                        <input type="email" id="ca_Email" name="ca_Email" value="{{ data['ca_Email'] }}" required>
+                    </div>
+    
+                    <div>
+                        <label for="ca_Tel">客戶電話：</label>
+                        <input type="tel" id="ca_Tel" name="ca_Tel" value="{{ data['ca_Tel'] }}" required>
+                    </div>
+    
+                    <div>
+                        <label for="ca_Add">客戶地址：</label>
+                        <input type="text" id="ca_Add" name="ca_Add" value="{{ data['ca_Add'] }}" required>
+                    </div>
+                    <p></p>
+                    <div>
+                        <center>
+                            <button onclick="updateData()" type="submit">更新資料</button>
+                        </center>
+                        
+                    </div>
+                </div>
+            </center>
+        </form>
+    </div>
+    
+    <script>
+        // JavaScript 控制側邊欄顯示/隱藏
+        const toggleButton = document.getElementById('toggleButton');
+        const content = document.getElementById('content');
+
+        // 點擊按鈕來切換顯示/隱藏
+        toggleButton.addEventListener('click', () => {
+            content.classList.toggle('expanded'); // 調整內容區域位置
+        });
+        function updateData() {
+        alert("資料已更新"); // 顯示提示
+        }
+    </script>
+</body>
+</html>
