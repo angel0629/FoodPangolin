@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagolin 註冊頁面</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    .brand-section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #b2c4b6;
+      background-color: rgb(188, 225, 225);
+    }
+
+    .brand-section img {
+      width: 300px;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .brand-text {
+      font-size: 20px;
+      color: #333;
+      margin-top: 10px;
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 900;
+    }
+
+    body {
+      align-items: flex-start;
+      font-family: 'Noto Sans SC', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+      flex-direction: column;
+      overflow: hidden;
+      margin-top: 80px;
+      
+    }
+
+    .welcome-text {
+      font-size: 30px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      height: 300px;
+      width: 45%;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .identity-text {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 650;
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: slideUp 1s ease-out forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes slideUp {
+      0% {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .identity-selection {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 40px;
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 500;
+    }
+
+    .identity {
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .identity img {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+    }
+
+    .identity:hover {
+      transform: scale(1.1);
+    }
+
+    .next-step {
+      display: none;
+      margin-top: 20px;
+      bottom: 20px;
+      position: absolute;
+      width: auto;
+      border-radius: 15px;
+    }
+
+    .next-step button {
+      background-color: #ccc;
+      color: #333;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: 600;
+    }
+
+    .next-step button:hover {
+      background-color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <div class="brand-section">
+<<<<<<<< HEAD:軟體工程期末修改中 - 複製/templates/register.html
+    <img src="/static/img/brand.png" alt="品牌圖片">
+========
+    <img src="/img/brand.png" alt="品牌圖片">
+>>>>>>>> origin/restaurant2:軟體工程期末修改中 - 複製/static/templates/register.html
+    <p class="brand-text">全台第一外送平台</p>
+  </div>
+
+  <div class="welcome-text">
+    用戶您好，歡迎註冊Foodpangolin
+  </div>
+
+  <div class="container">
+    <div class="identity-text">
+      <p>您的身分是?</p>
+    </div>
+    <div class="identity-selection">
+      <div class="identity" id="customer" onclick="selectIdentity('消費客戶')">
+<<<<<<<< HEAD:軟體工程期末修改中 - 複製/templates/register.html
+        <img src="/static/img/customer1.jpeg" alt="消費者" />
+        <p>消費客戶</p>
+      </div>
+      <div class="identity" id="deliverer" onclick="selectIdentity('外送人員')">
+        <img src="/static/img/deliver1.jpeg" alt="外送人員" />
+        <p>外送人員</p>
+      </div>
+      <div class="identity" id="merchant" onclick="selectIdentity('餐廳業者')">
+        <img src="/static/img/restaurant1.jpeg" alt="餐廳業者" />
+========
+        <img src="/img/customer1.jpeg" alt="消費者" />
+        <p>消費客戶</p>
+      </div>
+      <div class="identity" id="deliverer" onclick="selectIdentity('外送人員')">
+        <img src="/img/deliver1.jpeg" alt="外送人員" />
+        <p>外送人員</p>
+      </div>
+      <div class="identity" id="merchant" onclick="selectIdentity('餐廳業者')">
+        <img src="/img/restaurant1.jpeg" alt="餐廳業者" />
+>>>>>>>> origin/restaurant2:軟體工程期末修改中 - 複製/static/templates/register.html
+        <p>餐廳業者</p>
+      </div>
+    </div>
+
+    <div class="next-step" id="nextStepContainer">
+      <a id="nextStepLink" href="#">
+        <button>下一步</button>
+      </a>
+    </div>
+
+    <!-- 隱藏字段用來存儲選擇的身份 -->
+    <input type="hidden" id="selectedIdentity" name="identity" value="">
+
+  </div>
+
+  <script>
+    function selectIdentity(identity) {
+    // 設置所選身份到隱藏字段
+    document.getElementById('selectedIdentity').value = identity;
+
+    // 動態設置超連結的 href
+    const nextStepLink = document.getElementById('nextStepLink');
+    nextStepLink.href = '/privacy?identity=' + encodeURIComponent(identity);
+
+    // 顯示下一步按鈕
+    document.getElementById('nextStepContainer').style.display = 'block';
+  }
+  </script>
+</body>
+</html>
