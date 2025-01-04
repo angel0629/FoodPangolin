@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>外送首頁</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* 基本架構 */
+        html, body {
+            height: auto;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        /* 預設隱藏 sidebar */
+
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+
+        .sidebar.hidden {
+            left: -21.5%;
+        }
+
+        .sidebar img {
+            width: 68%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            flex-direction: column;   /* 垂直排列 */
+            justify-content: center;  /* 垂直置中 */
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+            align-items: center;      /* 垂直居中每一個li項目 */
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        .sidebar ul li.hint a {
+            color: #888;
+            font-size: 14px;
+            cursor: default;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 27.5px;
+            height: 25px;
+            background-color: #888;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .content {
+            margin-left: 20%;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .content.expanded {
+            margin-left: 0;
+        }
+        /* 登出按鈕樣式 */
+        .logout-button {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            padding: 8px 15px;
+            background-color: #888;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .brand-section {
+            height: 200px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #b2c4b6;
+            background-color: rgb(188, 225, 225);
+            position: relative; /* 圖片定位S*/
+            overflow: hidden; /* 確保圖片移動過程不會顯示超出容器的部分 */
+            z-index: 1; /* 設置層次 */
+            margin-left: 220px;
+        }
+
+        .brand-section img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .brand-text {
+            font-size: 20px;
+            color: #333;
+            margin-top: 10px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 900;
+        }
+        .moving-image {
+            max-width: 25%;  /* 讓圖片寬度最大不超過容器寬度 */
+            max-height: 300px;  
+            position: absolute; /* 讓圖片可以自由定位 */
+            left: -200px; /* 初始位置設為左邊外部，根據圖片大小調整 */
+            top: 50%; /* 垂直居中 */
+            transform: translateY(-50%); /* 確保圖片垂直居中 */
+            transition: left 3s ease-in-out; /* 設置過渡動畫效果 */
+        }
+
+        /* 登出按鈕樣式 */
+        .logout-button {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            padding: 8px 15px;
+            background-color: #888;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-button:hover {
+            background-color: #e53935;
+        }
+        /* 查看訂單 */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+            font-family: 'Noto Sans SC', sans-serif;
+            border-radius: 30px;
+            border-color: #ccc;
+            border-style: dashed;
+        }
+        .container>h1{
+            font-weight: 400;
+            font-size: large;
+        }  
+        /* 訂單文字 */
+        .container-topic{
+            display: flex;
+            margin-left: 25px;
+            font-weight: 600;
+            border-bottom: 2px solid #333;
+        }  
+        .container-topic {
+            display: flex; /* 使用 flex 排列 */
+            align-items: center; /* 垂直置中對齊 */
+        }
+
+        .container-topic p {
+            margin: 0; /* 移除預設的 p 標籤 margin */
+        }
+
+        .container-topic p:nth-child(1) {
+            margin-right: 464px; /* 第一個元素和第二個元素之間的間距 */
+        }
+
+        .container-topic p:nth-child(2) {
+            margin-right: 45px; /* 第二個元素和第三個元素之間的間距 */
+        }    
+
+        /* 每筆訂單的卡片 */
+        .order-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 訂單資訊 */
+        .order-info {
+            flex: 3;
+            text-align: left;
+        }
+
+        .order-info div {
+            margin: 4px 0;
+        }
+
+        .order-status {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* 已取消的訂單樣式 */
+        .order-card.cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-card.cancelled .order-status {
+            color: #c82333;
+        }
+
+        /* 通用標題樣式 */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        /* 總收入 */
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid #ccc; /* 用細線分隔總結區和訂單 */
+            background-color: #f9f9f9; /* 提供輕微區別背景 */
+            border-radius: 5px;
+            text-align: center; /* 文字置中 */
+            font-size: 14px;
+            color: #555; /* 中性色方便閱讀 */
+        }
+
+        .summary p {
+            margin: 5px 0; /* 縮小段落的間距 */
+        }
+
+        .total-amount {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold; /* 突顯總金額 */
+            color: #333; /* 更深的顏色，讓金額更醒目 */
+        }
+
+        /* 外送員區塊 */
+        .delivery-partner-section {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #dfe3e8;
+            border-radius: 8px;
+            background-color: #f9fafb; /* 淺灰色背景 */
+            max-width: 600px; 
+            margin-left: auto;
+            margin-right: auto; /* 居中顯示 */
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .delivery-partner-section h2 {
+            font-size: 22px;
+            color: #00796b; /* 使用清新的綠色 */
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 600; /* 加粗標題 */
+        }
+
+        .partner-stats {
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .partner-stats span {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .reviews-section {
+            margin-top: 20px;
+        }
+
+        .reviews-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #00796b; /* 使用清新的綠色 */
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-card {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 更柔和的陰影 */
+            border: 1px solid #dfe3e8; /* 淺邊框 */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px); /* 滑動效果 */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* 增強陰影 */
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .review-author {
+            font-weight: bold;
+            color: #00796b; /* 清新的綠色 */
+        }
+
+        .review-rating {
+            color: #fbc02d; /* 黃色星星 */
+        }
+
+        .review-content {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .view-more-reviews {
+            display: block;
+            margin: 20px auto 0;
+            padding: 8px 16px;
+            background-color: #00796b; /* 清新的綠色 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-more-reviews:hover {
+            background-color: #004d40; /* 深綠色 */
+        }
+
+
+
+        /*footer */ 
+        .footer {
+            background-color: #333; /* 深色背景 */
+            color: #fff; /* 白色文字 */
+            padding: 20px 10px; /* 內邊距 */
+            font-family: 'Noto Sans SC', sans-serif; /* 使用統一字型 */
+            text-align: center; /* 中心對齊 */
+        }
+
+        .footer-content {
+            display: flex; /* 彈性布局 */
+            justify-content: space-between; /* 元素均勻分布 */
+            flex-wrap: wrap; /* 當空間不足時換行 */
+            max-width: 1500px; /* 限制頁尾最大寬度 */
+            margin: 0 auto; /* 垂直居中 */
+        }
+
+        .footer-section {
+            flex: 1; /* 每部分等寬 */
+            margin: 10px; /* 外邊距 */
+        }
+
+        .footer-section h4 {
+            font-size: 18px; /* 標題大小 */
+            margin-bottom: 10px;
+            color: #f4f4f4; /* 淡色標題 */
+        }
+
+        .footer-section p, .footer-section a {
+            font-size: 14px; /* 文字大小 */
+            color: #ccc; /* 字體顏色 */
+            text-decoration: none; /* 去掉超連結下劃線 */
+        }
+
+        .footer-section a:hover {
+            color: #fff; /* 滑鼠懸停改為白色 */
+        }
+
+        .social-icons img {
+            width: 24px; /* 圖標大小 */
+            height: 24px;
+            margin: 0 5px; /* 圖標間距 */
+            cursor: pointer;
+            transition: transform 0.3s ease; /* 增加動畫效果 */
+        }
+
+        .social-icons img:hover {
+            transform: scale(1.1); /* 滑鼠懸停放大效果 */
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #444; /* 頁尾頂部邊框 */
+            margin-top: 10px;
+            padding-top: 10px;
+            font-size: 12px; /* 字體大小 */
+            color: #bbb; /* 字體顏色 */
+        }
+        .footer-section ul {
+            list-style: none; /* 移除預設的項目符號 */
+            padding: 0; /* 移除內邊距 */
+            margin: 0 auto; /* 中心對齊 */
+            text-align: center; /* 文字居中 */
+        }
+
+        .footer-section ul li {
+            margin: 5px 0; /* 每個選項上下間距 */
+        }
+
+        .footer-section ul li a {
+            font-size: 14px; /* 字體大小 */
+            color: #ccc; /* 字體顏色 */
+            text-decoration: none; /* 移除超連結的下劃線 */
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff; /* 滑鼠懸停時變為白色 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 側邊欄 -->
+    <nav class="sidebar" id="sidebar">
+        <button class="toggle-button" id="toggleButton">☰</button>
+        <img src="/static/img/good_deliver.png" alt="品牌圖片">
+        <ul>
+            <li class="hint"><a>監控外送人員指標</a></li>            <li><a href="#首頁">首頁</a></li>
+            <li><a href="#完成訂單資訊">完成訂單資訊</a></li>
+            <li><a href="#收入">收入</a></li>
+            <li><a href="#評分與評論">評分與評論</a></li>
+            <li><a href="#錢包">錢包</a></li>
+            <hr>
+            <li class="hint"><a>管理個人資料</a></li>
+            <li><a href="#菜單管理">偏好時段</a></li>
+            <li><a href="#營業時間">選擇你所在的區域</a></li>
+            <li><a href="#設定">設定</a></li>
+            <hr>
+            <li class="hint"><a>其他</a></li>
+            <li><a href="#幫助">幫助</a></li>
+        </ul>
+        <button class="logout-button">登出</button>
+    </nav>
+    
+    <div class="brand-section">
+        <img src="/static/img/brand.png" alt="品牌圖片">
+        <p class="brand-text">全台第一外送平台</p>
+        <img src="/static/img/city-move.png" alt="移動圖片" class="moving-image">
+    </div>
+    <div class="container">
+        <h1>所有訂單</h1>
+        <div class="container-topic">
+            <p>訂單資訊</p>
+            <p>該筆收入</p>
+            <p>訂單最後狀態</p>
+        </div>
+        <!-- 第一筆訂單 -->
+        <div class="order-card">
+            <div class="order-info">
+                <div>訂單編號：<strong>#20241001</strong></div>
+                <div>日期：2024/10/01</div>
+                <div>店家名稱：好棒棒餐廳</div>
+                <div>目的地：台北市信義區123號</div>
+            </div>
+            <div class="order-income">$250</div>
+            <div class="order-status">完成</div>
+        </div>
+
+        <!-- 第二筆訂單 (已取消) -->
+        <div class="order-card cancelled">
+            <div class="order-info">
+                <div>訂單編號：<strong>#20241002</strong></div>
+                <div>日期：2024/10/02</div>
+                <div>店家名稱：超級牛肉麵</div>
+                <div>目的地：新北市板橋區456號</div>
+            </div>
+            <div class="order-income">$0</div>
+            <div class="order-status">已取消</div>
+        </div>
+
+        <!-- 第三筆訂單 -->
+        <div class="order-card">
+            <div class="order-info">
+                <div>訂單編號：<strong>#20241003</strong></div>
+                <div>日期：2024/10/03</div>
+                <div>店家名稱：鮮炸雞腿堡</div>
+                <div>目的地：桃園市中壢區789號</div>
+            </div>
+            <div class="order-income">$250</div>
+            <div class="order-status">完成</div>
+        </div>
+        <div class="summary">
+            <p>總共金額：</p>
+            <p>每單保底費用 + 額外距離費用 + bonus (雨天或達到跑單量加成費用)</p>
+            <div class="total-amount">總計收入：<strong>$500</strong></div>
+        </div>
+    </div>
+    <div class="delivery-partner-section">
+        <h2>Pangolin優質合作夥伴</h2>
+        <p class="partner-stats">
+            <span>拿到好評次數：<strong>15次</strong></span>
+            <span>好評率：<strong>85%</strong></span>
+            <span>加入時間：<strong>2023/06/15</strong></span>
+        </p>
+    
+        <!-- 顧客評論列表 -->
+        <div class="reviews-section">
+            <h3>顧客評論</h3>
+    
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-author">顧客編號</span>
+                    <span class="review-rating">★★★★★</span>
+                </div>
+                <p class="review-content">外送員非常準時，服務態度也很好！</p>
+            </div>
+    
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-author">顧客編號</span>
+                    <span class="review-rating">★★★★☆</span>
+                </div>
+                <p class="review-content">服務還不錯，希望能更快些。</p>
+            </div>
+            
+            <!-- 更多評論按鈕 -->
+            <button class="view-more-reviews">查看更多評論</button>
+        </div>
+    </div>
+    
+    <!-- footer內容 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>FoodPangolin</h4>
+                <p>地址：台灣南投縣埔里鎮大學路287號3樓
+                </p>
+                <p>聯絡電話：+886-123-456-789</p>
+            </div>
+            <div class="footer-section">
+                <h4>快速導覽</h4>
+                <ul>
+                    <li><a href="#首頁">首頁</a></li>
+                    <li><a href="#營業額">營業額</a></li>
+                    <li><a href="#設定">設定</a></li>
+                    <li><a href="#隱私權政策">隱私權政策</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>追蹤我們</h4>
+                <div class="social-icons">
+                    <a href="#"><img src="/templates/img/fb.png" alt="Facebook"></a>
+                    <a href="#"><img src="/templates/img/ig.png" alt="Instagram"></a>
+                    <a href="#"><img src="/templates/img/line.png" alt="Twitter"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 FoodPangolin. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        // JavaScript 控制側邊欄顯示/隱藏
+        const sidebar = document.getElementById('sidebar');
+        const toggleButton = document.getElementById('toggleButton');
+        const content = document.getElementById('content');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            content.classList.toggle('expanded');
+        });
+        window.onload = function() {
+            const movingImage = document.querySelector('.moving-image');
+            movingImage.style.left = '80%';  // 使圖片從左邊移動到右邊
+        };
+        window.onload = function() {
+            const movingImage = document.querySelector('.moving-image');
+            movingImage.style.left = '80%';  // 使圖片從左邊移動到右邊
+        };
+        
+    </script>
+</body>
+</html>
