@@ -1,0 +1,110 @@
+
+body{
+    background-color:rgb(250, 196, 126);
+}
+
+button{
+    border-radius:10px; 
+    padding:15px;
+    min-height:30px; 
+    min-width: 120px;
+    font-size:20px;
+}
+
+.logout_button{
+    display: flex;/*水平排列*/
+    gap:20px ;/*分隔為20px*/
+    align-items: center;/*垂直對齊*/
+}
+    
+.login table{
+    width:80%;
+    text-align: center;/*文字置中*/
+}
+
+.my_table{
+    display: flex;/*水平排列*/
+    text-align: center;/*文字置中*/
+    justify-content: center;/*東西置中*/
+    background-color:rgb(250, 226, 195);/*rgb(250, 226, 195)*/
+}
+.my_table table{
+    width:80%; /*寬度設為頁面的80%*/
+}
+.my_table tr{
+    color:darkblue;/*文字顏色*/
+    font-size:30px;
+    text-align: left;/*文字靠左邊*/
+}
+.my_table td{
+    font-size:25px;
+    color:black;
+}
+.my_table button{
+    border-radius:10px; 
+    padding:15px;
+    min-height:30px; 
+    min-width: 120px;
+    font-size:20px;
+
+}
+
+.input_form{
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(250, 226, 195);/*rgb(160, 225, 225)*/
+}
+.input_form input{
+    border-radius:10px;/*按鈕的圓角*/
+    padding:15px;/*框框的寬度*/
+    font-size: 20px;
+    text-align: center;
+}
+.submit_button{
+    border-radius:10px;/*按鈕的圓角*/
+    padding:15px;/*框框的寬度*/
+    font: size 20px;
+    background-color: lightgreen;
+    text-align: center;
+}
+
+
+
+.button_middle{
+    display: flex;
+    gap: 20px;
+}
+
+
+/*
+table{
+    border:1px solid black;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center; 水平置中
+    align-items: center;  垂直置中 
+
+   }
+   table th{
+    border: 1px solid black;
+    padding: 5px;
+    color:darkblue;
+   }
+   table td{
+    border: 1px solid black;
+    padding: 5px;
+    
+}*/
+
+h1{
+    font-size:45px;
+    /*text-align: center;*/ /*文字置中*/
+}
+h3{
+    font-size:30px;
+}
+
+h4{
+    font-size:20px;
+}
