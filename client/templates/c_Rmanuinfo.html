@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="keywords" content=" " />
+<meta name="description" content=" " />
+<title>菜品詳細資訊</title>
+<style>
+body{
+    background-color: #faf6f1;
+}
+#div_position {
+    text-align: center;
+}
+.div_pic {
+    text-align: center;
+    position: relative;
+    margin-top: -25px;
+    margin-left: 0;
+    width: 80%;
+    height: 250px;
+    background-color: #eedede;
+    border-radius: 20px;
+}
+img {
+    width: 270px;
+    height: 270px;
+    position: absolute;
+    top: 50%; /* 垂直置中 */
+    left: 50%; /* 水平置中 */
+    transform: translate(-50%, -50%);/* 將圖片移至中心 */
+    object-fit: cover; /* 保持圖片比例，填充大小 */
+}
+div.title {
+    position: absolute;
+    top: 42%;
+    left: 12%;
+    font-weight: bold;
+    font-size: 40px;
+}
+.div_P {
+    font-weight: bold;
+    font-size: 40px;
+    position: absolute;
+    top: 52%;
+    left: 12%;
+}
+p {
+    position: absolute;
+    top: 62%;
+    left: 15%;
+}
+ul {
+    position: absolute;
+    top: 69%;
+    left: 15%;
+}
+button {
+    font-weight: bold;
+    padding: 10px 26px;
+    border-radius: 25px;
+    background-color: #d0a6a6;
+    border: 0px solid;
+    color: white;
+    cursor: pointer;
+}
+#back {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 30px solid #d0a6a6;
+    border-radius: 0px;
+    cursor: pointer;
+    position: absolute;
+    top: 35px;
+    left: 14%;
+}
+.quantity-selector {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    display: inline-flex;
+    align-items: center;
+    background-color: #eedede;
+    border-radius: 5px;
+    padding: 5px;
+}
+.denum {
+    position: absolute;
+    bottom: 5.5%;
+    left: 44.5%;
+}
+.innum {
+    position: absolute;
+    bottom: 5.5%;
+    right: 39%;
+}
+.add {
+    position: absolute;
+    bottom: 5.5%;
+    right: 25%;
+}
+.quantity-selector input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  font-size: 25px;
+  margin: 3px 9px;
+}
+</style>
+<script>
+    function addcar(Rname, Rid, Dname, Dprice) {
+        const Num=parseInt(document.getElementById('quantity').value);
+        let Sum=parseInt(Dprice)*Num
+        window.location.href = "/c_addcar/"+Rname+"/"+Rid+"/"+Dname+"/"+Dprice+"/"+Num+"/"+Sum;
+    }
+    function go_back(Rname, Rid) {
+        window.location.href = "/c_Rmenu/"+Rname+"/"+Rid;
+    }
+    function updnum(num, btnName) {
+        const btn =document.getElementById(btnName);
+        const inputbox=document.getElementById('quantity');
+        let oldnum=parseInt(inputbox.value);
+        if (oldnum+parseInt(num)>-1){
+            inputbox.value=oldnum+parseInt(num);
+        }
+    }
+    </script>
+</head>
+<body>
+<p></p>
+<div id="div_position">
+    <center>
+        <div class="div_pic"><img src="/{{data.pic}}"></div>
+        <div id="back" onclick="go_back('{{Rname}}','{{Rid}}')"></div>
+    </center>
+</div>
+<div class="title">{{data.name}}</div>
+<div class="div_P">${{data.price}}</div>
+<p>產品說明：</p>
+<ul>
+    <li>{{data.detail}}</li>
+</ul>
+<button type="button" class="denum" onclick="updnum(-1,'debtn')" id="debtn">-</button>
+<div class="quantity-selector">
+    <input type="text" id="quantity" value="1" readonly>
+</div>
+<button type="button" class="innum" onclick="updnum(1, 'inbtn')" id="inbtn">+</button>
+<button type="button" class="add" onclick="addcar('{{Rname}}','{{Rid}}','{{data.name}}','{{data.price}}')">加入購物車</button>
+</body>
+</html>
