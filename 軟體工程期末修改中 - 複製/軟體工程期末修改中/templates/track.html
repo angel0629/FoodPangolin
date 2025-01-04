@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前往取餐</title>
+    <style>
+        /* Reset styles for consistency */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+            background-color: #f4f6f9;
+        }
+
+        nav.sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #ffffff;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        nav.sidebar a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            padding: 12px 25px;
+            margin: 0 15px;
+            background-color: #f7f7f7;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        nav.sidebar a:hover {
+            background-color: #ff6666;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        nav.sidebar a.active {
+            background-color: #ff6666;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 120px 20px 20px 20px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .content {
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        .my_table {
+            margin-top: 30px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            color: #555;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        section button {
+            margin: 15px 10px;
+            padding: 12px 25px;
+            background-color: #ff6666;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        section button:hover {
+            background-color: #ff4d4d;
+            transform: scale(1.05);
+        }
+
+        section button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .picture {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 32px;
+        right: 5px;
+        transform: translate(-50%, -10%);
+        z-index: 100;
+      }
+    
+      .picture img {
+        width: 120px;
+        height: auto;
+      }
+    </style>
+</head>
+<body>
+      <nav class="sidebar">
+        <a href="/delivery_home" class="{% if request.path == '/delivery_home' %}active{% endif %}">狀態</a>
+        <a href="/track_order_status/{{staff.d_sid}}"
+            class="{% if 'order_status' in request.path %}active{% endif %}">訂單</a>        
+        <a href="/delivery_record/{{staff.d_sid}}"
+            class="{% if 'delivery_record' in request.path %}active{% endif %}">已完成訂單</a>
+    </nav>
+    <div class="picture">
+      <img src="/static/img/delivery_pangolin.png" alt="Profile Picture">
+    </div>
+  
+    <h1>{{ acc }}</h1>
+    <h1>訂單 {{ data.o_id }}</h1>
+  
+    <section class="my_table">
+      <table>
+        <tr>
+          <th>資訊</th>
+          <th>地址</th>
+          <th>連絡電話</th>
+        </tr>
+  
+        <!-- 餐廳資訊，o_status == 4 時預設顯示 -->
+        <tr id="restaurant-info">
+          <th>{{ restaurant.r_name }}</th>
+          <th>{{ restaurant.r_addr }}</th>
+          <th>{{ restaurant.r_phone }}</th>
+        </tr>
+  
+        <!-- 客戶資訊（預設隱藏） -->
+        <tr id="customer-info" style="display: none;">
+          <th>{{ customer.ca_Acc }}</th>
+          <th>{{ customer.ca_Add }}</th>
+          <th>{{ customer.ca_Tel }}</th>
+        </tr>
+      </table>
+    </section>
+  
+    <hr />
+    <section id="button-section">
+      {% if data.o_status == 4 %}
+      <button id="confirm-pickup-btn" style="background-color: rgb(255, 166, 166);" onclick="confirmPickup()">確定取餐</button>
+      {% else %}
+      <button style="background-color: rgb(200, 200, 200);" disabled>餐點尚未完成</button>
+      {% endif %}
+    </section>
+  
+    {% if error %}
+    <div class="error-message">
+      {{ error }}
+    </div>
+    {% endif %}
+  
+    <script>
+      function confirmPickup() {
+        // 隱藏餐廳資訊
+        const restaurantInfoRow = document.getElementById("restaurant-info");
+        const customerInfoRow = document.getElementById("customer-info");
+        const buttonSection = document.getElementById("button-section");
+  
+        if (restaurantInfoRow) {
+          restaurantInfoRow.style.display = "none"; // 隱藏餐廳資訊
+        }
+  
+        if (customerInfoRow) {
+          customerInfoRow.style.display = "table-row"; // 顯示客戶資訊
+        }
+  
+        // 替換按鈕為 "完成訂單"
+        buttonSection.innerHTML = `
+          <button id="complete-order-btn" style="background-color: rgb(255, 166, 166);" onclick="completeOrder()">完成訂單</button>
+        `;
+      }
+  
+      function completeOrder() {
+        // 完成訂單的操作（可跳轉或進行其他操作）
+        alert("訂單已完成！"); // 可改為實際跳轉操作
+        window.location.href = "/order_status/finish/{{ data.o_id }}/delivery/finish/{{ staff.d_sid }}";
+      }
+    </script>
+  </body>
+  

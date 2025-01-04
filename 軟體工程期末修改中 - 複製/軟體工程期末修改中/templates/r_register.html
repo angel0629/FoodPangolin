@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="keywords" content=" " />
+    <meta name="description" content=" " />
+    <title>餐廳註冊</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+        }
+        #div_01 {
+            background-color: #e0e8f0;
+            width: 70%;
+            margin: auto;
+            border-radius: 25px;
+            text-align: center;
+            padding-bottom: 3px;
+        }
+        #div_01t {
+            display: flex;
+            gap: 41%;
+            text-align: center;
+            background-color: #b0c6e5;
+            border-radius: 25px;
+            padding: 1px;
+        }
+        input {
+            border: 0px solid;
+            border-radius: 25px;
+            width: 30%;
+            height: 30px;
+            padding: 3px;
+            text-align: center;
+        }
+        #name {
+            width: 80px;
+        }
+        #name1 {
+            width: 135px;
+        }
+        button {
+            font-weight: bold;
+            padding: 10px 26px;
+            border-radius: 25px;
+            background-color: #b0c6e5;
+            border: 0px solid;
+            color: #f0f8ff;
+            cursor: pointer;
+        }
+        #back {
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 30px solid #e0e8f0;
+            border-radius: 0px;
+            cursor: pointer;
+            position: relative;
+            top: 30px;
+            left: 15px;
+        }
+    </style>
+</head>
+<body>
+<p></p>
+<form action="/register_restaurant" method="POST">
+    <div id="div_01">
+        <div id="div_01t">
+            <div id="back" onclick="goBack()"></div>
+            <h2>餐廳註冊</h2>
+        </div>
+        <p>帳號：<input type="text" name="r_account"></p>
+        <p>密碼：<input type="password" name="r_pwd"></p>
+        <p>餐廳名稱：<input type="text" name="r_name"></p>
+        <p>電話：<input type="text" name="r_phone"></p>
+        <p>地址：<input type="text" name="r_addr"></p>
+        <p>營業時間：<input type="text" name="r_time"></p>
+        <p><button type="submit">註冊</button></p>
+    </div>
+</form>
+</body>
+<script>
+    function goBack() {
+        window.location.href = '/register'; // 返回註冊選擇頁面
+    }
+    </script>
+</html>

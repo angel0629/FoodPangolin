@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>對帳單</title>
+    <style>
+        /* 基本架構 */
+        html, body {
+            height: auto;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        /* 預設隱藏 sidebar */
+
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+
+        .sidebar.hidden {
+            left: -21.5%;
+        }
+
+        .sidebar img {
+            width: 68%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            color: #007bff;
+        }
+
+        .sidebar ul li.hint a {
+            color: #888;
+            font-size: 14px;
+            cursor: default;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 27.5px;
+            height: 25px;
+            background-color: #888;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .content {
+            margin-left: 20%;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .content.expanded {
+            margin-left: 0;
+        }
+        /* 登出按鈕樣式 */
+        .logout-button {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            padding: 8px 15px;
+            background-color: #888;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        /* 對帳單 */
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+            position: relative; /* 相對定位 */
+            height: 200px; /* 設定高度確保有足夠空間 */
+        }
+        .statement-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: auto;
+        }
+        /* 左上角內容 */
+        .top-left {
+            position: absolute;
+            top: 20px; /* 距離容器上方的距離 */
+            left: 20px; /* 距離容器左側的距離 */
+            text-align: left;
+        }
+
+        /* 右下角內容 */
+        .bottom-right {
+            position: absolute;
+            top: 20px; /* 距離容器下方的距離 */
+            right: 20px; /* 距離容器右側的距離 */
+            text-align: right;
+        }
+        
+        .header{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .summary-table th, .summary-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            border: none;
+        }
+
+        .summary-table th {
+            background-color: #ddd;
+        }
+        .total-row td {
+            border-top: 3px solid #333; /* 粗線條 */
+            font-weight: bold; /* 字體加粗 */
+        }
+
+        .bank-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .bank-info div {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 側邊欄 -->
+    <nav class="sidebar" id="sidebar">
+        <button class="toggle-button" id="toggleButton">☰</button>
+        <img src="/templates/img/good_pangolin2.png" alt="品牌圖片">
+        <img src="/templates/imgtreeortreek2" alt="樹圖片" class="sidebar-image">
+        <ul>
+            <li class="hint"><a>監控餐廳各項指標</a></li>
+            <li><a href="#首頁">首頁</a></li>
+            <li><a href="#營業額">營業額</a></li>
+            <li><a href="#銷售品項">銷售品項</a></li>
+            <li><a href="#評分與評論">評分與評論</a></li>
+            <li><a href="#對帳單">對帳單</a></li>
+            <hr>
+            <li class="hint"><a>管理餐廳</a></li>
+            <li><a href="#菜單管理">菜單管理</a></li>
+            <li><a href="#營業時間">營業時間</a></li>
+            <li><a href="#使用者管理">使用者管理</a></li>
+            <li><a href="#設定">設定</a></li>
+        </ul>
+        <form action="/logout" method="GET" style="margin: 0;">
+            <button type="submit" class="logout-button">登出</button>
+        </form>
+    </nav>
+    <div class="statement-container">
+        <!-- 頁面標題 -->
+        <div class="header">
+            <h1>對帳單</h1>
+        </div>
+
+        <!-- 基本資訊 -->
+        <div class="container">
+            <!-- 左上角 -->
+            <div class="top-left">
+                <div>商家名稱：<strong>好棒棒餐廳</strong></div>
+                <div>商家代號：<strong>8456</strong></div>
+            </div>
+    
+            <!-- 右下角 -->
+            <div class="bottom-right">
+                <div>帳務日期：<strong>2024/11/07</strong></div>
+                <div>帳單編號：<strong>200001459</strong></div>
+                <div>結帳週期：<strong>2024/10/01 至 2024/10/31</strong></div>
+            </div>
+        </div>
+
+        <!-- 交易數據 -->
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>   </th>
+                    <th>交易筆數</th>
+                    <th>交易金額</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>一般訂單</td>
+                    <td>125</td>
+                    <td>25,000</td>
+                </tr>
+                <tr class="total-row">
+                    <td>總計</td>
+                    <td></td>
+                    <td><strong>25,000</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 銀行帳戶資訊 -->
+        <div class="bank-info">
+            <h3>商家銀行帳戶資料</h3>
+            <div>銀行名稱：台灣銀行</div>
+            <div>銀行代碼：0123456</div>
+            <div>銀行帳號：0123456</div>
+            <div>銀行帳戶名稱：賢叔基</div>
+        </div>
+    <script>
+        // JavaScript 控制側邊欄顯示/隱藏
+        const sidebar = document.getElementById('sidebar');
+        const toggleButton = document.getElementById('toggleButton');
+        const content = document.getElementById('content');
+
+        // 預設 sidebar 隱藏
+        sidebar.classList.add('hidden');
+
+        // 點擊按鈕來切換顯示/隱藏
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden'); // 切換隱藏顯示
+            content.classList.toggle('expanded'); // 調整內容區域位置
+        });
+    </script>
+</body>
+</html>

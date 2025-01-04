@@ -1,0 +1,57 @@
+<html><head>
+<meta charset="utf-8">
+<title>Food</title>
+<script>
+  function alert_del(m_id){
+    sure_to_delete=window.confirm('確定要刪除嗎?') //系統跳出視窗詢問是否要刪除s
+    if (sure_to_delete){//如果按確定刪除
+        console.log(m_id);
+        window.location.href='/r_delete_product/'+m_id; //連到資料庫刪除資料
+        alert("已刪除資料");
+        
+    }
+    else{
+      alert("已取消刪除");
+    }
+      
+  }
+</script>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<h1>上架食物清單</h1>
+<hr />
+<section>
+  <a href="/restaurant_home"><button style="background-color:rgb(166, 212, 255);">回主頁</button></a>
+  <a href="/restaurant_sell_list"><button style="background-color:rgb(255, 166, 166);">我的訂單</button></a> 
+  <a href="/r_new"><button style="background-color:rgb(245, 245, 128);">++新增上架食物++</button></a>
+</section>
+
+<section class="my_table" >
+
+  <table>
+    <tr>
+      <th>圖片</th>
+      <th>名稱</th>
+      <th>價錢</th>
+      <th>內容</th>
+      <th></th>
+      <th> </th>
+    </tr>
+    {% for i in data %}
+      <tr>
+        <td><img src="/img/{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 200px; height: auto;"></td>
+        <!--<th style="background-color: rgb(255, 186, 186);">{{i.m_picture}}</th> -->
+        <th>{{i.m_name}}</th>
+        <th>${{i.m_price}}</th>
+        <th>{{i.m_detail}}</th>
+        <!--<img src="{{i.m_picture}}" alt="{{ i.m_name }}" style="width: 100px; height: auto;">-->
+        <td><a href="/r_edit_product/{{i.m_id}}"><button style="background-color:yellowgreen">修改</button></td>
+        <td><button onclick="alert_del('{{i.m_id}}')" style="background-color:orangered">刪除</button></td>
+      </tr>
+    {% endfor %}
+  </table>  
+
+</section>
+</body></html>
+
