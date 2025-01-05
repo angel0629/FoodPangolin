@@ -17,10 +17,12 @@
 	/c_feedbackUPL/<餐廳名稱>/<訂單編號>：評價輸入頁面
 
 	餐廳相關：
-	/restaurant_sell_list：餐廳首頁(該餐廳訂單列表)
+	/restaurant_sell_list：餐廳訂單列表
+	/r_more_order_info：訂單詳細資訊
 	/r_sell_food：菜單列表、修改&刪除功能
 	/r_edit_product/<餐點ID>：餐點修改頁面
 	/r_new：新增餐點頁面
+	
 
 	外送人員相關：
 	/delivery_status：外送人員首頁(各餐外送員狀態廳訂單列表)、切換外送員狀態功能、接單功能
