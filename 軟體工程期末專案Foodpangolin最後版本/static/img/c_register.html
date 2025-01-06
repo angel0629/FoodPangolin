@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="keywords" content=" " />
+<meta name="description" content=" " />
+<title>客戶註冊</title>
+<style>
+body{
+    background-color: #faf6f1;
+}
+#div_01{
+    background-color: #eedede;
+    width: 70%;
+    margin:auto;
+    border-radius: 25px;
+    text-align: center;
+    padding-bottom: 3px;
+}
+#div_01t {
+    display: flex; /* 開啟彈性盒模型 */
+    gap: 41%;
+    text-align: center;
+    background-color: #d0a6a6;
+    border-radius: 25px;
+    padding: 1px ;
+}
+input {
+    border: 0px solid;
+    border-radius: 25px;
+    width: 30%;
+    height: 30px;
+    padding: 3px;
+    text-align: center;
+}
+#name {
+    width: 80px;
+}
+#name1 {
+    width: 135px;
+}
+button {
+    font-weight: bold;
+    padding: 10px 26px;
+    border-radius: 25px;
+    background-color: #d0a6a6;
+    border: 0px solid;
+    color: #faf6f1;
+    cursor: pointer;
+}
+#back {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 30px solid #eedede;
+    border-radius: 0px;
+    cursor: pointer;
+    position: relative;
+    top: 30px;
+    left: 15px;
+}
+</style>
+<script>
+function insert(){
+    window.location.href="/c_register"
+}
+</script>
+</head>
+<body>
+<p></p>
+<div id="div_01">
+    <div id="div_01t">
+        <div id="back" onclick="go_back()"></div>
+        <h2>客戶註冊</h2>
+    </div>
+    <form action="/c_register" method="post">
+    <p>帳號：<input type="text" name="acc"></p>    
+    <p>密碼：<input type="password" name="psw"></p>
+    <p>姓氏：<input type="text" id="name" name="fname"> 名字：<input type="text" id="name1" name="lname"></p>
+    <p>電話：<input type="text" name="tel"></p>
+    <p>郵件：<input type="text" name="email"></p>
+    <p>地址：<input type="text" name="add"></p>
+    <p><button type="submit" onclick="insert()">註冊</button></p>
+    </form>
+</div>
+
+</body>
+</html>

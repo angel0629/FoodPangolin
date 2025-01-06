@@ -1,0 +1,124 @@
+<html><head>
+    <meta charset="utf-8">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(250, 243, 220);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #444;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #ccc;
+            margin: 20px 0;
+        }
+
+        section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        section a button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            color: black;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            background-color: lightblue;
+        }
+
+        section a button:hover {
+            opacity: 0.9;
+        }
+
+        .input_form {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .input_form h3 {
+            margin: 15px 0;
+            color: #333;
+            font-size: 18px;
+            text-align: left; 
+        }
+
+        .input_form input[type="text"], .input_form input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            
+        }
+
+        .input_form input[type="file"] {
+            border: none;
+        }
+
+        .submit_button {
+            padding: 12px 30px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            background-color: #d0a6a6;
+            color: black;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit_button:hover {
+            opacity: 0.9;
+        }
+
+        button {
+            font-weight: bold;
+            padding: 10px 26px;
+            border-radius: 25px;
+            background-color: #d0a6a6;
+            border: 0px solid;
+            color: black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+    <body>
+    <section>
+        <h1>新增上架食物</h1>
+        <hr/>
+    </section>
+
+    <a href="/r_sell_food"><button style="background-color: lightblue;">&lt;-</button></a>
+    
+    <section class="input_form">
+        <form method="POST" action="/r_add_product" enctype="multipart/form-data">
+                <h3>商品名稱：<input type="text" name="name"></h3>
+                <h3>價錢：<input type="text" name="price"></h3>
+                <h3>詳細資訊：<input type="text" name="more"></h3>
+                <h3>圖片：<input type="file" name="picture" accept="image/*"></h3>
+                <input type="submit" class="submit_button" value="新增">
+        </form>
+    </section>
+    
+</body></html>
