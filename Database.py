@@ -7,7 +7,7 @@ try:
         password="",
         host="localhost",
         port="3306",
-        database="food(3)"
+        database="foodpangolin"
     )
     cursor = conn.cursor(dictionary=True, buffered=True)
 except mysql.connector.Error as e:
