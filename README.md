@@ -35,7 +35,7 @@
 	- 	CSS
 	- 	JavaScript
 	-   MySQL
-	-   tabase：XAMPP、MeriaDB
+	-   Database：XAMPP、MeriaDB
 
 - 平台開發人員&分工：
 	- 111213080 邱昀晴：客戶相關全端、DB建構、專案整合、readme.txt整理
